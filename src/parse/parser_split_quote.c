@@ -3,16 +3,18 @@
 /*                                                        :::      ::::::::   */
 /*   parser_split_quote.c                               :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: pablo <pablo@student.42.fr>                +#+  +:+       +#+        */
+/*   By: pabmart2 <pabmart2@student.42malaga.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/07/30 16:10:16 by pablo             #+#    #+#             */
-/*   Updated: 2025/07/30 16:14:11 by pablo            ###   ########.fr       */
+/*   Updated: 2025/07/31 13:20:19 by pabmart2         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "libft.h"
 #include "minishell.h"
 
+
+//TODO: Comprobar si hay que controlar dquote
 char	**split_quotes(char **array)
 {
 	size_t	size;

@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   parser_tokenization.c                              :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: pablo <pablo@student.42.fr>                +#+  +:+       +#+        */
+/*   By: pabmart2 <pabmart2@student.42malaga.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/07/30 16:21:57 by pablo             #+#    #+#             */
-/*   Updated: 2025/07/30 21:56:49 by pablo            ###   ########.fr       */
+/*   Updated: 2025/07/31 12:45:04 by pabmart2         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -26,15 +26,15 @@
  */
 static void	first_token_assign(char **array, t_token **tokens, size_t i)
 {
-	if (!ft_strncmp(array[i], "|", 2))
+	if (!ft_strncmp(array[i], "|", ft_strlen(array[i])))
 		tokens[i]->token_type = PIPE;
-	else if (!ft_strncmp(array[i], "<<", 3))
+	else if (!ft_strncmp(array[i], "<<", ft_strlen(array[i])))
 		tokens[i]->token_type = REDIRECT_IN_CHAR_HEREDOC;
-	else if (!ft_strncmp(array[i], ">>", 3))
+	else if (!ft_strncmp(array[i], ">>", ft_strlen(array[i])))
 		tokens[i]->token_type = REDIRECT_OUT_CHAR_APPEND;
-	else if (!ft_strncmp(array[i], "<", 2))
+	else if (!ft_strncmp(array[i], "<", ft_strlen(array[i])))
 		tokens[i]->token_type = REDIRECT_IN_CHAR;
-	else if (!ft_strncmp(array[i], ">", 2))
+	else if (!ft_strncmp(array[i], ">", ft_strlen(array[i])))
 		tokens[i]->token_type = REDIRECT_OUT_CHAR;
 	else
 		tokens[i]->token_type = UNDEFINED;

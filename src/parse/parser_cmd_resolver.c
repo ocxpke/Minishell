@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   parser_cmd_resolver.c                              :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: pablo <pablo@student.42.fr>                +#+  +:+       +#+        */
+/*   By: pabmart2 <pabmart2@student.42malaga.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/07/30 18:08:16 by pablo             #+#    #+#             */
-/*   Updated: 2025/07/30 21:54:24 by pablo            ###   ########.fr       */
+/*   Updated: 2025/07/31 13:58:21 by pabmart2         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -85,29 +85,74 @@ static char	*search_path(char **paths, char *cmd)
 	return (NULL);
 }
 
-void	cmd_resolver(t_token **tokens, size_t i)
+/**
+ * @brief Resolves whether a command token represents a literal path.
+ *
+ * If the token's string contains a '/', it is treated as a path:
+ *
+ *   - If the path is accessible and executable, sets token_type to
+ *     COMMAND_NOT_FOUND and returns 0.
+ *
+ *   - Otherwise, sets token_type to COMMAND_ROUTE and returns 1.
+ *
+ * If the token's string does not contain a '/', returns 2.
+ *
+ * @param token Pointer to the command token to resolve.
+ * @return 0 if the command is not found, 1 if the command is a route, 2
+ *         otherwise.
+ */
+static int	cmd_literal_resolver(t_token *token)
 {
-	char	*cmd_path;
-	char	*tmp;
-	char	**paths;
-	char	*env_path;
+	if (ft_strchr(token->string, '/') != NULL)
+	{
+		if (!access(token->string, X_OK))
+			return (token->token_type = COMMAND_NOT_FOUND, 0);
+		return (token->token_type = COMMAND_ROUTE, 1);
+	}
+	return (2);
+}
 
-	if (is_built_in(tokens[i]->string))
-		return (tokens[i]->token_type = UNDEFINED, (void)0);
-	tokens[i]->token_type = COMMAND_ROUTE;
-	if (ft_strchr(tokens[i]->string, '/') != NULL)
-		return ;
+/**
+ * @brief Resolves the full path of a command token using PATH env variable.
+ *
+ * Attempts to find the executable path for the command in the given token.
+ * Retrieves PATH, splits it into directories, and searches for the command.
+ * If found, updates token->string and sets type to COMMAND_ROUTE.
+ * If not found, sets type to COMMAND_NOT_FOUND.
+ * If PATH is missing or allocation fails, sets type to UNDEFINED.
+ *
+ * @param token Pointer to the t_token structure to resolve.
+ */
+static void	cmd_path_resolver(t_token *token)
+{
+	char	*env_path;
+	char	**paths;
+	char	*cmd_path;
+
 	env_path = getenv("PATH");
 	if (!env_path)
-		return (tokens[i]->token_type = UNDEFINED, (void)0);
+		return (token->token_type = UNDEFINED, (void)0);
 	paths = ft_split(env_path, ':');
 	if (!paths)
-		return (tokens[i]->token_type = UNDEFINED, (void)0);
-	cmd_path = search_path(paths, tokens[i]->string);
+		return (token->token_type = UNDEFINED, (void)0);
+	cmd_path = search_path(paths, token->string);
 	ft_matrix_free((void **)paths, 0);
 	if (cmd_path)
-		return (tmp = tokens[i]->string, tokens[i]->string = cmd_path,
-			free(tmp), (void)0);
+	{
+		free(token->string);
+		token->string = cmd_path;
+		token->token_type = COMMAND_ROUTE;
+		return ;
+	}
 	else
-		tokens[i]->token_type = UNDEFINED;
+		return (token->token_type = COMMAND_NOT_FOUND, (void)0);
+}
+
+void	cmd_resolver(t_token **tokens, size_t i)
+{
+	if (is_built_in(tokens[i]->string))
+		return (tokens[i]->token_type = COMMAND_BUILT_IN, (void)0);
+	if (cmd_literal_resolver(tokens[i]) != 2)
+		return ;
+	cmd_path_resolver(tokens[i]);
 }

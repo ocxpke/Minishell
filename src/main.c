@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   main.c                                             :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: pablo <pablo@student.42.fr>                +#+  +:+       +#+        */
+/*   By: pabmart2 <pabmart2@student.42malaga.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/07/24 20:38:12 by pablo             #+#    #+#             */
-/*   Updated: 2025/07/30 22:06:01 by pablo            ###   ########.fr       */
+/*   Updated: 2025/07/31 13:58:53 by pabmart2         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -52,6 +52,8 @@ static char	*get_token_type_name(t_ttype type)
 		return ("REDIRECT_OUT_ROUTE");
 	else if (type == UNDEFINED)
 		return ("UNDEFINED");
+	else if (type == COMMAND_NOT_FOUND)
+		return("COMMAND_NOT_FOUND");
 	else
 		return ("UNKNOWN");
 }
@@ -95,7 +97,7 @@ int	main(void)
 {
 	t_token	**tokens;
 
-	tokens = parse("echo $HOME$USER | patata > 4");
+	tokens = parse("cat $HOME$USER | patata > 4 | echo");
 	print_token_matrix(tokens);
 	free_tokens(tokens);
 	return (0);

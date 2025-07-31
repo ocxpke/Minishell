@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   minishell.h                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: pablo <pablo@student.42.fr>                +#+  +:+       +#+        */
+/*   By: pabmart2 <pabmart2@student.42malaga.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/07/24 12:02:38 by pablo             #+#    #+#             */
-/*   Updated: 2025/07/30 21:56:17 by pablo            ###   ########.fr       */
+/*   Updated: 2025/07/31 13:56:12 by pabmart2         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -54,6 +54,7 @@ typedef enum e_token_type
 	ARGUMENT,
 	COMMAND_ROUTE,
 	COMMAND_BUILT_IN,
+	COMMAND_NOT_FOUND,
 	HEREDOC_EOF,
 	PIPE,
 	REDIRECT_IN_CHAR,
@@ -181,16 +182,14 @@ char		**split_quotes(char **array);
 t_token		**tokenize(char **array);
 
 /**
- * @brief Resolves the command path for a token in the tokens array.
+ * @brief Resolves the command type for the token at index `i`.
  *
- * Checks if the token at index `i` is a built-in, a direct path,
- * or needs resolution via PATH. Built-ins get UNDEFINED type.
- * If the command contains '/', it's assumed to be a direct path.
- * Otherwise, searches for the command in PATH directories.
- * If found, updates the token's string to the resolved path;
- * if not, sets the token type to UNDEFINED.
- *
- * @param tokens Array of token pointers for parsed commands.
+ * Checks if the token string is a built-in, a command literal, or needs
+ * path resolution.
+ * Sets token type to COMMAND_BUILT_IN if built-in.
+ * If not built-in and cmd_literal_resolver does not return 2, returns early.
+ * Otherwise, tries to resolve the command path.
+ * @param tokens Array of token pointers.
  * @param i Index of the token to resolve.
  */
 void		cmd_resolver(t_token **tokens, size_t i);
