@@ -3,19 +3,29 @@
 /*                                                        :::      ::::::::   */
 /*   minishell.h                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: pabmart2 <pabmart2@student.42malaga.com    +#+  +:+       +#+        */
+/*   By: jose-ara < jose-ara@student.42malaga.co    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/07/24 12:02:38 by pablo             #+#    #+#             */
-/*   Updated: 2025/07/31 13:56:12 by pabmart2         ###   ########.fr       */
+/*   Updated: 2025/07/31 15:47:30 by jose-ara         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #ifndef MINISHELL_H
 # define MINISHELL_H
 
+// Cuidado con esto hay que verlo bien
+# define _GNU_SOURCE
+
+# include "../lib/libft/include/libft.h"
+# include <aio.h>
+# include <readline/history.h>
+# include <readline/readline.h>
+# include <signal.h>
 # include <stdio.h>
 # include <stdlib.h>
 # include <string.h>
+# include <sys/wait.h>
+# include <unistd.h>
 
 /////////////////////////////////// STRUCTS ////////////////////////////////////
 
@@ -65,6 +75,12 @@ typedef enum e_token_type
 	REDIRECT_OUT_ROUTE,
 	UNDEFINED
 }			t_ttype;
+
+static char	*token_strings[] = {"ARGUMENT", "COMMAND_ROUTE", "COMMAND_BUILT_IN",
+		"COMMAND_NOT_FOUND", "HEREDOC_EOF", "PIPE", "REDIRECT_IN_CHAR",
+		"REDIRECT_IN_CHAR_HEREDOC", "REDIRECT_OUT_CHAR",
+		"REDIRECT_OUT_CHAR_qAPPEND", "REDIRECT_IN_ROUTE", "REDIRECT_OUT_ROUTE",
+		"UNDEFINED"};
 
 /**
  * @struct s_token
@@ -236,6 +252,13 @@ char		**clean_splitted(char **splitted);
  * @param tokens Pointer to an array of t_token pointers to be freed.
  */
 void		free_tokens(t_token **tokens);
+
+void		terminal_signals(void (*func)(int));
+void		block_signal(int signal, int block);
+
+// MACROS
+# define restore_terminal_signals() terminal_signals(SIG_DFL)
+# define ignore_terminal_signals() terminal_signals(SIG_IGN)
 
 // DEBUG
 void		print_char_matrix(char **matrix);
