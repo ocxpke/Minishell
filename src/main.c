@@ -3,14 +3,14 @@
 /*                                                        :::      ::::::::   */
 /*   main.c                                             :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: pabmart2 <pabmart2@student.42malaga.com    +#+  +:+       +#+        */
+/*   By: jose-ara < jose-ara@student.42malaga.co    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/07/24 20:38:12 by pablo             #+#    #+#             */
-/*   Updated: 2025/07/31 13:58:53 by pabmart2         ###   ########.fr       */
+/*   Updated: 2025/07/31 16:11:39 by jose-ara         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "minishell.h"
+#include "../include/minishell.h"
 
 void	print_char_matrix(char **matrix)
 {
@@ -52,8 +52,6 @@ static char	*get_token_type_name(t_ttype type)
 		return ("REDIRECT_OUT_ROUTE");
 	else if (type == UNDEFINED)
 		return ("UNDEFINED");
-	else if (type == COMMAND_NOT_FOUND)
-		return("COMMAND_NOT_FOUND");
 	else
 		return ("UNKNOWN");
 }
@@ -93,12 +91,108 @@ void	print_single_token(t_token *token, int index)
 	printf("=== END SINGLE TOKEN ===\n");
 }
 
+/*
 int	main(void)
 {
 	t_token	**tokens;
 
-	tokens = parse("cat $HOME$USER | patata > 4 | echo");
+	tokens = parse("echo $HOME$USER | patata > 4");
 	print_token_matrix(tokens);
 	free_tokens(tokens);
 	return (0);
+}
+	*/
+/**
+ * @note Me da el comando + todos los argumentos, todo lo demas lo omite
+ */
+char	**get_full_command(t_token **token)
+{
+	char	**ret;
+	int		nmeb;
+	int		i;
+
+	nmeb = 0;
+	while (token[nmeb] && ((token[nmeb]->token_type == COMMAND_ROUTE)
+			|| (token[nmeb]->token_type == COMMAND_BUILT_IN)
+			|| (token[nmeb]->token_type == ARGUMENT)))
+		nmeb++;
+	if (nmeb == 0)
+		return (NULL);
+	ret = ft_calloc(nmeb, sizeof(char *));
+	if (!ret)
+		return (NULL);
+	i = 0;
+	while (i < nmeb)
+	{
+		ret[i] = ft_strdup(token[i]->string);
+		i++;
+	}
+	return (ret);
+}
+
+void	free_full_command(char **command)
+{
+	int	i;
+
+	i = 0;
+	if (command == NULL)
+		return ;
+	while (command[i])
+	{
+		free(command[i]);
+		i++;
+	}
+	free(command);
+	command = NULL;
+}
+
+int	main(int argc, char **argv, char **envp)
+{
+	t_token	**tokens;
+	pid_t	pid_fork;
+	char	*input;
+	char	**get_full_cmd;
+
+	ignore_terminal_signals();
+	while (1)
+	{
+		input = readline("--> ");
+		if (input == NULL)
+			return (rl_clear_history(), EXIT_SUCCESS);
+		tokens = parse(input);
+		// Gitanaada
+		if (!tokens)
+			continue ;
+		add_history(input);
+		if (!ft_strncmp(tokens[0]->string, "exit",
+				ft_strlen(tokens[0]->string)))
+			return (free_tokens(tokens), rl_clear_history(), EXIT_SUCCESS);
+		// Solo para informar
+		for (int i = 0; tokens[i]; i++)
+		{
+			printf("%s : %s\n", tokens[i]->string,
+				token_strings[tokens[i]->token_type]);
+			printf("\n/////////////////////////////////////\n");
+		}
+		get_full_cmd = get_full_command(tokens);
+		pid_fork = fork();
+		if (pid_fork == -1)
+			exit(EXIT_FAILURE);
+		if (pid_fork == 0)
+		{
+			// Creo que necesitamos env por que nos pueden pasar las cosas sin
+			// variables de entornos o variables de entorono modificadas
+			restore_terminal_signals();
+			if (get_full_cmd[0] != NULL)
+				execve(get_full_cmd[0], get_full_cmd, envp);
+			free_full_command(get_full_cmd);
+			exit(EXIT_FAILURE);
+		}
+		else
+		{
+			// Ctrl+z suspende un proceso-- > implica controol de tareas-- > no hacer nada,no ?
+			waitpid(pid_fork, NULL, 0);
+			free_full_command(get_full_cmd);
+		}
+	}
 }

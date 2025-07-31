@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   parser.c                                           :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: pablo <pablo@student.42.fr>                +#+  +:+       +#+        */
+/*   By: jose-ara < jose-ara@student.42malaga.co    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/07/24 11:57:25 by pablo             #+#    #+#             */
-/*   Updated: 2025/07/30 21:20:04 by pablo            ###   ########.fr       */
+/*   Updated: 2025/07/31 16:07:08 by jose-ara         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -18,6 +18,9 @@ t_token	**parse(char *command_line)
 	char	**splitted;
 	t_token	**tokens;
 
+	//Peuqeño cambio dejalo o quitalo a tu gusto pablo
+	if (!command_line || !ft_strlen(command_line))
+		return (NULL);
 	splitted = split_pipes(command_line);
 	splitted = split_quotes(splitted);
 	splitted = split_args(splitted);
