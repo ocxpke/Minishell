@@ -1,0 +1,133 @@
+# **************************************************************************** #
+#                                                                              #
+#                                                         :::      ::::::::    #
+#    Makefile.test                                      :+:      :+:    :+:    #
+#                                                     +:+ +:+         +:+      #
+#    By: pablo <pablo@student.42.fr>                +#+  +:+       +#+         #
+#                                                 +#+#+#+#+#+   +#+            #
+#    Created: 2025/07/30 19:30:00 by pablo             #+#    #+#              #
+#    Updated: 2025/07/30 21:17:29 by pablo            ###   ########.fr        #
+#                                                                              #
+# **************************************************************************** #
+
+# Nombre del ejecutable de pruebas
+NAME = test_parser
+
+# Compilador y flags
+CC = gcc
+CFLAGS = -Wall -Wextra -g
+
+# Directorios
+ROOTDIR = ..
+SRCDIR = $(ROOTDIR)/src
+LIBFTDIR = $(ROOTDIR)/lib/libft
+INCDIR = $(ROOTDIR)/include
+TESTDIR = .
+OBJDIR = obj
+
+# Archivos fuente del parser (excluyendo main.c)
+PARSER_SRCS = $(SRCDIR)/parse/parser.c \
+              $(SRCDIR)/parse/parser_cmd_resolver.c \
+              $(SRCDIR)/parse/parser_env.c \
+              $(SRCDIR)/parse/parser_split_args.c \
+              $(SRCDIR)/parse/parser_split_pipes.c \
+              $(SRCDIR)/parse/parser_split_quote.c \
+              $(SRCDIR)/parse/parser_tokenization.c \
+              $(SRCDIR)/parse/utils/parser_clean_splitted.c \
+              $(SRCDIR)/parse/utils/parser_collapse.c \
+              $(SRCDIR)/parse/utils/parser_free_tokens.c
+
+# Archivo de pruebas
+TEST_SRCS = parser/test_parser.c
+
+# Funciones de debug (necesarias para print_token_matrix, etc.)
+DEBUG_SRCS = utils/debug_functions.c
+
+# Todos los archivos fuente
+ALL_SRCS = $(PARSER_SRCS) $(TEST_SRCS) $(DEBUG_SRCS)
+
+# Archivos objeto
+OBJS = $(ALL_SRCS:%.c=$(OBJDIR)/%.o)
+
+# Libft
+LIBFT = $(LIBFTDIR)/include/libft.a
+
+# Flags de inclusión
+INCLUDES = -I$(INCDIR) -I$(LIBFTDIR)/include -I$(LIBFTDIR)/include/ft_get_next_line -I$(LIBFTDIR)/include/ft_printf
+
+# Archivos de dependencias
+DEPS = $(OBJS:.o=.d)
+
+# Regla principal
+all: $(NAME)
+
+# Crear directorio de objetos
+$(OBJDIR):
+	@mkdir -p $(OBJDIR)
+	@mkdir -p $(OBJDIR)/$(SRCDIR)/parse
+	@mkdir -p $(OBJDIR)/$(SRCDIR)/parse/utils
+	@mkdir -p $(OBJDIR)/parser
+	@mkdir -p $(OBJDIR)/utils
+
+# Compilar archivos objeto
+$(OBJDIR)/%.o: %.c | $(OBJDIR)
+	@echo "Compiling $<..."
+	@$(CC) $(CFLAGS) $(INCLUDES) -MMD -MP -c $< -o $@
+
+# Compilar libft
+$(LIBFT):
+	@echo "Compiling libft..."
+	@make -C $(LIBFTDIR)
+
+# Compilar el programa de pruebas
+$(NAME): $(OBJS) $(LIBFT)
+	@echo "Linking parser tests..."
+	@$(CC) $(CFLAGS) $(OBJS) $(LIBFT) -o $(NAME)
+	@echo "Parser test suite compiled successfully!"
+
+# Ejecutar todas las pruebas
+test: $(NAME)
+	@echo "Running parser test suite..."
+	@./$(NAME)
+
+# Ejecutar una prueba específica
+test-input: $(NAME)
+	@echo "Enter the input to test:"
+	@read input; ./$(NAME) "$$input"
+
+# Limpiar archivos objeto
+clean:
+	@make clean -C $(LIBFTDIR)
+	@rm -rf $(OBJDIR)
+	@echo "Cleaned object files"
+
+# Limpiar todo
+fclean: clean
+	@make fclean -C $(LIBFTDIR)
+	@rm -f $(NAME)
+	@echo "Cleaned executable"
+
+# Incluir dependencias
+-include $(DEPS)
+
+# Recompilar todo
+re: fclean all
+
+# Ejecutar con valgrind para detectar memory leaks
+valgrind: $(NAME)
+	@echo "Running with valgrind..."
+	@valgrind --leak-check=full --show-leak-kinds=all --track-origins=yes ./$(NAME)
+
+# Mostrar ayuda
+help:
+	@echo "Available targets:"
+	@echo "  all        - Compile the test suite"
+	@echo "  test       - Run the interactive test suite"
+	@echo "  test-input - Test a specific input"
+	@echo "  clean      - Remove object files"
+	@echo "  fclean     - Remove all generated files"
+	@echo "  re         - Recompile everything"
+	@echo "  valgrind   - Run with memory leak detection"
+	@echo "  help       - Show this help message"
+
+.PHONY: all test test-input clean fclean re valgrind help
