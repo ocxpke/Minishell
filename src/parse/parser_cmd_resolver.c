@@ -6,7 +6,7 @@
 /*   By: pabmart2 <pabmart2@student.42malaga.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/07/30 18:08:16 by pablo             #+#    #+#             */
-/*   Updated: 2025/07/31 13:58:21 by pabmart2         ###   ########.fr       */
+/*   Updated: 2025/08/01 12:39:06 by pabmart2         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -105,7 +105,7 @@ static int	cmd_literal_resolver(t_token *token)
 {
 	if (ft_strchr(token->string, '/') != NULL)
 	{
-		if (!access(token->string, X_OK))
+		if (access(token->string, X_OK))
 			return (token->token_type = COMMAND_NOT_FOUND, 0);
 		return (token->token_type = COMMAND_ROUTE, 1);
 	}

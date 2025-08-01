@@ -3,14 +3,14 @@
 /*                                                        :::      ::::::::   */
 /*   main.c                                             :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: jose-ara < jose-ara@student.42malaga.co    +#+  +:+       +#+        */
+/*   By: pabmart2 <pabmart2@student.42malaga.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/07/24 20:38:12 by pablo             #+#    #+#             */
-/*   Updated: 2025/07/31 16:11:39 by jose-ara         ###   ########.fr       */
+/*   Updated: 2025/08/01 13:37:35 by pabmart2         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "../include/minishell.h"
+#include "minishell.h"
 
 void	print_char_matrix(char **matrix)
 {
@@ -153,6 +153,8 @@ int	main(int argc, char **argv, char **envp)
 	char	*input;
 	char	**get_full_cmd;
 
+	(void)argv;
+	(void)argc;
 	ignore_terminal_signals();
 	while (1)
 	{

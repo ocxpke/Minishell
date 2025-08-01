@@ -17,7 +17,7 @@
                 "-I${workspaceFolder}/lib/libft/include",
 				"-I${workspaceFolder}/lib/libft/include/ft_get_next_line",
 				"-I${workspaceFolder}/lib/libft/include/ft_printf",
-				"-lm",
+				"-lreadline",
                 "-o",
                 "${workspaceFolder}/src/main.out",
             ],
