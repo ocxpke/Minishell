@@ -6,7 +6,7 @@
 #    By: jose-ara < jose-ara@student.42malaga.co    +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2025/07/30 19:30:00 by pablo             #+#    #+#              #
-#    Updated: 2025/07/31 16:12:02 by jose-ara         ###   ########.fr        #
+#    Updated: 2025/08/01 13:23:05 by jose-ara         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -39,8 +39,11 @@ PARSER_SRCS = $(SRCDIR)/parse/parser.c \
 
 SIGNALS_SRCS = $(SRCDIR)/signals/signals.c
 
+PROCESS_SRCS = $(SRCDIR)/process_management/child_process.c \
+				$(SRCDIR)/process_management/parent_process.c
+
 # Todos los archivos fuente
-ALL_SRCS = $(PARSER_SRCS) $(SIGNALS_SRCS)
+ALL_SRCS = $(PARSER_SRCS) $(SIGNALS_SRCS) $(PROCESS_SRCS)
 
 # Archivos objeto
 OBJS = $(ALL_SRCS:%.c=$(OBJDIR)/%.o)
@@ -62,6 +65,7 @@ $(OBJDIR):
 	@mkdir -p $(OBJDIR)/parser
 	@mkdir -p $(OBJDIR)/utils
 	@mkdir -p $(OBJDIR)/signals
+	@mkdir -p $(OBJDIR)/process_management
 
 # Compilar archivos objeto
 $(OBJDIR)/%.o: %.c | $(OBJDIR)

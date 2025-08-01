@@ -6,7 +6,7 @@
 /*   By: jose-ara < jose-ara@student.42malaga.co    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/07/24 20:38:12 by pablo             #+#    #+#             */
-/*   Updated: 2025/07/31 16:11:39 by jose-ara         ###   ########.fr       */
+/*   Updated: 2025/08/01 13:17:24 by jose-ara         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -153,46 +153,33 @@ int	main(int argc, char **argv, char **envp)
 	char	*input;
 	char	**get_full_cmd;
 
-	ignore_terminal_signals();
 	while (1)
 	{
 		input = readline("--> ");
 		if (input == NULL)
 			return (rl_clear_history(), EXIT_SUCCESS);
 		tokens = parse(input);
-		// Gitanaada
-		if (!tokens)
-			continue ;
-		add_history(input);
-		if (!ft_strncmp(tokens[0]->string, "exit",
-				ft_strlen(tokens[0]->string)))
-			return (free_tokens(tokens), rl_clear_history(), EXIT_SUCCESS);
-		// Solo para informar
-		for (int i = 0; tokens[i]; i++)
+		if (tokens)
 		{
-			printf("%s : %s\n", tokens[i]->string,
-				token_strings[tokens[i]->token_type]);
-			printf("\n/////////////////////////////////////\n");
-		}
-		get_full_cmd = get_full_command(tokens);
-		pid_fork = fork();
-		if (pid_fork == -1)
-			exit(EXIT_FAILURE);
-		if (pid_fork == 0)
-		{
-			// Creo que necesitamos env por que nos pueden pasar las cosas sin
-			// variables de entornos o variables de entorono modificadas
-			restore_terminal_signals();
-			if (get_full_cmd[0] != NULL)
-				execve(get_full_cmd[0], get_full_cmd, envp);
-			free_full_command(get_full_cmd);
-			exit(EXIT_FAILURE);
-		}
-		else
-		{
-			// Ctrl+z suspende un proceso-- > implica controol de tareas-- > no hacer nada,no ?
-			waitpid(pid_fork, NULL, 0);
-			free_full_command(get_full_cmd);
+			add_history(input);
+			if (!ft_strncmp(tokens[0]->string, "exit",
+					ft_strlen(tokens[0]->string)))
+				return (free_tokens(tokens), rl_clear_history(), EXIT_SUCCESS);
+			// Analyze each element
+			for (int i = 0; tokens[i]; i++)
+			{
+				printf("%s : %s\n", tokens[i]->string,
+					token_strings[tokens[i]->token_type]);
+			}
+			printf("/////////////////////////////////////\n");
+			get_full_cmd = get_full_command(tokens);
+			pid_fork = fork();
+			if (pid_fork == -1)
+				exit(EXIT_FAILURE);
+			if (pid_fork == 0)
+				child_process(tokens, get_full_cmd, envp);
+			else
+				parent_process(pid_fork, get_full_cmd);
 		}
 	}
 }
