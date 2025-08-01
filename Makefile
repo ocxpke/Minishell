@@ -6,7 +6,7 @@
 #    By: pabmart2 <pabmart2@student.42malaga.com    +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2024/09/20 14:34:30 by pabmart2          #+#    #+#              #
-#    Updated: 2025/08/01 13:50:15 by pabmart2         ###   ########.fr        #
+#    Updated: 2025/08/01 13:57:30 by pabmart2         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -24,6 +24,7 @@ NAME = minishell
 
 HEADERS = \
 	include/minishell.h \
+	include/colors.h \
 
 SRC = \
 	src/main.c \

@@ -11,8 +11,6 @@
 				"${workspaceFolder}/src/**/*.c",
 				"${workspaceFolder}/src/**/**/*.c",
                 "${workspaceFolder}/lib/libft/src/*.c",
-                "${workspaceFolder}/lib/libft/src/**/*.c",
-                "${workspaceFolder}/lib/libft/src/**/**/*.c",
                 "-I${workspaceFolder}/include",
                 "-I${workspaceFolder}/lib/libft/include",
 				"-I${workspaceFolder}/lib/libft/include/ft_get_next_line",

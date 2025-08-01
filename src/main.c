@@ -6,7 +6,7 @@
 /*   By: pabmart2 <pabmart2@student.42malaga.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/07/24 20:38:12 by pablo             #+#    #+#             */
-/*   Updated: 2025/08/01 13:37:35 by pabmart2         ###   ########.fr       */
+/*   Updated: 2025/08/01 14:27:12 by pabmart2         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -169,13 +169,19 @@ int	main(int argc, char **argv, char **envp)
 		if (!ft_strncmp(tokens[0]->string, "exit",
 				ft_strlen(tokens[0]->string)))
 			return (free_tokens(tokens), rl_clear_history(), EXIT_SUCCESS);
+		//TODO: Investigar por que no se ve el prompt
+		if(tokens[0]->token_type = REDIRECT_IN_CHAR_HEREDOC)
+			set_heredoc_tmp_file(tokens[1]->string);
 		// Solo para informar
-		for (int i = 0; tokens[i]; i++)
-		{
+		/**
+		 *
+		 for (int i = 0; tokens[i]; i++)
+		 {
 			printf("%s : %s\n", tokens[i]->string,
-				token_strings[tokens[i]->token_type]);
+			token_strings[tokens[i]->token_type]);
 			printf("\n/////////////////////////////////////\n");
 		}
+		*/
 		get_full_cmd = get_full_command(tokens);
 		pid_fork = fork();
 		if (pid_fork == -1)

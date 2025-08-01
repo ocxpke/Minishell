@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   minishell.h                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: jose-ara < jose-ara@student.42malaga.co    +#+  +:+       +#+        */
+/*   By: pabmart2 <pabmart2@student.42malaga.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/07/24 12:02:38 by pablo             #+#    #+#             */
-/*   Updated: 2025/07/31 15:47:30 by jose-ara         ###   ########.fr       */
+/*   Updated: 2025/08/01 14:25:35 by pabmart2         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -18,6 +18,7 @@
 
 # include "../lib/libft/include/libft.h"
 # include <aio.h>
+# include <fcntl.h>
 # include <readline/history.h>
 # include <readline/readline.h>
 # include <signal.h>
@@ -255,6 +256,24 @@ void		free_tokens(t_token **tokens);
 
 void		terminal_signals(void (*func)(int));
 void		block_signal(int signal, int block);
+
+//////////////////////////////////// TOOLS /////////////////////////////////////
+
+/**
+* @brief Creates a temporary file containing heredoc input.
+*
+* Reads input from the user until the specified EOF delimiter is encountered,
+* writes the input to a newly generated temporary file,
+*	and returns the name
+* of the file. Handles memory allocation, file creation,
+*	and error reporting.
+*
+* @param eof The end-of-file delimiter string for the heredoc.
+* @return On success, returns the name of the temporary file (char *).
+*         On failure,
+*	returns NULL or 1 depending on the error encountered.
+*/
+char		*set_heredoc_tmp_file(char *eof);
 
 // MACROS
 # define restore_terminal_signals() terminal_signals(SIG_DFL)
