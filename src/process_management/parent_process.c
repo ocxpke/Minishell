@@ -1,25 +1,20 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   signals.c                                          :+:      :+:    :+:   */
+/*   parent_process.c                                   :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: pabmart2 <pabmart2@student.42malaga.com    +#+  +:+       +#+        */
+/*   By: jose-ara < jose-ara@student.42malaga.co    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2025/07/31 15:44:48 by jose-ara          #+#    #+#             */
-/*   Updated: 2025/08/01 12:42:26 by jose-ara         ###   ########.fr       */
+/*   Created: 2025/08/01 12:47:33 by jose-ara          #+#    #+#             */
+/*   Updated: 2025/08/01 12:55:09 by jose-ara         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
 
-extern sig_atomic_t signal_recv;
-
-void block_terminal_signals(){
-	signal(SIGINT, sigint_handler);
-	signal(SIGQUIT, SIG_IGN);
-}
-
-void restore_terminal_signals(){
-	signal(SIGINT, SIG_DFL);
-	signal(SIGQUIT, SIG_DFL);
+void	parent_process(pid_t pid_fork, char **get_full_cmd)
+{
+	// Ctrl+z suspende un proceso-- > implica controol de tareas-- > no hacer nada,no ?
+	waitpid(pid_fork, NULL, 0);
+	free_full_command(get_full_cmd);
 }

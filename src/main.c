@@ -6,12 +6,13 @@
 /*   By: pabmart2 <pabmart2@student.42malaga.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/07/24 20:38:12 by pablo             #+#    #+#             */
-/*   Updated: 2025/08/01 14:27:12 by pabmart2         ###   ########.fr       */
+/*   Updated: 2025/08/01 13:17:24 by jose-ara         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
 
+/*
 void	print_char_matrix(char **matrix)
 {
 	int	i;
@@ -91,7 +92,7 @@ void	print_single_token(t_token *token, int index)
 	printf("=== END SINGLE TOKEN ===\n");
 }
 
-/*
+
 int	main(void)
 {
 	t_token	**tokens;
@@ -102,6 +103,9 @@ int	main(void)
 	return (0);
 }
 	*/
+
+volatile sig_atomic_t signal_recv = 0;
+
 /**
  * @note Me da el comando + todos los argumentos, todo lo demas lo omite
  */
@@ -146,6 +150,15 @@ void	free_full_command(char **command)
 	command = NULL;
 }
 
+void init_minishell(){
+	if (!isatty(STDIN_FILENO))
+	{
+		//En este caso ejecutamos el archivo que nos hayan pasado linea a linea GNL.
+		//Tenemos que leer el archivo de entrada linea a linea y ejcutarlo linea a linea
+		printf("No es una entrada interactiva\n");
+	}
+}
+
 int	main(int argc, char **argv, char **envp)
 {
 	t_token	**tokens;
@@ -153,54 +166,37 @@ int	main(int argc, char **argv, char **envp)
 	char	*input;
 	char	**get_full_cmd;
 
-	(void)argv;
-	(void)argc;
-	ignore_terminal_signals();
+	init_minishell();
+	block_terminal_signals();
 	while (1)
 	{
 		input = readline("--> ");
 		if (input == NULL)
 			return (rl_clear_history(), EXIT_SUCCESS);
 		tokens = parse(input);
-		// Gitanaada
-		if (!tokens)
-			continue ;
-		add_history(input);
-		if (!ft_strncmp(tokens[0]->string, "exit",
-				ft_strlen(tokens[0]->string)))
-			return (free_tokens(tokens), rl_clear_history(), EXIT_SUCCESS);
-		//TODO: Investigar por que no se ve el prompt
-		if(tokens[0]->token_type = REDIRECT_IN_CHAR_HEREDOC)
-			set_heredoc_tmp_file(tokens[1]->string);
-		// Solo para informar
-		/**
-		 *
-		 for (int i = 0; tokens[i]; i++)
-		 {
-			printf("%s : %s\n", tokens[i]->string,
-			token_strings[tokens[i]->token_type]);
-			printf("\n/////////////////////////////////////\n");
-		}
-		*/
-		get_full_cmd = get_full_command(tokens);
-		pid_fork = fork();
-		if (pid_fork == -1)
-			exit(EXIT_FAILURE);
-		if (pid_fork == 0)
+		if (tokens)
 		{
-			// Creo que necesitamos env por que nos pueden pasar las cosas sin
-			// variables de entornos o variables de entorono modificadas
-			restore_terminal_signals();
-			if (get_full_cmd[0] != NULL)
-				execve(get_full_cmd[0], get_full_cmd, envp);
-			free_full_command(get_full_cmd);
-			exit(EXIT_FAILURE);
-		}
-		else
-		{
-			// Ctrl+z suspende un proceso-- > implica controol de tareas-- > no hacer nada,no ?
-			waitpid(pid_fork, NULL, 0);
-			free_full_command(get_full_cmd);
+			add_history(input);
+			if(tokens[0]->token_type = REDIRECT_IN_CHAR_HEREDOC)
+				set_heredoc_tmp_file(tokens[1]->string);
+			// Analyze each element
+			for (int i = 0; tokens[i]; i++)
+			{
+				printf("%s : %s\n", tokens[i]->string,
+					token_strings[tokens[i]->token_type]);
+			}
+			printf("/////////////////////////////////////\n");
+			if (!check_if_is_built_in(tokens, envp))
+			{
+				get_full_cmd = get_full_command(tokens);
+				pid_fork = fork();
+				if (pid_fork == -1)
+					exit(EXIT_FAILURE);
+				if (pid_fork == 0)
+					child_process(tokens, get_full_cmd, envp);
+				else
+					parent_process(pid_fork, get_full_cmd);
+			}
 		}
 	}
 }
