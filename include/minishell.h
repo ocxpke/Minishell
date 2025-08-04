@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   minishell.h                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: jose-ara < jose-ara@student.42malaga.co    +#+  +:+       +#+        */
+/*   By: pabmart2 <pabmart2@student.42malaga.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/07/24 12:02:38 by pablo             #+#    #+#             */
-/*   Updated: 2025/07/31 15:47:30 by jose-ara         ###   ########.fr       */
+/*   Updated: 2025/08/01 13:17:58 by jose-ara         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -18,6 +18,7 @@
 
 # include "../lib/libft/include/libft.h"
 # include <aio.h>
+# include <fcntl.h>
 # include <readline/history.h>
 # include <readline/readline.h>
 # include <signal.h>
@@ -26,6 +27,7 @@
 # include <string.h>
 # include <sys/wait.h>
 # include <unistd.h>
+# include <termios.h>
 
 /////////////////////////////////// STRUCTS ////////////////////////////////////
 
@@ -253,16 +255,23 @@ char		**clean_splitted(char **splitted);
  */
 void		free_tokens(t_token **tokens);
 
-void		terminal_signals(void (*func)(int));
-void		block_signal(int signal, int block);
-
-// MACROS
-# define restore_terminal_signals() terminal_signals(SIG_DFL)
-# define ignore_terminal_signals() terminal_signals(SIG_IGN)
-
 // DEBUG
 void		print_char_matrix(char **matrix);
 void		print_token_matrix(t_token **tokens);
 void		print_single_token(t_token *token, int index);
 
+void		child_process(t_token **tokens, char **get_full_cmd, char **envp);
+void		parent_process(pid_t pid_fork, char **get_full_cmd);
+void		free_full_command(char **command);
+char		**get_full_command(t_token **token);
+
+void block_terminal_signals();
+void sigint_handler(int sig);
+void restore_terminal_signals();
+void exit_cmd(t_token **tokens);
+void cd_cmd(t_token **tokens, int *ret);
+void pwd_cmd(t_token **tokens, int *ret);
+void echo_cmd(t_token **tokens, int *ret);
+void env_cmd(t_token **tokens, char **envp, int *ret);
+int check_if_is_built_in(t_token **tokens, char **envp);
 #endif

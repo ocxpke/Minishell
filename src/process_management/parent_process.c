@@ -1,20 +1,20 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   prct_printer.c                                     :+:      :+:    :+:   */
+/*   parent_process.c                                   :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: pablo <pablo@student.42.fr>                +#+  +:+       +#+        */
+/*   By: jose-ara < jose-ara@student.42malaga.co    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2024/09/25 12:15:53 by pabmart2          #+#    #+#             */
-/*   Updated: 2025/03/13 20:24:14 by pablo            ###   ########.fr       */
+/*   Created: 2025/08/01 12:47:33 by jose-ara          #+#    #+#             */
+/*   Updated: 2025/08/01 12:55:09 by jose-ara         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "ft_printf.h"
+#include "minishell.h"
 
-int	prct_printer(va_list arg)
+void	parent_process(pid_t pid_fork, char **get_full_cmd)
 {
-	(void)arg;
-	ft_putchar_fd('%', 1);
-	return (1);
+	// Ctrl+z suspende un proceso-- > implica controol de tareas-- > no hacer nada,no ?
+	waitpid(pid_fork, NULL, 0);
+	free_full_command(get_full_cmd);
 }
