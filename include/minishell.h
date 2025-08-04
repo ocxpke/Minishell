@@ -26,6 +26,7 @@
 # include <string.h>
 # include <sys/wait.h>
 # include <unistd.h>
+# include <termios.h>
 
 /////////////////////////////////// STRUCTS ////////////////////////////////////
 
@@ -262,4 +263,14 @@ void		child_process(t_token **tokens, char **get_full_cmd, char **envp);
 void		parent_process(pid_t pid_fork, char **get_full_cmd);
 void		free_full_command(char **command);
 char		**get_full_command(t_token **token);
+
+void block_terminal_signals();
+void sigint_handler(int sig);
+void restore_terminal_signals();
+void exit_cmd(t_token **tokens);
+void cd_cmd(t_token **tokens, int *ret);
+void pwd_cmd(t_token **tokens, int *ret);
+void echo_cmd(t_token **tokens, int *ret);
+void env_cmd(t_token **tokens, char **envp, int *ret);
+int check_if_is_built_in(t_token **tokens, char **envp);
 #endif

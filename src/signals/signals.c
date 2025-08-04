@@ -12,3 +12,14 @@
 
 #include "minishell.h"
 
+extern sig_atomic_t signal_recv;
+
+void block_terminal_signals(){
+	signal(SIGINT, sigint_handler);
+	signal(SIGQUIT, SIG_IGN);
+}
+
+void restore_terminal_signals(){
+	signal(SIGINT, SIG_DFL);
+	signal(SIGQUIT, SIG_DFL);
+}

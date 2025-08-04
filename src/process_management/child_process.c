@@ -12,11 +12,13 @@
 
 #include "../../include/minishell.h"
 
+extern sig_atomic_t signal_recv;
+
 void	child_process(t_token **tokens, char **get_full_cmd, char **envp)
 {
 	// Creo que necesitamos env por que nos pueden pasar las cosas sin
 	// variables de entornos o variables de entorono modificadas
-	// restore_terminal_signals();
+	restore_terminal_signals();
 	if (get_full_cmd[0] != NULL)
 		execve(get_full_cmd[0], get_full_cmd, envp);
 	free_full_command(get_full_cmd);

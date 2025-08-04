@@ -10,8 +10,9 @@
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "../include/minishell.h"
+#include "minishell.h"
 
+/*
 void	print_char_matrix(char **matrix)
 {
 	int	i;
@@ -91,7 +92,7 @@ void	print_single_token(t_token *token, int index)
 	printf("=== END SINGLE TOKEN ===\n");
 }
 
-/*
+
 int	main(void)
 {
 	t_token	**tokens;
@@ -102,6 +103,9 @@ int	main(void)
 	return (0);
 }
 	*/
+
+volatile sig_atomic_t signal_recv = 0;
+
 /**
  * @note Me da el comando + todos los argumentos, todo lo demas lo omite
  */
@@ -146,6 +150,15 @@ void	free_full_command(char **command)
 	command = NULL;
 }
 
+void init_minishell(){
+	if (!isatty(STDIN_FILENO))
+	{
+		//En este caso ejecutamos el archivo que nos hayan pasado linea a linea GNL.
+		//Tenemos que leer el archivo de entrada linea a linea y ejcutarlo linea a linea
+		printf("No es una entrada interactiva\n");
+	}
+}
+
 int	main(int argc, char **argv, char **envp)
 {
 	t_token	**tokens;
@@ -153,6 +166,8 @@ int	main(int argc, char **argv, char **envp)
 	char	*input;
 	char	**get_full_cmd;
 
+	init_minishell();
+	block_terminal_signals();
 	while (1)
 	{
 		input = readline("--> ");
@@ -162,9 +177,6 @@ int	main(int argc, char **argv, char **envp)
 		if (tokens)
 		{
 			add_history(input);
-			if (!ft_strncmp(tokens[0]->string, "exit",
-					ft_strlen(tokens[0]->string)))
-				return (free_tokens(tokens), rl_clear_history(), EXIT_SUCCESS);
 			// Analyze each element
 			for (int i = 0; tokens[i]; i++)
 			{
@@ -172,14 +184,17 @@ int	main(int argc, char **argv, char **envp)
 					token_strings[tokens[i]->token_type]);
 			}
 			printf("/////////////////////////////////////\n");
-			get_full_cmd = get_full_command(tokens);
-			pid_fork = fork();
-			if (pid_fork == -1)
-				exit(EXIT_FAILURE);
-			if (pid_fork == 0)
-				child_process(tokens, get_full_cmd, envp);
-			else
-				parent_process(pid_fork, get_full_cmd);
+			if (!check_if_is_built_in(tokens, envp))
+			{
+				get_full_cmd = get_full_command(tokens);
+				pid_fork = fork();
+				if (pid_fork == -1)
+					exit(EXIT_FAILURE);
+				if (pid_fork == 0)
+					child_process(tokens, get_full_cmd, envp);
+				else
+					parent_process(pid_fork, get_full_cmd);
+			}
 		}
 	}
 }

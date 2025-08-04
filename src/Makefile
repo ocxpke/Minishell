@@ -37,13 +37,17 @@ PARSER_SRCS = $(SRCDIR)/parse/parser.c \
               $(SRCDIR)/parse/utils/parser_free_tokens.c\
 			  $(SRCDIR)/main.c
 
-SIGNALS_SRCS = $(SRCDIR)/signals/signals.c
+SIGNALS_SRCS = $(SRCDIR)/signals/signals.c \
+				$(SRCDIR)/signals/sig_handlers.c
 
 PROCESS_SRCS = $(SRCDIR)/process_management/child_process.c \
 				$(SRCDIR)/process_management/parent_process.c
 
+BUILT_IN_SRCS = $(SRCDIR)/built_in/built_in_cmds.c \
+				$(SRCDIR)/built_in/manage_built_in.c
+
 # Todos los archivos fuente
-ALL_SRCS = $(PARSER_SRCS) $(SIGNALS_SRCS) $(PROCESS_SRCS)
+ALL_SRCS = $(PARSER_SRCS) $(SIGNALS_SRCS) $(PROCESS_SRCS) $(BUILT_IN_SRCS)
 
 # Archivos objeto
 OBJS = $(ALL_SRCS:%.c=$(OBJDIR)/%.o)
@@ -66,6 +70,7 @@ $(OBJDIR):
 	@mkdir -p $(OBJDIR)/utils
 	@mkdir -p $(OBJDIR)/signals
 	@mkdir -p $(OBJDIR)/process_management
+	@mkdir -p $(OBJDIR)/built_in
 
 # Compilar archivos objeto
 $(OBJDIR)/%.o: %.c | $(OBJDIR)
