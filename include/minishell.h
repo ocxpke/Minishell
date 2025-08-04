@@ -3,7 +3,7 @@
 /*                                                        :::      ::::::::   */
 /*   minishell.h                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: jose-ara < jose-ara@student.42malaga.co    +#+  +:+       +#+        */
+/*   By: pabmart2 <pabmart2@student.42malaga.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/07/24 12:02:38 by pablo             #+#    #+#             */
 /*   Updated: 2025/08/01 13:17:58 by jose-ara         ###   ########.fr       */
@@ -18,6 +18,7 @@
 
 # include "../lib/libft/include/libft.h"
 # include <aio.h>
+# include <fcntl.h>
 # include <readline/history.h>
 # include <readline/readline.h>
 # include <signal.h>

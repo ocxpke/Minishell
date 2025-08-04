@@ -41,6 +41,7 @@
 		"variant": "c",
 		"checker.h": "c",
 		"minishell.h": "c",
-		"stdlib.h": "c"
+		"stdlib.h": "c",
+		"colors.h": "c"
 	}
 }

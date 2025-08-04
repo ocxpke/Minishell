@@ -3,10 +3,10 @@
 #                                                         :::      ::::::::    #
 #    Makefile                                           :+:      :+:    :+:    #
 #                                                     +:+ +:+         +:+      #
-#    By: pablo <pablo@student.42.fr>                +#+  +:+       +#+         #
+#    By: pabmart2 <pabmart2@student.42malaga.com    +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2024/09/20 14:34:30 by pabmart2          #+#    #+#              #
-#    Updated: 2025/07/30 20:41:30 by pablo            ###   ########.fr        #
+#    Updated: 2025/08/01 13:18:19 by pabmart2         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -86,23 +86,12 @@ SRC = \
 	src/ft_uintptrtob.c \
 	src/ft_uitoa.c \
 	src/ft_uitob.c \
-	src/ft_printf/check_printer.c \
-	src/ft_printf/ft_printf.c \
-	src/ft_printf/printers/c_printer.c \
-	src/ft_printf/printers/di_printer.c \
-	src/ft_printf/printers/p_printer.c \
-	src/ft_printf/printers/prct_printer.c \
-	src/ft_printf/printers/s_printer.c \
-	src/ft_printf/printers/u_printer.c \
-	src/ft_printf/printers/x_low_printer.c \
-	src/ft_printf/printers/x_up_printer.c \
 
 OBJ = $(SRC:.c=.o)
 
 INCLUDES = \
 	-Iinclude \
 	-Iinclude/ft_get_next_line \
-	-Iinclude/ft_printf \
 
 all: $(NAME)
 

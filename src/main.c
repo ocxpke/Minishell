@@ -3,7 +3,7 @@
 /*                                                        :::      ::::::::   */
 /*   main.c                                             :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: jose-ara < jose-ara@student.42malaga.co    +#+  +:+       +#+        */
+/*   By: pabmart2 <pabmart2@student.42malaga.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/07/24 20:38:12 by pablo             #+#    #+#             */
 /*   Updated: 2025/08/01 13:17:24 by jose-ara         ###   ########.fr       */
@@ -177,6 +177,8 @@ int	main(int argc, char **argv, char **envp)
 		if (tokens)
 		{
 			add_history(input);
+			if(tokens[0]->token_type = REDIRECT_IN_CHAR_HEREDOC)
+				set_heredoc_tmp_file(tokens[1]->string);
 			// Analyze each element
 			for (int i = 0; tokens[i]; i++)
 			{

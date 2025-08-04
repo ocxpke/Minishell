@@ -3,7 +3,7 @@
 /*                                                        :::      ::::::::   */
 /*   signals.c                                          :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: jose-ara < jose-ara@student.42malaga.co    +#+  +:+       +#+        */
+/*   By: pabmart2 <pabmart2@student.42malaga.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/07/31 15:44:48 by jose-ara          #+#    #+#             */
 /*   Updated: 2025/08/01 12:42:26 by jose-ara         ###   ########.fr       */

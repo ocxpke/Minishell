@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   libft.h                                            :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: pablo <pablo@student.42.fr>                +#+  +:+       +#+        */
+/*   By: pabmart2 <pabmart2@student.42malaga.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/09/10 18:17:00 by pabmart2          #+#    #+#             */
-/*   Updated: 2025/07/30 19:53:43 by pablo            ###   ########.fr       */
+/*   Updated: 2025/08/01 13:15:50 by pabmart2         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -30,7 +30,6 @@
 # include <stdlib.h>
 # include <unistd.h>
 # include "ft_get_next_line/ft_get_next_line.h"
-# include "ft_printf/ft_printf.h"
 
 
 /**
