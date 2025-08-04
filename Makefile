@@ -40,6 +40,28 @@ SRC = \
 	src/parse/utils/parser_free_tokens.c \
 	src/signals/signals.c
 
+# Archivos fuente del parser (excluyendo main.c)
+PARSER_SRCS = $(SRCDIR)/parse/parser.c \
+              $(SRCDIR)/parse/parser_cmd_resolver.c \
+              $(SRCDIR)/parse/parser_env.c \
+              $(SRCDIR)/parse/parser_split_args.c \
+              $(SRCDIR)/parse/parser_split_pipes.c \
+              $(SRCDIR)/parse/parser_split_quote.c \
+              $(SRCDIR)/parse/parser_tokenization.c \
+              $(SRCDIR)/parse/utils/parser_clean_splitted.c \
+              $(SRCDIR)/parse/utils/parser_collapse.c \
+              $(SRCDIR)/parse/utils/parser_free_tokens.c\
+			  $(SRCDIR)/main.c
+
+SIGNALS_SRCS = $(SRCDIR)/signals/signals.c \
+				$(SRCDIR)/signals/sig_handlers.c
+
+PROCESS_SRCS = $(SRCDIR)/process_management/child_process.c \
+				$(SRCDIR)/process_management/parent_process.c
+
+BUILT_IN_SRCS = $(SRCDIR)/built_in/built_in_cmds.c \
+				$(SRCDIR)/built_in/manage_built_in.c
+
 
 OBJ = $(addprefix $(OBJ_DIR)/, $(SRC:.c=.o))
 
