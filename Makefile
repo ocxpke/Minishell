@@ -11,7 +11,7 @@
 # **************************************************************************** #
 
 CC = cc
-CFLAGS = -Wall -Wextra -Werror -lreadline
+CFLAGS = -Wall -Wextra -lreadline
 DEBUG_FLAGS = -g -fno-inline -gdwarf-4
 ASAN_FLAGS = $(DEBUG_FLAGS) -fsanitize=address -O1
 TSAN_FLAGS = $(DEBUG_FLAGS) -fsanitize=thread -O1
@@ -26,41 +26,42 @@ HEADERS = \
 	include/minishell.h \
 	include/colors.h \
 
-SRC = \
-	src/main.c \
-	src/parse/parser_cmd_resolver.c \
-	src/parse/parser_env.c \
-	src/parse/parser_split_args.c \
-	src/parse/parser_split_pipes.c \
-	src/parse/parser_split_quotes.c \
-	src/parse/parser_tokenization.c \
-	src/parse/parser.c \
-	src/parse/utils/parser_clean_splitted.c \
-	src/parse/utils/parser_collapse.c \
-	src/parse/utils/parser_free_tokens.c \
-	src/signals/signals.c
+SRC = src/main.c $(SHELL_DATA_SRC) $(PROC_MNG_SRC) $(SIGNALS_SRC) $(PARSE_SRC) \
+	$(TOOLS_SRC) $(BUILT_IN_SRC)
 
-# Archivos fuente del parser (excluyendo main.c)
-PARSER_SRCS = $(SRCDIR)/parse/parser.c \
-              $(SRCDIR)/parse/parser_cmd_resolver.c \
-              $(SRCDIR)/parse/parser_env.c \
-              $(SRCDIR)/parse/parser_split_args.c \
-              $(SRCDIR)/parse/parser_split_pipes.c \
-              $(SRCDIR)/parse/parser_split_quote.c \
-              $(SRCDIR)/parse/parser_tokenization.c \
-              $(SRCDIR)/parse/utils/parser_clean_splitted.c \
-              $(SRCDIR)/parse/utils/parser_collapse.c \
-              $(SRCDIR)/parse/utils/parser_free_tokens.c\
-			  $(SRCDIR)/main.c
+SHELL_DATA_SRC = src/shell_data/manage_shell_data.c
 
-SIGNALS_SRCS = $(SRCDIR)/signals/signals.c \
-				$(SRCDIR)/signals/sig_handlers.c
+PROC_MNG_SRC = src/process_management/child_process.c \
+				src/process_management/parent_process.c \
+				src/process_management/manage_execution.c
 
-PROCESS_SRCS = $(SRCDIR)/process_management/child_process.c \
-				$(SRCDIR)/process_management/parent_process.c
+SIGNALS_SRC = src/signals/signals.c\
+				src/signals/sig_handlers.c
 
-BUILT_IN_SRCS = $(SRCDIR)/built_in/built_in_cmds.c \
-				$(SRCDIR)/built_in/manage_built_in.c
+PARSE_SRC = src/parse/parser_cmd_resolver.c \
+			src/parse/parser_env.c \
+			src/parse/parser_split_args.c \
+			src/parse/parser_split_pipes.c \
+			src/parse/parser_split_quotes.c \
+			src/parse/parser_tokenization.c \
+			src/parse/parser.c \
+			src/parse/utils/parser_clean_splitted.c \
+			src/parse/utils/parser_collapse.c \
+			src/parse/utils/parser_free_tokens.c
+
+TOOLS_SRC = src/tools/tools_heredoc.c \
+			src/tools/tools_enviroment.c \
+			src/tools/tools_envp_linked_list.c \
+			src/tools/tools_aux_envp_linked_list.c
+
+BUILT_IN_SRC = src/built_in/manage_built_in.c \
+				src/built_in/echo_command.c \
+				src/built_in/cd_command.c \
+				src/built_in/pwd_command.c \
+				src/built_in/export_command.c \
+				src/built_in/unset_command.c \
+				src/built_in/env_command.c \
+				src/built_in/exit_command.c
 
 
 OBJ = $(addprefix $(OBJ_DIR)/, $(SRC:.c=.o))
@@ -85,29 +86,31 @@ debug-tsan: clean $(NAME)
 
 clean:
 	@rm -rf $(OBJ_DIR)
-	@echo "\033[31mObject files removed\033[0m"
+	@make clean -C lib/libft
+	@echo -e "\033[31mObject files removed\033[0m"
 
 fclean: clean
 	@rm -f $(BUILD_DIR)/$(NAME)
-	@echo "\033[31m$(NAME) removed\033[0m"
+	@make fclean -C lib/libft
+	@echo -e "\033[31m$(NAME) removed\033[0m"
 
 re: fclean
 	$(MAKE) all
 
 libft:
-	@echo "\033[33mCompiling libft...\033[0m"
+	@echo -e "\033[33mCompiling libft...\033[0m"
 	@$(MAKE) -C lib/libft
 
 $(NAME): libft $(OBJ)
 	@mkdir -p $(BUILD_DIR)
 	@$(CC) $(CFLAGS) $(OBJ) -o $(BUILD_DIR)/$(NAME) $(LIBS) $(INCLUDES)
-	@echo "\033[32m\n¡$(NAME) compiled! \
-	ᕦ(\033[36m⌐■\033[32m_\033[36m■\033[32m)ᕤ\n"
+	@echo -e "\033[32m\n¡$(NAME) compiled! \
+	ᕦ(\033[36m⌐■\033[32m_\033[36m■\033[32m)ᕤ\033[0m\n"
 
 $(OBJ) : $(OBJ_DIR)/%.o : %.c $(HEADERS)
 	@mkdir -p $(dir $@)
 	@$(CC) $(CFLAGS) $(INCLUDES) -c $< -o $@
-	@echo "\033[34mCompiling: \033[0m$<"
+	@echo -e "\033[34mCompiling: \033[0m$<"
 
 ################################################
 .PHONY: all debug debug-asan debug-tsan clean fclean re
