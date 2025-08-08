@@ -107,12 +107,12 @@ re: fclean
 $(NAME) : $(OBJ)
 	@mkdir -p $(LIB_DIR)
 	@ar rcs $(LIB_DIR)/$(NAME) $(OBJ)
-	@echo "\033[32m\n¡$(NAME) compiled! \
+	@echo -e "\033[32m\n¡$(NAME) compiled! \
     ᕦ(\033[36m⌐■\033[32m_\033[36m■\033[32m)ᕤ\n\033[0m"
 
 
 $(OBJ): %.o : %.c
-	@echo "\033[34mCompiling $<\033[0m"
+	@echo -e "\033[34mCompiling $<\033[0m"
 	@$(CC) $(CFLAGS) $(INCLUDES) -c $< -o $@
 
 .PHONY: all clean fclean re bonus

@@ -102,6 +102,30 @@ typedef struct s_token
 	t_ttype	token_type;
 }			t_token;
 
+typedef struct s_linked_env
+{
+	char *key;
+	char *value;
+	struct s_linked_env *next;
+}			t_linked_env;
+
+typedef struct s_envp
+{
+	t_linked_env *envp;
+	t_linked_env *ordered_envp;
+	char **envp_exec;
+	int len_env;
+}			t_envp;
+
+//No me mola como ha quedado esta estrucutura
+typedef struct s_shell_data
+{
+	t_envp shell_envi;
+	char **command_exec;
+	t_token **tokens;
+	pid_t pid_fork;
+}	t_shell_data;
+
 //////////////////////////////////// PARSER ////////////////////////////////////
 
 /**
@@ -260,18 +284,37 @@ void		print_char_matrix(char **matrix);
 void		print_token_matrix(t_token **tokens);
 void		print_single_token(t_token *token, int index);
 
-void		child_process(t_token **tokens, char **get_full_cmd, char **envp);
-void		parent_process(pid_t pid_fork, char **get_full_cmd);
-void		free_full_command(char **command);
+void		child_process(t_shell_data *shell_data);
+void		parent_process(t_shell_data *shell_data);
 char		**get_full_command(t_token **token);
+
+char	*set_heredoc_tmp_file(char *eof);
 
 void block_terminal_signals();
 void sigint_handler(int sig);
 void restore_terminal_signals();
-void exit_cmd(t_token **tokens);
-void cd_cmd(t_token **tokens, int *ret);
-void pwd_cmd(t_token **tokens, int *ret);
-void echo_cmd(t_token **tokens, int *ret);
-void env_cmd(t_token **tokens, char **envp, int *ret);
-int check_if_is_built_in(t_token **tokens, char **envp);
+void exit_cmd(t_shell_data *shell_data);
+void cd_cmd(t_shell_data *shell_data, int *ret);
+void pwd_cmd(int *ret);
+void echo_cmd(t_shell_data *shell_data, int *ret);
+void env_cmd(t_envp *enviroment, int *ret);
+int check_if_is_built_in(t_shell_data *shell_data);
+
+void clone_environs(t_envp *enviroment);
+void init_shell_data(t_shell_data *shell_data);
+
+int add_normal_node(t_linked_env **envp, char **key_value);
+int add_ordered_node(t_linked_env **ordered_envp, char **key_value);
+int generate_exec_envp(t_envp *shell_envi);
+void print_envi_list(t_linked_env *envp_list, int mode);
+void export_cmd(t_shell_data *shell_data, int*ret);
+
+char **get_key_value(char *env);
+void free_splitted_string(char **splitted);
+void unset_cmd(t_shell_data *shell_data, int *ret);
+int ft_max_len_str(char *str_1, char *str_2);
+
+void execution_cycle(t_shell_data *shell_data);
+void free_env_linked_list(t_linked_env **linked_env);
+void free_shell_data(t_shell_data *shell_data);
 #endif

@@ -11,7 +11,9 @@
 /* ************************************************************************** */
 
 #include "minishell.h"
+#include "colors.h"
 
+extern char **environ;
 /*
 void	print_char_matrix(char **matrix)
 {
@@ -134,23 +136,8 @@ char	**get_full_command(t_token **token)
 	return (ret);
 }
 
-void	free_full_command(char **command)
+void init_minishell()
 {
-	int	i;
-
-	i = 0;
-	if (command == NULL)
-		return ;
-	while (command[i])
-	{
-		free(command[i]);
-		i++;
-	}
-	free(command);
-	command = NULL;
-}
-
-void init_minishell(){
 	if (!isatty(STDIN_FILENO))
 	{
 		//En este caso ejecutamos el archivo que nos hayan pasado linea a linea GNL.
@@ -159,44 +146,38 @@ void init_minishell(){
 	}
 }
 
-int	main(int argc, char **argv, char **envp)
+//Variables locales???????????????
+int	main(void)
 {
-	t_token	**tokens;
-	pid_t	pid_fork;
 	char	*input;
-	char	**get_full_cmd;
+	t_shell_data shell_data;
 
+	init_shell_data(&shell_data);
 	init_minishell();
 	block_terminal_signals();
 	while (1)
 	{
+		printf("%sMinishell%s@%s%s%s", YELLOW, RED , BLUE, getenv("USER"), RESET);
 		input = readline("--> ");
 		if (input == NULL)
-			return (rl_clear_history(), EXIT_SUCCESS);
-		tokens = parse(input);
-		if (tokens)
+			return (rl_clear_history(), free_shell_data(&shell_data), EXIT_SUCCESS);
+		shell_data.tokens = parse(input);
+		if (shell_data.tokens)
 		{
 			add_history(input);
-			if(tokens[0]->token_type = REDIRECT_IN_CHAR_HEREDOC)
-				set_heredoc_tmp_file(tokens[1]->string);
+
+			if(shell_data.tokens[0]->token_type == REDIRECT_IN_CHAR_HEREDOC)
+				set_heredoc_tmp_file(shell_data.tokens[1]->string);
 			// Analyze each element
-			for (int i = 0; tokens[i]; i++)
+			for (int i = 0; shell_data.tokens[i]; i++)
 			{
-				printf("%s : %s\n", tokens[i]->string,
-					token_strings[tokens[i]->token_type]);
+				printf("%s : %s\n", shell_data.tokens[i]->string,
+					token_strings[shell_data.tokens[i]->token_type]);
 			}
 			printf("/////////////////////////////////////\n");
-			if (!check_if_is_built_in(tokens, envp))
-			{
-				get_full_cmd = get_full_command(tokens);
-				pid_fork = fork();
-				if (pid_fork == -1)
-					exit(EXIT_FAILURE);
-				if (pid_fork == 0)
-					child_process(tokens, get_full_cmd, envp);
-				else
-					parent_process(pid_fork, get_full_cmd);
-			}
+			execution_cycle(&shell_data);
 		}
+		free(input);
+		free_tokens(shell_data.tokens);
 	}
 }
