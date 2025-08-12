@@ -124,7 +124,7 @@ char	**get_full_command(t_token **token)
 		nmeb++;
 	if (nmeb == 0)
 		return (NULL);
-	ret = ft_calloc(nmeb, sizeof(char *));
+	ret = ft_calloc(nmeb + 1, sizeof(char *));
 	if (!ret)
 		return (NULL);
 	i = 0;
@@ -158,14 +158,20 @@ int	main(void)
 	while (1)
 	{
 		printf("%sMinishell%s@%s%s%s", YELLOW, RED , BLUE, getenv("USER"), RESET);
-		input = readline("--> ");
+		/**
+		 * @note Guarreo de prueba, ver como pablo pilla las variables de entorno.
+		 */
+		if (isatty(STDIN_FILENO))
+			input = readline("--> ");
+		else
+			input = ft_get_next_line(STDIN_FILENO);
 		if (input == NULL)
 			return (rl_clear_history(), free_shell_data(&shell_data), EXIT_SUCCESS);
 		shell_data.tokens = parse(input);
 		if (shell_data.tokens)
 		{
 			add_history(input);
-
+			free(input);
 			if(shell_data.tokens[0]->token_type == REDIRECT_IN_CHAR_HEREDOC)
 				set_heredoc_tmp_file(shell_data.tokens[1]->string);
 			// Analyze each element
@@ -177,7 +183,8 @@ int	main(void)
 			printf("/////////////////////////////////////\n");
 			execution_cycle(&shell_data);
 		}
-		free(input);
+		else
+			free(input);
 		free_tokens(shell_data.tokens);
 	}
 }

@@ -19,8 +19,11 @@ void	child_process(t_shell_data *shell_data)
 	free_splitted_string(shell_data->shell_envi.envp_exec);
 	generate_exec_envp(&(shell_data->shell_envi));
 	restore_terminal_signals();
-	if (shell_data->command_exec[0] != NULL)
+	if (shell_data->command_exec && shell_data->command_exec[0] != NULL)
 		execve(shell_data->command_exec[0], shell_data->command_exec, shell_data->shell_envi.envp_exec);
 	free_splitted_string(shell_data->command_exec);
+	rl_clear_history();
+	free_tokens(shell_data->tokens);
+	free_shell_data(shell_data);
 	exit(EXIT_FAILURE);
 }
