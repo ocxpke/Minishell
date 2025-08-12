@@ -317,4 +317,6 @@ int ft_max_len_str(char *str_1, char *str_2);
 void execution_cycle(t_shell_data *shell_data);
 void free_env_linked_list(t_linked_env **linked_env);
 void free_shell_data(t_shell_data *shell_data);
+void check_if_shelllvl(char **key_value);
+int add_pid_env(t_envp *enviroment);
 #endif

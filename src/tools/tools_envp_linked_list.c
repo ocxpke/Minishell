@@ -5,12 +5,12 @@ int generate_exec_envp(t_envp *shell_envi){
 	char *env;
 	int i;
 
-	shell_envi->envp_exec = (char **)ft_calloc(shell_envi->len_env+1, sizeof(char *));
+	shell_envi->envp_exec = (char **)ft_calloc(shell_envi->len_env + 1, sizeof(char *));
 	if (!shell_envi->envp_exec)
 		return (perror("Error creating envp_exec\n"), 0);
 	aux = shell_envi->envp;
 	i = 0;
-	while (aux)
+	while (aux && (i<=shell_envi->len_env))
 	{
 		env = ft_calloc(1, ft_strlen(aux->key)+ ft_strlen(aux->value) + 1);
 		if (!env)
@@ -18,7 +18,7 @@ int generate_exec_envp(t_envp *shell_envi){
 		ft_strlcat(env, aux->key, ft_strlen(aux->key)+ ft_strlen(aux->value) + 1);
 		if (aux->value)
 			ft_strlcat(env, aux->value, ft_strlen(aux->key)+ ft_strlen(aux->value) + 1);
-		shell_envi->envp_exec[i] = ft_strdup(env);
+		shell_envi->envp_exec[i] = env;
 		i++;
 		aux = aux->next;
 	}

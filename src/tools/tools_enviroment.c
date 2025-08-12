@@ -7,18 +7,20 @@ void clone_environs(t_envp *enviroment)
 	int i = 0;
 	char **key_value;
 
+
 	while (environ[i])
 	{
 		key_value = get_key_value(environ[i]);
 		if (key_value)
 		{
+			check_if_shelllvl(key_value);
 			add_normal_node(&(enviroment->envp), key_value);
 			add_ordered_node(&(enviroment->ordered_envp), key_value);
 			free_splitted_string(key_value);
 		}
 		i++;
 	}
-	enviroment->len_env = i;
+	enviroment->len_env = i + add_pid_env(enviroment);
 }
 
 void free_splitted_string(char **splitted)

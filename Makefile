@@ -52,7 +52,8 @@ PARSE_SRC = src/parse/parser_cmd_resolver.c \
 TOOLS_SRC = src/tools/tools_heredoc.c \
 			src/tools/tools_enviroment.c \
 			src/tools/tools_envp_linked_list.c \
-			src/tools/tools_aux_envp_linked_list.c
+			src/tools/tools_aux_envp_linked_list.c \
+			src/tools/tools_modify_env.c
 
 BUILT_IN_SRC = src/built_in/manage_built_in.c \
 				src/built_in/echo_command.c \
