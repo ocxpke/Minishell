@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   main.c                                             :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: pabmart2 <pabmart2@student.42malaga.com    +#+  +:+       +#+        */
+/*   By: pablo <pablo@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/07/24 20:38:12 by pablo             #+#    #+#             */
-/*   Updated: 2025/08/01 14:27:12 by pabmart2         ###   ########.fr       */
+/*   Updated: 2025/08/18 13:48:12 by pablo            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -146,16 +146,20 @@ void	free_full_command(char **command)
 	command = NULL;
 }
 
+//TODO Eliminar el tmp del heredoc
 int	main(int argc, char **argv, char **envp)
 {
 	t_token	**tokens;
 	pid_t	pid_fork;
 	char	*input;
 	char	**get_full_cmd;
+	char	*heredoc_buffer;
+	t_einfo *einfo;
 
 	(void)argv;
 	(void)argc;
 	ignore_terminal_signals();
+	heredoc_buffer = NULL;
 	while (1)
 	{
 		input = readline("--> ");
@@ -165,23 +169,19 @@ int	main(int argc, char **argv, char **envp)
 		// Gitanaada
 		if (!tokens)
 			continue ;
+		einfo = get_entry_info(tokens);
 		add_history(input);
 		if (!ft_strncmp(tokens[0]->string, "exit",
 				ft_strlen(tokens[0]->string)))
 			return (free_tokens(tokens), rl_clear_history(), EXIT_SUCCESS);
-		//TODO: Investigar por que no se ve el prompt
-		if(tokens[0]->token_type = REDIRECT_IN_CHAR_HEREDOC)
-			set_heredoc_tmp_file(tokens[1]->string);
 		// Solo para informar
-		/**
-		 *
-		 for (int i = 0; tokens[i]; i++)
-		 {
+		for (int i = 0; tokens[i]; i++)
+		{
 			printf("%s : %s\n", tokens[i]->string,
-			token_strings[tokens[i]->token_type]);
+				get_token_type_name(tokens[i]->token_type));
 			printf("\n/////////////////////////////////////\n");
 		}
-		*/
+		fflush(stdout); // Forzar que se imprima el buffer
 		get_full_cmd = get_full_command(tokens);
 		pid_fork = fork();
 		if (pid_fork == -1)
