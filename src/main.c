@@ -6,14 +6,14 @@
 /*   By: pablo <pablo@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/07/24 20:38:12 by pablo             #+#    #+#             */
-/*   Updated: 2025/08/18 14:45:56 by pablo            ###   ########.fr       */
+/*   Updated: 2025/08/18 14:48:32 by pablo            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "minishell.h"
 #include "colors.h"
+#include "minishell.h"
 
-extern char **environ;
+extern char				**environ;
 /*
 void	print_char_matrix(char **matrix)
 {
@@ -165,36 +165,36 @@ void	init_minishell(void)
 // TODO Eliminar el tmp del heredoc
 int	main(int argc, char **argv, char **envp)
 {
-	char	*input;
-	char	**get_full_cmd;
-	char	*heredoc_buffer;
-	t_einfo	*einfo;
-	t_shell_data shell_data;
+	char			*input;
+	char			**get_full_cmd;
+	char			*heredoc_buffer;
+	t_einfo			*einfo;
+	t_shell_data	shell_data;
 
 	init_shell_data(&shell_data);
 	init_minishell();
 	block_terminal_signals();
 	while (1)
 	{
-		printf("%sMinishell%s@%s%s%s", YELLOW, RED , BLUE, getenv("USER"), RESET);
+		printf("%sMinishell%s@%s%s%s", YELLOW, RED, BLUE, getenv("USER"),
+			RESET);
 		/**
-		 * @note Guarreo de prueba, ver como pablo pilla las variables de entorno.
-		 */
+			* @note Guarreo de prueba,
+				ver como pablo pilla las variables de entorno.
+			*/
 		if (isatty(STDIN_FILENO))
 			input = readline("--> ");
 		else
 			input = ft_get_next_line(STDIN_FILENO);
 		if (input == NULL)
-			return (rl_clear_history(), free_shell_data(&shell_data), EXIT_SUCCESS);
+			return (rl_clear_history(), free_shell_data(&shell_data),
+				EXIT_SUCCESS);
 		shell_data.tokens = parse(input);
 		if (shell_data.tokens)
 		{
 			einfo = get_entry_info(shell_data.tokens);
 			add_history(input);
 			free(input);
-			if(shell_data.tokens[0]->token_type == REDIRECT_IN_CHAR_HEREDOC)
-				set_heredoc_tmp_file(shell_data.tokens[1]->string);
-
 			// Analyze each element
 			for (int i = 0; shell_data.tokens[i]; i++)
 			{

@@ -6,14 +6,16 @@
 #    By: pablo <pablo@student.42.fr>                +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2024/09/20 14:34:30 by pabmart2          #+#    #+#              #
-#    Updated: 2025/08/18 14:27:54 by pablo            ###   ########.fr        #
+#    Updated: 2025/08/18 14:53:30 by pablo            ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
 CC = cc
-CFLAGS = -Wall -Wextra -lreadline
+# TODO: Incluir -Werror cuando acabemos de depurar
+CFLAGS = -Wall -Wextra
 DEBUG_FLAGS = -g -fno-inline -gdwarf-4
 ASAN_FLAGS = $(DEBUG_FLAGS) -fsanitize=address -O1
+LDFLAGS = -lreadline
 
 BUILD_DIR = build
 
@@ -26,7 +28,7 @@ HEADERS = \
 	include/colors.h \
 
 SRC = src/main.c $(SHELL_DATA_SRC) $(PROC_MNG_SRC) $(SIGNALS_SRC) $(PARSER_SRC) \
-	$(TOOLS_SRC) $(BUILT_IN_SRC)
+	$(TOOLS_SRC) $(BUILT_IN_SRC) $(UTILS_SRC)
 
 BUILT_IN_SRC = src/built_in/manage_built_in.c \
 				src/built_in/echo_command.c \
@@ -104,7 +106,7 @@ libft:
 
 $(NAME): libft $(OBJ)
 	@mkdir -p $(BUILD_DIR)
-	@$(CC) $(CFLAGS) $(OBJ) -o $(BUILD_DIR)/$(NAME) $(LIBS) $(INCLUDES)
+	@$(CC) $(CFLAGS) $(OBJ) -o $(BUILD_DIR)/$(NAME) $(LIBS) $(INCLUDES) $(LDFLAGS)
 	@echo -e "\033[32m\n¡$(NAME) compiled! \
 	ᕦ(\033[36m⌐■\033[32m_\033[36m■\033[32m)ᕤ\033[0m\n"
 
