@@ -6,7 +6,7 @@
 #    By: pablo <pablo@student.42.fr>                +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2024/09/20 14:34:30 by pabmart2          #+#    #+#              #
-#    Updated: 2025/08/18 14:21:55 by pablo            ###   ########.fr        #
+#    Updated: 2025/08/18 14:27:54 by pablo            ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -14,7 +14,6 @@ CC = cc
 CFLAGS = -Wall -Wextra -lreadline
 DEBUG_FLAGS = -g -fno-inline -gdwarf-4
 ASAN_FLAGS = $(DEBUG_FLAGS) -fsanitize=address -O1
-TSAN_FLAGS = $(DEBUG_FLAGS) -fsanitize=thread -O1
 
 BUILD_DIR = build
 
@@ -86,9 +85,6 @@ debug: clean $(NAME)
 debug-asan: CFLAGS += $(ASAN_FLAGS)
 debug-asan: clean $(NAME)
 
-debug-tsan: CFLAGS += $(TSAN_FLAGS)
-debug-tsan: clean $(NAME)
-
 clean:
 	@rm -rf $(OBJ_DIR)
 	@make clean -C lib/libft
@@ -118,4 +114,4 @@ $(OBJ) : $(OBJ_DIR)/%.o : %.c $(HEADERS)
 	@echo -e "\033[34mCompiling: \033[0m$<"
 
 ################################################
-.PHONY: all debug debug-asan debug-tsan clean fclean re
+.PHONY: all debug debug-asan clean fclean re
