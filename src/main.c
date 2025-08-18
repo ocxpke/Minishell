@@ -6,7 +6,7 @@
 /*   By: pablo <pablo@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/07/24 20:38:12 by pablo             #+#    #+#             */
-/*   Updated: 2025/08/18 14:34:35 by pablo            ###   ########.fr       */
+/*   Updated: 2025/08/18 14:45:56 by pablo            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -189,7 +189,7 @@ int	main(int argc, char **argv, char **envp)
 		shell_data.tokens = parse(input);
 		if (shell_data.tokens)
 		{
-			einfo = get_entry_info(tokens);
+			einfo = get_entry_info(shell_data.tokens);
 			add_history(input);
 			free(input);
 			if(shell_data.tokens[0]->token_type == REDIRECT_IN_CHAR_HEREDOC)
