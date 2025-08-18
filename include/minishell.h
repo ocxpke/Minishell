@@ -6,7 +6,7 @@
 /*   By: pablo <pablo@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/07/24 12:02:38 by pablo             #+#    #+#             */
-/*   Updated: 2025/08/18 13:43:32 by pablo            ###   ########.fr       */
+/*   Updated: 2025/08/18 14:02:46 by pablo            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -27,6 +27,7 @@
 # include <string.h>
 # include <sys/wait.h>
 # include <unistd.h>
+# include <termios.h>
 
 /////////////////////////////////// STRUCTS ////////////////////////////////////
 
@@ -338,4 +339,17 @@ void		print_char_matrix(char **matrix);
 void		print_token_matrix(t_token **tokens);
 void		print_single_token(t_token *token, int index);
 
+void		child_process(t_token **tokens, char **get_full_cmd, char **envp);
+void		parent_process(pid_t pid_fork, char **get_full_cmd);
+void		free_full_command(char **command);
+char		**get_full_command(t_token **token);
+
+void block_terminal_signals();
+void sigint_handler(int sig);
+void exit_cmd(t_token **tokens);
+void cd_cmd(t_token **tokens, int *ret);
+void pwd_cmd(t_token **tokens, int *ret);
+void echo_cmd(t_token **tokens, int *ret);
+void env_cmd(t_token **tokens, char **envp, int *ret);
+int check_if_is_built_in(t_token **tokens, char **envp);
 #endif
