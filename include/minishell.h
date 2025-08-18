@@ -6,7 +6,7 @@
 /*   By: pablo <pablo@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/07/24 12:02:38 by pablo             #+#    #+#             */
-/*   Updated: 2025/08/18 14:02:46 by pablo            ###   ########.fr       */
+/*   Updated: 2025/08/18 14:26:41 by pablo            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -330,9 +330,6 @@ t_token		*extract_first_type_token(t_token **tokens, t_ttype type);
  */
 t_einfo		*get_entry_info(t_token **tokens);
 
-// MACROS
-# define restore_terminal_signals() terminal_signals(SIG_DFL)
-# define ignore_terminal_signals() terminal_signals(SIG_IGN)
 
 // DEBUG
 void		print_char_matrix(char **matrix);
@@ -346,6 +343,7 @@ char		**get_full_command(t_token **token);
 
 void block_terminal_signals();
 void sigint_handler(int sig);
+void restore_terminal_signals();
 void exit_cmd(t_token **tokens);
 void cd_cmd(t_token **tokens, int *ret);
 void pwd_cmd(t_token **tokens, int *ret);
