@@ -14,13 +14,16 @@
 
 extern sig_atomic_t signal_recv;
 
-void	child_process(t_token **tokens, char **get_full_cmd, char **envp)
+void	child_process(t_shell_data *shell_data)
 {
-	// Creo que necesitamos env por que nos pueden pasar las cosas sin
-	// variables de entornos o variables de entorono modificadas
+	free_splitted_string(shell_data->shell_envi.envp_exec);
+	generate_exec_envp(&(shell_data->shell_envi));
 	restore_terminal_signals();
-	if (get_full_cmd[0] != NULL)
-		execve(get_full_cmd[0], get_full_cmd, envp);
-	free_full_command(get_full_cmd);
+	if (shell_data->command_exec && shell_data->command_exec[0] != NULL)
+		execve(shell_data->command_exec[0], shell_data->command_exec, shell_data->shell_envi.envp_exec);
+	free_splitted_string(shell_data->command_exec);
+	rl_clear_history();
+	free_tokens(shell_data->tokens);
+	free_shell_data(shell_data);
 	exit(EXIT_FAILURE);
 }

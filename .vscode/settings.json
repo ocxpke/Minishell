@@ -43,5 +43,6 @@
 		"minishell.h": "c",
 		"stdlib.h": "c",
 		"colors.h": "c"
-	}
+	},
+	"makefile.configureOnOpen": false
 }

@@ -12,9 +12,8 @@
 
 #include "minishell.h"
 
-void	parent_process(pid_t pid_fork, char **get_full_cmd)
+void	parent_process(t_shell_data *shell_data)
 {
 	// Ctrl+z suspende un proceso-- > implica controol de tareas-- > no hacer nada,no ?
-	waitpid(pid_fork, NULL, 0);
-	free_full_command(get_full_cmd);
+	waitpid(shell_data->pid_fork, NULL, 0);
 }
