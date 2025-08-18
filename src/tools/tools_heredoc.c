@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   tools_heredoc.c                                    :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: pabmart2 <pabmart2@student.42malaga.com    +#+  +:+       +#+        */
+/*   By: pablo <pablo@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/05 18:31:11 by pablo             #+#    #+#             */
-/*   Updated: 2025/08/01 14:25:40 by pabmart2         ###   ########.fr       */
+/*   Updated: 2025/08/18 12:09:38 by pablo            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -57,7 +57,7 @@ char	*heredoc(char *eof, size_t eof_size)
 	buffer = NULL;
 	while (1)
 	{
-		printf(BOLD "heredoc >" RESET);
+		write(STDOUT_FILENO, BOLD "heredoc > " RESET, 18);
 		line = ft_get_next_line(STDIN_FILENO);
 		if (line)
 		{
@@ -102,9 +102,7 @@ static char	*gerate_tmp_heredoc_name(void)
 	return (tmp_name);
 }
 
-//TODO: Es importante eliminar el archivo temporal al terminar con heredoc
-//TODO: Cambiar el nombre de esta funcion a algo que tenga más sentido
-char	*set_heredoc_tmp_file(char *eof)
+char	*heredoc_behaviour(char *eof)
 {
 	char	*buffer;
 	char	*tmp_name;

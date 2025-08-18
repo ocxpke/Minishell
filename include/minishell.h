@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   minishell.h                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: pabmart2 <pabmart2@student.42malaga.com    +#+  +:+       +#+        */
+/*   By: pablo <pablo@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/07/24 12:02:38 by pablo             #+#    #+#             */
-/*   Updated: 2025/08/01 13:17:58 by jose-ara         ###   ########.fr       */
+/*   Updated: 2025/08/18 14:26:41 by pablo            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -81,7 +81,7 @@ typedef enum e_token_type
 static char	*token_strings[] = {"ARGUMENT", "COMMAND_ROUTE", "COMMAND_BUILT_IN",
 		"COMMAND_NOT_FOUND", "HEREDOC_EOF", "PIPE", "REDIRECT_IN_CHAR",
 		"REDIRECT_IN_CHAR_HEREDOC", "REDIRECT_OUT_CHAR",
-		"REDIRECT_OUT_CHAR_qAPPEND", "REDIRECT_IN_ROUTE", "REDIRECT_OUT_ROUTE",
+		"REDIRECT_OUT_CHAR_APPEND", "REDIRECT_IN_ROUTE", "REDIRECT_OUT_ROUTE",
 		"UNDEFINED"};
 
 /**
@@ -101,6 +101,32 @@ typedef struct s_token
 	char	*string;
 	t_ttype	token_type;
 }			t_token;
+
+/**
+ * @struct s_line_analysis
+ * @brief Structure to hold information about a parsed command line.
+ *
+ * This structure contains details about the number of pipes in the command,
+ * the input and output file names, and whether the output is to be appended.
+ *
+ * @param n_pipes     Number of pipes ('|') in the command line. Initialized -1.
+ * @param input_file  Pointer to the input file name for redirection.
+ *                    Initialized NULL.
+ * @param output_file Pointer to the output file name for redirection.
+ *                    Initialized NULL.
+ * @param is_append   1 if output should be appended, 0 if overwritten.
+ *                    Initialized -1.
+ * @param is_heredoc  1 if input is heredoc. In that case, theres a tmp file.
+ *                    Initialized -1.
+ */
+typedef struct s_entry_info
+{
+	int		n_pipes;
+	char	*input_file;
+	char	*output_file;
+	char	is_append;
+	char	is_heredoc;
+}			t_einfo;
 
 typedef struct s_linked_env
 {
@@ -278,6 +304,56 @@ char		**clean_splitted(char **splitted);
  * @param tokens Pointer to an array of t_token pointers to be freed.
  */
 void		free_tokens(t_token **tokens);
+
+void		terminal_signals(void (*func)(int));
+void		block_signal(int signal, int block);
+
+//////////////////////////////////// TOOLS /////////////////////////////////////
+
+/**
+ * @brief Creates a temporary file containing heredoc input.
+ *
+ * Reads input from the user until the specified EOF delimiter is encountered,
+ * writes the input to a newly generated temporary file,
+ * and returns the name
+ * of the file. Handles memory allocation, file creation,
+ * and error reporting.
+ *
+ * @param eof The end-of-file delimiter string for the heredoc.
+ * @return On success, returns the name of the temporary file (char *).
+ *         On failure, returns NULL.
+ */
+char		*heredoc_behaviour(char *eof);
+
+///////////////////////////////////// UTILS ////////////////////////////////////
+
+/**
+ * @brief Extracts the first token of a specified type from a token list.
+ *
+ * Iterates through the linked list of tokens and returns a pointer to the
+ * first token whose type matches the specified type. If no such token is
+ * found, returns NULL.
+ *
+ * @param tokens Double pointer to the head of the token list.
+ * @param type The token type to search for.
+ * @return Pointer to the first token of the specified type, or NULL if not
+ *         found.
+ */
+t_token		*extract_first_type_token(t_token **tokens, t_ttype type);
+
+/**
+ * @brief Retrieves and initializes entry information from a list of tokens.
+ *
+ * This function allocates and initializes a t_einfo structure, then sets its
+ * input and output file fields based on the provided tokens. It also counts
+ * the number of pipes present in the token list and stores this value in the
+ * structure. Returns NULL if memory allocation fails.
+ *
+ * @param tokens Double pointer to the list of tokens to be analyzed.
+ * @return Pointer to the initialized t_einfo structure, or NULL on failure.
+ */
+t_einfo		*get_entry_info(t_token **tokens);
+
 
 // DEBUG
 void		print_char_matrix(char **matrix);

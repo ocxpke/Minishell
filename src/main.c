@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   main.c                                             :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: pabmart2 <pabmart2@student.42malaga.com    +#+  +:+       +#+        */
+/*   By: pablo <pablo@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/07/24 20:38:12 by pablo             #+#    #+#             */
-/*   Updated: 2025/08/01 13:17:24 by jose-ara         ###   ########.fr       */
+/*   Updated: 2025/08/18 14:34:35 by pablo            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -106,7 +106,7 @@ int	main(void)
 }
 	*/
 
-volatile sig_atomic_t signal_recv = 0;
+volatile sig_atomic_t	signal_recv = 0;
 
 /**
  * @note Me da el comando + todos los argumentos, todo lo demas lo omite
@@ -136,20 +136,39 @@ char	**get_full_command(t_token **token)
 	return (ret);
 }
 
-void init_minishell()
+void	free_full_command(char **command)
+{
+	int	i;
+
+	i = 0;
+	if (command == NULL)
+		return ;
+	while (command[i])
+	{
+		free(command[i]);
+		i++;
+	}
+	free(command);
+	command = NULL;
+}
+
+void	init_minishell(void)
 {
 	if (!isatty(STDIN_FILENO))
 	{
-		//En este caso ejecutamos el archivo que nos hayan pasado linea a linea GNL.
-		//Tenemos que leer el archivo de entrada linea a linea y ejcutarlo linea a linea
+		// En este caso ejecutamos el archivo que nos hayan pasado linea a linea GNL.
+		// Tenemos que leer el archivo de entrada linea a linea y ejcutarlo linea a linea
 		printf("No es una entrada interactiva\n");
 	}
 }
 
-//Variables locales???????????????
-int	main(void)
+// TODO Eliminar el tmp del heredoc
+int	main(int argc, char **argv, char **envp)
 {
 	char	*input;
+	char	**get_full_cmd;
+	char	*heredoc_buffer;
+	t_einfo	*einfo;
 	t_shell_data shell_data;
 
 	init_shell_data(&shell_data);
@@ -170,10 +189,12 @@ int	main(void)
 		shell_data.tokens = parse(input);
 		if (shell_data.tokens)
 		{
+			einfo = get_entry_info(tokens);
 			add_history(input);
 			free(input);
 			if(shell_data.tokens[0]->token_type == REDIRECT_IN_CHAR_HEREDOC)
 				set_heredoc_tmp_file(shell_data.tokens[1]->string);
+
 			// Analyze each element
 			for (int i = 0; shell_data.tokens[i]; i++)
 			{
