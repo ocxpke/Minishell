@@ -14,12 +14,23 @@
 
 extern sig_atomic_t signal_recv;
 
-void block_terminal_signals(){
-	signal(SIGINT, sigint_handler);
-	signal(SIGQUIT, SIG_IGN);
+static inline void set_func_for_generic_signals(void (*sig_func)(int))
+{
+	struct sigaction sa;
+	int i = 1;
+
+	sa.sa_handler = sig_func;
+	sigemptyset(&sa.sa_mask);
+	sa.sa_flags = 0;
+	sigaction(SIGINT, &sa, NULL);
+	sigaction(SIGQUIT, &sa, NULL);
+}
+
+void block_terminal_signals(void (*set_global_var)(int))
+{
+	set_func_for_generic_signals(set_global_var);
 }
 
 void restore_terminal_signals(){
-	signal(SIGINT, SIG_DFL);
-	signal(SIGQUIT, SIG_DFL);
+	set_func_for_generic_signals(SIG_DFL);
 }

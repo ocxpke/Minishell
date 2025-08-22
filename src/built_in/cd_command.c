@@ -1,5 +1,8 @@
 #include "minishell.h"
 
+/**
+ * @note comprobar que sea un directory
+ */
 void cd_cmd(t_shell_data *shell_data, int *ret){
 	char *home;
 

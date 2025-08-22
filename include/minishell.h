@@ -290,8 +290,7 @@ char		**get_full_command(t_token **token);
 
 char	*set_heredoc_tmp_file(char *eof);
 
-void block_terminal_signals();
-void sigint_handler(int sig);
+void block_terminal_signals(void (*set_global_var)(int));
 void restore_terminal_signals();
 void exit_cmd(t_shell_data *shell_data);
 void cd_cmd(t_shell_data *shell_data, int *ret);
@@ -319,4 +318,6 @@ void free_env_linked_list(t_linked_env **linked_env);
 void free_shell_data(t_shell_data *shell_data);
 void check_if_shelllvl(char **key_value);
 int add_pid_env(t_envp *enviroment);
+void sig_setter(int sig);
+void sigint_handler();
 #endif
