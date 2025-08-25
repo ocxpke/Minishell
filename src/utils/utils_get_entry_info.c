@@ -6,11 +6,40 @@
 /*   By: pablo <pablo@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/08/18 12:52:02 by pablo             #+#    #+#             */
-/*   Updated: 2025/08/18 13:43:26 by pablo            ###   ########.fr       */
+/*   Updated: 2025/08/25 19:15:29 by pablo            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
+
+/**
+ * @brief Allocates and initializes a new t_einfo structure.
+ *
+ * This function allocates memory for a t_einfo structure and initializes
+ * its members to default values:
+ *
+ *   - input_file, output_file and commands are set to NULL.
+ *
+ *   - is_append, is_heredoc, and n_pipes are set to -1.
+ *
+ * @return Pointer to the newly allocated and initialized t_einfo structure,
+ *         or NULL if memory allocation fails.
+ */
+static t_einfo	*initialize_einfo(void)
+{
+	t_einfo	*einfo;
+
+	einfo = malloc(sizeof(t_einfo));
+	if (!einfo)
+		return (NULL);
+	einfo->input_file = NULL;
+	einfo->output_file = NULL;
+	einfo->is_append = -1;
+	einfo->is_heredoc = -1;
+	einfo->n_pipes = -1;
+	einfo->commands = NULL;
+	return (einfo);
+}
 
 /**
  * @brief Sets the input file and heredoc status in the entry info struct.
@@ -36,12 +65,16 @@ static void	set_input_file(t_token **tokens, t_einfo *einfo)
 	}
 	else if (extract_first_type_token(tokens, REDIRECT_IN_CHAR_HEREDOC))
 	{
-		route = heredoc_behaviour(extract_first_type_token(tokens,
-					HEREDOC_EOF)->string);
-		if (route)
+		extracted = extract_first_type_token(tokens, HEREDOC_EOF);
+		if (extracted)
 		{
-			einfo->input_file = route;
-			einfo->is_heredoc = 1;
+			ft_get_next_line(-1);
+			route = heredoc_behaviour(extracted->string);
+			if (route)
+			{
+				einfo->input_file = route;
+				einfo->is_heredoc = 1;
+			}
 		}
 	}
 }
@@ -80,59 +113,6 @@ static void	set_output_file(t_token **tokens, t_einfo *einfo)
 	}
 }
 
-/**
- * @brief Allocates and initializes a new t_einfo structure.
- *
- * This function allocates memory for a t_einfo structure and initializes
- * its members to default values:
- *
- *   - input_file and output_file are set to NULL.
- *
- *   - is_append, is_heredoc, and n_pipes are set to -1.
- *
- * @return Pointer to the newly allocated and initialized t_einfo structure,
- *         or NULL if memory allocation fails.
- */
-static t_einfo	*initialize_einfo(void)
-{
-	t_einfo	*einfo;
-
-	einfo = malloc(sizeof(t_einfo));
-	if (!einfo)
-		return (NULL);
-	einfo->input_file = NULL;
-	einfo->output_file = NULL;
-	einfo->is_append = -1;
-	einfo->is_heredoc = -1;
-	einfo->n_pipes = -1;
-	return (einfo);
-}
-
-/**
- * @brief Counts the number of PIPE tokens in the token array.
- *
- * Iterates through the array of token pointers and increments a counter
- * for each token of type PIPE.
- *
- * @param tokens Array of pointers to t_token, terminated by NULL.
- * @return Number of PIPE tokens found.
- */
-static int	get_pipes_count(t_token **tokens)
-{
-	int	n_pipes;
-	int	i;
-
-	n_pipes = 0;
-	i = 0;
-	while (tokens[i])
-	{
-		if (tokens[i]->token_type == PIPE)
-			++n_pipes;
-		++i;
-	}
-	return (n_pipes);
-}
-
 t_einfo	*get_entry_info(t_token **tokens)
 {
 	t_einfo	*einfo;
@@ -142,5 +122,8 @@ t_einfo	*get_entry_info(t_token **tokens)
 		return (NULL);
 	set_input_file(tokens, einfo);
 	set_output_file(tokens, einfo);
-	einfo->n_pipes = get_pipes_count(tokens);
+	einfo->n_pipes = count_tokens(tokens, PIPE);
+	einfo->commands = get_commands(tokens);
+	debug_einfo(einfo);
+	return (einfo);
 }

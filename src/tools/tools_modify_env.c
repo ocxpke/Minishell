@@ -38,6 +38,7 @@ static char *get_pid_from_file()
 		if (!found)
 			free(env);
 	}
+	ft_get_next_line(-1);
 	close(fd);
 	if (!found)
 		return (NULL);

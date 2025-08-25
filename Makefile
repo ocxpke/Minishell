@@ -6,7 +6,7 @@
 #    By: pablo <pablo@student.42.fr>                +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2024/09/20 14:34:30 by pabmart2          #+#    #+#              #
-#    Updated: 2025/08/18 14:53:30 by pablo            ###   ########.fr        #
+#    Updated: 2025/08/25 14:15:38 by pablo            ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -60,10 +60,11 @@ SIGNALS_SRC = src/signals/signals.c \
 				src/signals/sig_handlers.c
 
 
-TOOLS_SRC = src/tools/tools_heredoc.c \
+TOOLS_SRC = src/tools/tools_aux_envp_linked_list.c \
+			src/tools/tools_count_tokens.c \
 			src/tools/tools_enviroment.c \
 			src/tools/tools_envp_linked_list.c \
-			src/tools/tools_aux_envp_linked_list.c \
+			src/tools/tools_heredoc.c \
 			src/tools/tools_modify_env.c
 
 UTILS_SRC = src/utils/utils_extract_tokens.c \

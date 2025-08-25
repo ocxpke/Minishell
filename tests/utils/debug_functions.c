@@ -6,7 +6,7 @@
 /*   By: pablo <pablo@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/07/30 19:45:00 by pablo             #+#    #+#             */
-/*   Updated: 2025/07/30 19:34:45 by pablo            ###   ########.fr       */
+/*   Updated: 2025/08/25 18:41:16 by pablo            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -90,4 +90,44 @@ void	print_single_token(t_token *token, int index)
 	printf("String: |%s|\n", token->string ? token->string : "NULL");
 	printf("Type: %s\n", get_token_type_name(token->token_type));
 	printf("=== END SINGLE TOKEN ===\n");
+}
+
+void	debug_einfo(t_einfo *einfo)
+{
+	int	i;
+	int	j;
+
+	if (!einfo)
+	{
+		printf("einfo is NULL\n");
+		return ;
+	}
+	printf("=== EINFO DEBUG ===\n");
+	printf("n_pipes: %d\n", einfo->n_pipes);
+	printf("input_file: %s\n", einfo->input_file ? einfo->input_file : "NULL");
+	printf("output_file: %s\n", einfo->output_file ? einfo->output_file : "NULL");
+	printf("is_append: %d\n", einfo->is_append);
+	printf("is_heredoc: %d\n", einfo->is_heredoc);
+
+	if (!einfo->commands)
+	{
+		printf("commands: NULL\n");
+	}
+	else
+	{
+		printf("commands:\n");
+		i = 0;
+		while (einfo->commands[i])
+		{
+			printf("  Command[%d]:\n", i);
+			j = 0;
+			while (einfo->commands[i][j])
+			{
+				printf("    [%d]: |%s|\n", j, einfo->commands[i][j]);
+				j++;
+			}
+			i++;
+		}
+	}
+	printf("=== END EINFO DEBUG ===\n");
 }
