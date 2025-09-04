@@ -12,12 +12,13 @@ int generate_exec_envp(t_envp *shell_envi){
 	i = 0;
 	while (aux && (i<=shell_envi->len_env))
 	{
-		env = ft_calloc(1, ft_strlen(aux->key)+ ft_strlen(aux->value) + 1);
+		env = ft_calloc(1, ft_strlen(aux->key)+ 1 +ft_strlen(aux->value) + 1);
 		if (!env)
 			return(perror("BOOM in exec_envp"), 1);
-		ft_strlcat(env, aux->key, ft_strlen(aux->key)+ ft_strlen(aux->value) + 1);
+		ft_strlcat(env, aux->key, ft_strlen(aux->key)+ 1+ft_strlen(aux->value) + 1);
+		ft_strlcat(env, "=", ft_strlen(aux->key)+ 1+ft_strlen(aux->value) + 1);
 		if (aux->value)
-			ft_strlcat(env, aux->value, ft_strlen(aux->key)+ ft_strlen(aux->value) + 1);
+			ft_strlcat(env, aux->value, ft_strlen(aux->key)+ 1+ft_strlen(aux->value) + 1);
 		shell_envi->envp_exec[i] = env;
 		i++;
 		aux = aux->next;

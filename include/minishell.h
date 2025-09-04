@@ -6,28 +6,28 @@
 /*   By: pablo <pablo@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/07/24 12:02:38 by pablo             #+#    #+#             */
-/*   Updated: 2025/08/18 14:26:41 by pablo            ###   ########.fr       */
+/*   Updated: 2025/08/25 18:42:09 by pablo            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #ifndef MINISHELL_H
-# define MINISHELL_H
+#define MINISHELL_H
 
 // Cuidado con esto hay que verlo bien
-# define _GNU_SOURCE
+#define _GNU_SOURCE
 
-# include "../lib/libft/include/libft.h"
-# include <aio.h>
-# include <fcntl.h>
-# include <readline/history.h>
-# include <readline/readline.h>
-# include <signal.h>
-# include <stdio.h>
-# include <stdlib.h>
-# include <string.h>
-# include <sys/wait.h>
-# include <unistd.h>
-# include <termios.h>
+#include "../lib/libft/include/libft.h"
+#include <aio.h>
+#include <fcntl.h>
+#include <readline/history.h>
+#include <readline/readline.h>
+#include <signal.h>
+#include <stdio.h>
+#include <stdlib.h>
+#include <string.h>
+#include <sys/wait.h>
+#include <termios.h>
+#include <unistd.h>
 
 /////////////////////////////////// STRUCTS ////////////////////////////////////
 
@@ -61,28 +61,29 @@
  *
  * - UNDEFINED: Undefined or unrecognized token type.
  */
-typedef enum e_token_type
-{
-	ARGUMENT,
-	COMMAND_ROUTE,
-	COMMAND_BUILT_IN,
-	COMMAND_NOT_FOUND,
-	HEREDOC_EOF,
-	PIPE,
-	REDIRECT_IN_CHAR,
-	REDIRECT_IN_CHAR_HEREDOC,
-	REDIRECT_OUT_CHAR,
-	REDIRECT_OUT_CHAR_APPEND,
-	REDIRECT_IN_ROUTE,
-	REDIRECT_OUT_ROUTE,
-	UNDEFINED
-}			t_ttype;
+typedef enum e_token_type {
+  ARGUMENT,
+  COMMAND_ROUTE,
+  COMMAND_BUILT_IN,
+  COMMAND_NOT_FOUND,
+  HEREDOC_EOF,
+  PIPE,
+  REDIRECT_IN_CHAR,
+  REDIRECT_IN_CHAR_HEREDOC,
+  REDIRECT_OUT_CHAR,
+  REDIRECT_OUT_CHAR_APPEND,
+  REDIRECT_IN_ROUTE,
+  REDIRECT_OUT_ROUTE,
+  UNDEFINED
+} t_ttype;
 
-static char	*token_strings[] = {"ARGUMENT", "COMMAND_ROUTE", "COMMAND_BUILT_IN",
-		"COMMAND_NOT_FOUND", "HEREDOC_EOF", "PIPE", "REDIRECT_IN_CHAR",
-		"REDIRECT_IN_CHAR_HEREDOC", "REDIRECT_OUT_CHAR",
-		"REDIRECT_OUT_CHAR_APPEND", "REDIRECT_IN_ROUTE", "REDIRECT_OUT_ROUTE",
-		"UNDEFINED"};
+static char *token_strings[] = {"ARGUMENT",          "COMMAND_ROUTE",
+                                "COMMAND_BUILT_IN",  "COMMAND_NOT_FOUND",
+                                "HEREDOC_EOF",       "PIPE",
+                                "REDIRECT_IN_CHAR",  "REDIRECT_IN_CHAR_HEREDOC",
+                                "REDIRECT_OUT_CHAR", "REDIRECT_OUT_CHAR_APPEND",
+                                "REDIRECT_IN_ROUTE", "REDIRECT_OUT_ROUTE",
+                                "UNDEFINED"};
 
 /**
  * @struct s_token
@@ -96,11 +97,10 @@ static char	*token_strings[] = {"ARGUMENT", "COMMAND_ROUTE", "COMMAND_BUILT_IN",
  * @param s_token::t_ttype
  *   The type of the token, represented by the t_ttype enum.
  */
-typedef struct s_token
-{
-	char	*string;
-	t_ttype	token_type;
-}			t_token;
+typedef struct s_token {
+  char *string;
+  t_ttype token_type;
+} t_token;
 
 /**
  * @struct s_line_analysis
@@ -119,38 +119,35 @@ typedef struct s_token
  * @param is_heredoc  1 if input is heredoc. In that case, theres a tmp file.
  *                    Initialized -1.
  */
-typedef struct s_entry_info
-{
-	int		n_pipes;
-	char	*input_file;
-	char	*output_file;
-	char	is_append;
-	char	is_heredoc;
-}			t_einfo;
+typedef struct s_entry_info {
+  int n_pipes;
+  char *input_file;
+  char *output_file;
+  char is_append;
+  char is_heredoc;
+  char ***commands;
+} t_einfo;
 
-typedef struct s_linked_env
-{
-	char *key;
-	char *value;
-	struct s_linked_env *next;
-}			t_linked_env;
+typedef struct s_linked_env {
+  char *key;
+  char *value;
+  struct s_linked_env *next;
+} t_linked_env;
 
-typedef struct s_envp
-{
-	t_linked_env *envp;
-	t_linked_env *ordered_envp;
-	char **envp_exec;
-	int len_env;
-}			t_envp;
+typedef struct s_envp {
+  t_linked_env *envp;
+  t_linked_env *ordered_envp;
+  char **envp_exec;
+  int len_env;
+} t_envp;
 
-//No me mola como ha quedado esta estrucutura
-typedef struct s_shell_data
-{
-	t_envp shell_envi;
-	char **command_exec;
-	t_token **tokens;
-	pid_t pid_fork;
-}	t_shell_data;
+// No me mola como ha quedado esta estrucutura
+typedef struct s_shell_data {
+  t_envp shell_envi;
+  t_token **tokens;
+  pid_t pid_fork;
+  t_einfo *einfo;
+} t_shell_data;
 
 //////////////////////////////////// PARSER ////////////////////////////////////
 
@@ -174,7 +171,7 @@ typedef struct s_shell_data
  * @return An array of pointers to t_token structures representing the parsed
  *         tokens.
  */
-t_token		**parse(char *command_line);
+t_token **parse(char *command_line);
 
 /**
  * @brief Expands environment variables in an array of strings.
@@ -188,7 +185,7 @@ t_token		**parse(char *command_line);
  * @param splitted Array of strings to process for environment expansion.
  * @return Modified array of strings with environment variables expanded.
  */
-char		**parse_expand_env(char **splitted);
+char **parse_expand_env(char **splitted);
 
 /**
  * @brief Splits a command line string into an array of strings using the pipe
@@ -206,7 +203,7 @@ char		**parse_expand_env(char **splitted);
  *
  * @note The caller is responsible for freeing the returned matrix.
  */
-char		**split_pipes(char *command_line);
+char **split_pipes(char *command_line);
 
 /**
  * @brief Splits each string in the array into arguments, handling quotes.
@@ -223,7 +220,7 @@ char		**split_pipes(char *command_line);
  *
  * @note The input array is freed inside this function.
  */
-char		**split_args(char **array);
+char **split_args(char **array);
 
 /**
  * @brief Splits each string in the array by quotes and processes results.
@@ -235,7 +232,7 @@ char		**split_args(char **array);
  * @param array Array of strings to split and process. Freed in function.
  * @return Newly allocated array of processed strings, or NULL on failure.
  */
-char		**split_quotes(char **array);
+char **split_quotes(char **array);
 
 /**
  * @brief Tokenizes an array of strings into an array of t_token pointers.
@@ -247,7 +244,7 @@ char		**split_quotes(char **array);
  * @param array The input array of strings to be tokenized.
  * @return t_token** Pointer to an array of token structures.
  */
-t_token		**tokenize(char **array);
+t_token **tokenize(char **array);
 
 /**
  * @brief Resolves the command type for the token at index `i`.
@@ -260,7 +257,7 @@ t_token		**tokenize(char **array);
  * @param tokens Array of token pointers.
  * @param i Index of the token to resolve.
  */
-void		cmd_resolver(t_token **tokens, size_t i);
+void cmd_resolver(t_token **tokens, size_t i);
 
 //////////////////////////////// PARSER - UTILS ////////////////////////////////
 
@@ -275,7 +272,7 @@ void		cmd_resolver(t_token **tokens, size_t i);
  * @return A double pointer to a newly allocated 2D array containing all
  *         strings.
  */
-char		**collapse_extracted(char ***extracted);
+char **collapse_extracted(char ***extracted);
 
 /**
  * @brief Cleans a splitted string array by trimming spaces and removing empty
@@ -292,7 +289,7 @@ char		**collapse_extracted(char ***extracted);
  * @return A newly allocated NULL-terminated array of cleaned strings. Returns
  * NULL if no strings remain.
  */
-char		**clean_splitted(char **splitted);
+char **clean_splitted(char **splitted);
 
 /**
  * @brief Frees memory allocated for an array of t_token pointers.
@@ -303,10 +300,7 @@ char		**clean_splitted(char **splitted);
  *
  * @param tokens Pointer to an array of t_token pointers to be freed.
  */
-void		free_tokens(t_token **tokens);
-
-void		terminal_signals(void (*func)(int));
-void		block_signal(int signal, int block);
+void free_tokens(t_token **tokens);
 
 //////////////////////////////////// TOOLS /////////////////////////////////////
 
@@ -323,7 +317,35 @@ void		block_signal(int signal, int block);
  * @return On success, returns the name of the temporary file (char *).
  *         On failure, returns NULL.
  */
-char		*heredoc_behaviour(char *eof);
+char *heredoc_behaviour(char *eof);
+
+/**
+ * @brief Counts the number of tokens of a specific type in a token array.
+ *
+ * Iterates through the given array of token pointers and counts how many
+ * tokens have a token_type matching the specified type.
+ *
+ * @param tokens Array of pointers to t_token structures, terminated by NULL.
+ * @param type The token type to count (of type t_ttype).
+ * @return The number of tokens in the array that match the specified type.
+ */
+int count_tokens(t_token **tokens, t_ttype type);
+
+/**
+ * @brief Parses a list of tokens and constructs a 3D array of
+ * command arguments.
+ *
+ * Counts the number of command tokens (built-in and routed), allocates a
+ * 3D array to store arguments for each command, and fills it using
+ * set_commands_loop. The resulting array is NULL-terminated.
+ *
+ * @param tokens: Pointer to an array of token pointers representing the parsed
+ * input.
+ *
+ * @return: Pointer to the 3D array of command arguments, or NULL on
+ * allocation failure.
+ */
+char ***get_commands(t_token **tokens);
 
 ///////////////////////////////////// UTILS ////////////////////////////////////
 
@@ -339,7 +361,7 @@ char		*heredoc_behaviour(char *eof);
  * @return Pointer to the first token of the specified type, or NULL if not
  *         found.
  */
-t_token		*extract_first_type_token(t_token **tokens, t_ttype type);
+t_token *extract_first_type_token(t_token **tokens, t_ttype type);
 
 /**
  * @brief Retrieves and initializes entry information from a list of tokens.
@@ -352,23 +374,23 @@ t_token		*extract_first_type_token(t_token **tokens, t_ttype type);
  * @param tokens Double pointer to the list of tokens to be analyzed.
  * @return Pointer to the initialized t_einfo structure, or NULL on failure.
  */
-t_einfo		*get_entry_info(t_token **tokens);
-
+t_einfo *get_entry_info(t_token **tokens);
 
 // DEBUG
-void		print_char_matrix(char **matrix);
-void		print_token_matrix(t_token **tokens);
-void		print_single_token(t_token *token, int index);
+void print_char_matrix(char **matrix);
+void print_token_matrix(t_token **tokens);
+void print_single_token(t_token *token, int index);
+void debug_einfo(t_einfo *einfo);
 
-void		child_process(t_shell_data *shell_data);
-void		parent_process(t_shell_data *shell_data);
-char		**get_full_command(t_token **token);
+void	child_process(t_shell_data *shell_data, int pipes[2], int *pipe_aux ,int index);
+void	parent_process(t_shell_data *shell_data, int pipes[2], int *pipe_aux, int index);
+char **get_full_command(t_token **token);
 
-char	*set_heredoc_tmp_file(char *eof);
+char *set_heredoc_tmp_file(char *eof);
 
-void block_terminal_signals();
+void block_terminal_signals(void);
 void sigint_handler(int sig);
-void restore_terminal_signals();
+void restore_terminal_signals(void);
 void exit_cmd(t_shell_data *shell_data);
 void cd_cmd(t_shell_data *shell_data, int *ret);
 void pwd_cmd(int *ret);
@@ -383,7 +405,7 @@ int add_normal_node(t_linked_env **envp, char **key_value);
 int add_ordered_node(t_linked_env **ordered_envp, char **key_value);
 int generate_exec_envp(t_envp *shell_envi);
 void print_envi_list(t_linked_env *envp_list, int mode);
-void export_cmd(t_shell_data *shell_data, int*ret);
+void export_cmd(t_shell_data *shell_data, int *ret);
 
 char **get_key_value(char *env);
 void free_splitted_string(char **splitted);

@@ -6,7 +6,7 @@
 /*   By: pablo <pablo@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/07/24 20:38:12 by pablo             #+#    #+#             */
-/*   Updated: 2025/08/18 14:48:32 by pablo            ###   ########.fr       */
+/*   Updated: 2025/08/25 19:07:56 by pablo            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -167,8 +167,6 @@ int	main(int argc, char **argv, char **envp)
 {
 	char			*input;
 	char			**get_full_cmd;
-	char			*heredoc_buffer;
-	t_einfo			*einfo;
 	t_shell_data	shell_data;
 
 	init_shell_data(&shell_data);
@@ -192,7 +190,7 @@ int	main(int argc, char **argv, char **envp)
 		shell_data.tokens = parse(input);
 		if (shell_data.tokens)
 		{
-			einfo = get_entry_info(shell_data.tokens);
+			shell_data.einfo = get_entry_info(shell_data.tokens);
 			add_history(input);
 			free(input);
 			// Analyze each element
@@ -203,6 +201,7 @@ int	main(int argc, char **argv, char **envp)
 			}
 			printf("/////////////////////////////////////\n");
 			execution_cycle(&shell_data);
+			//liberar cosas de get_entry_info
 		}
 		else
 			free(input);

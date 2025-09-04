@@ -38,10 +38,43 @@ static char *get_pid_from_file()
 		if (!found)
 			free(env);
 	}
+	ft_get_next_line(-1);
 	close(fd);
 	if (!found)
 		return (NULL);
 	return (env);
+}
+
+/**
+ * @note peazo mierda, funciona pero es muy guarro
+ */
+int pid_exists(t_envp *enviroment, char *pid)
+{
+	t_linked_env *aux = enviroment->envp;
+	char *substr;
+	int i;
+
+	if (!pid)
+		return 0;
+	i = 0;
+	while(pid[i] && !ft_isdigit(pid[i]))
+		i++;
+	substr = ft_substr(pid, i, ft_strlen(&pid[i]) - 1);
+	if (!substr)
+		return (0);
+	while(aux && (ft_strncmp("Pid", aux->key, 3)!=0))
+		aux = aux->next;
+	if (aux)
+		aux->value = ft_strdup(substr);
+	else
+		return 0;
+	aux = enviroment->ordered_envp;
+	while(aux && ft_strncmp("Pid", aux->key, 3))
+		aux = aux->next;
+	if (aux)
+		aux->value = ft_strdup(substr);
+	free(substr);
+	return 1;
 }
 
 int add_pid_env(t_envp *enviroment)
@@ -53,6 +86,8 @@ int add_pid_env(t_envp *enviroment)
 	pid_from_file = get_pid_from_file();
 	if (!pid_from_file)
 		return (0);
+	if (pid_exists(enviroment, pid_from_file))
+		return (free(pid_from_file),1);
 	env_prepared = get_pid_env(pid_from_file);
 	if (!env_prepared)
 		return (free(pid_from_file), 0);

@@ -42,7 +42,9 @@
 		"checker.h": "c",
 		"minishell.h": "c",
 		"stdlib.h": "c",
-		"colors.h": "c"
+		"colors.h": "c",
+		"chrono": "c",
+		"ranges": "c"
 	},
 	"makefile.configureOnOpen": false
 }
