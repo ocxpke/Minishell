@@ -35,7 +35,7 @@ void print_envi_list(t_linked_env *envp_list, int mode)
 		{
 			printf("%s", envp_list->key);
 			if (envp_list->value)
-				printf("=%s", envp_list->value);
+				printf("=%s\n", envp_list->value);
 		}
 		else
 		{
@@ -50,5 +50,5 @@ void print_envi_list(t_linked_env *envp_list, int mode)
 		envp_list = envp_list->next;
 	}
 	if (mode)
-		printf("%s\n", RESET);
+		printf("%s", RESET);
 }

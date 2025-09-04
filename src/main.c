@@ -201,6 +201,7 @@ int	main(int argc, char **argv, char **envp)
 			}
 			printf("/////////////////////////////////////\n");
 			execution_cycle(&shell_data);
+			//liberar cosas de get_entry_info
 		}
 		else
 			free(input);

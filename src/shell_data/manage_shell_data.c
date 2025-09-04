@@ -12,7 +12,6 @@ void free_shell_data(t_shell_data *shell_data)
 
 void init_shell_data(t_shell_data *shell_data){
 	shell_data->pid_fork = 0;
-	shell_data->command_exec = NULL;
 	shell_data->tokens = NULL;
 	shell_data->shell_envi.envp = NULL;
 	shell_data->shell_envi.ordered_envp = NULL;

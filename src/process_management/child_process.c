@@ -14,14 +14,57 @@
 
 extern sig_atomic_t signal_recv;
 
-void	child_process(t_shell_data *shell_data)
+void redirect_input(t_shell_data *shell_data, int *pipe_aux, int index)
 {
+	int fd;
+
+	if (index == 0 && shell_data->einfo->input_file)
+	{
+		fd = open(shell_data->einfo->input_file, O_RDONLY);
+		if (fd == -1)
+			return (perror ("Error\n"), (void) 0);
+		dup2(fd, STDIN_FILENO);
+		close(fd);
+	}
+	else if (shell_data->einfo->n_pipes)
+	{
+		dup2(*pipe_aux, STDIN_FILENO);
+		close(*pipe_aux);
+	}
+
+}
+
+void redirect_output(t_shell_data *shell_data, int pipes[2],int index)
+{
+	int fd;
+
+	if ((index == shell_data->einfo->n_pipes) && shell_data->einfo->output_file)
+	{
+		fd = open(shell_data->einfo->output_file, O_WRONLY | O_CREAT, 0644);
+		if (fd == -1)
+			return (perror ("Error\n"), (void) 0);
+		dup2(fd, STDOUT_FILENO);
+		close(fd);
+	}
+	else if (shell_data->einfo->n_pipes && (shell_data->einfo->n_pipes!= index))
+	{
+		close(pipes[0]);
+		dup2(pipes[1], STDOUT_FILENO);
+		close(pipes[1]);
+	}
+
+}
+
+void	child_process(t_shell_data *shell_data, int pipes[2], int *pipe_aux ,int index)
+{
+	redirect_input(shell_data, pipe_aux, index);
+	redirect_output(shell_data,pipes,index);
 	free_splitted_string(shell_data->shell_envi.envp_exec);
 	generate_exec_envp(&(shell_data->shell_envi));
 	restore_terminal_signals();
-	if (shell_data->command_exec && shell_data->command_exec[0] != NULL)
-		execve(shell_data->command_exec[0], shell_data->command_exec, shell_data->shell_envi.envp_exec);
-	free_splitted_string(shell_data->command_exec);
+	if (shell_data->einfo->commands[index] && shell_data->einfo->commands[index][0] != NULL)
+		execve(shell_data->einfo->commands[index][0], shell_data->einfo->commands[index], shell_data->shell_envi.envp_exec);
+	//liberar todo de einfo
 	rl_clear_history();
 	free_tokens(shell_data->tokens);
 	free_shell_data(shell_data);

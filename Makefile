@@ -69,6 +69,7 @@ TOOLS_SRC = src/tools/tools_aux_envp_linked_list.c \
 
 UTILS_SRC = src/utils/utils_extract_tokens.c \
 			src/utils/utils_get_entry_info.c \
+			src/utils/utils_set_commands_array.c
 
 
 OBJ = $(addprefix $(OBJ_DIR)/, $(SRC:.c=.o))

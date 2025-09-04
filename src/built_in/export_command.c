@@ -11,6 +11,7 @@ static int if_exists_replace(t_linked_env *env_list, char **key_value, int *ret)
 			env_list->value = NULL;
 		*ret = 1;
 	}
+	return 1;
 }
 
 static int find_and_replace_env(t_envp *shell_envi, char **key_value)
