@@ -3,31 +3,31 @@
 /*                                                        :::      ::::::::   */
 /*   minishell.h                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: pablo <pablo@student.42.fr>                +#+  +:+       +#+        */
+/*   By: pabmart2 <pabmart2@student.42malaga.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/07/24 12:02:38 by pablo             #+#    #+#             */
-/*   Updated: 2025/08/25 18:42:09 by pablo            ###   ########.fr       */
+/*   Updated: 2025/09/11 21:29:51 by pabmart2         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #ifndef MINISHELL_H
-#define MINISHELL_H
+# define MINISHELL_H
 
 // Cuidado con esto hay que verlo bien
-#define _GNU_SOURCE
+# define _GNU_SOURCE
 
-#include "../lib/libft/include/libft.h"
-#include <aio.h>
-#include <fcntl.h>
-#include <readline/history.h>
-#include <readline/readline.h>
-#include <signal.h>
-#include <stdio.h>
-#include <stdlib.h>
-#include <string.h>
-#include <sys/wait.h>
-#include <termios.h>
-#include <unistd.h>
+# include "../lib/libft/include/libft.h"
+# include <aio.h>
+# include <fcntl.h>
+# include <readline/history.h>
+# include <readline/readline.h>
+# include <signal.h>
+# include <stdio.h>
+# include <stdlib.h>
+# include <string.h>
+# include <sys/wait.h>
+# include <termios.h>
+# include <unistd.h>
 
 /////////////////////////////////// STRUCTS ////////////////////////////////////
 
@@ -61,29 +61,28 @@
  *
  * - UNDEFINED: Undefined or unrecognized token type.
  */
-typedef enum e_token_type {
-  ARGUMENT,
-  COMMAND_ROUTE,
-  COMMAND_BUILT_IN,
-  COMMAND_NOT_FOUND,
-  HEREDOC_EOF,
-  PIPE,
-  REDIRECT_IN_CHAR,
-  REDIRECT_IN_CHAR_HEREDOC,
-  REDIRECT_OUT_CHAR,
-  REDIRECT_OUT_CHAR_APPEND,
-  REDIRECT_IN_ROUTE,
-  REDIRECT_OUT_ROUTE,
-  UNDEFINED
-} t_ttype;
+typedef enum e_token_type
+{
+	ARGUMENT,
+	COMMAND_ROUTE,
+	COMMAND_BUILT_IN,
+	COMMAND_NOT_FOUND,
+	HEREDOC_EOF,
+	PIPE,
+	REDIRECT_IN_CHAR,
+	REDIRECT_IN_CHAR_HEREDOC,
+	REDIRECT_OUT_CHAR,
+	REDIRECT_OUT_CHAR_APPEND,
+	REDIRECT_IN_ROUTE,
+	REDIRECT_OUT_ROUTE,
+	UNDEFINED
+}						t_ttype;
 
-static char *token_strings[] = {"ARGUMENT",          "COMMAND_ROUTE",
-                                "COMMAND_BUILT_IN",  "COMMAND_NOT_FOUND",
-                                "HEREDOC_EOF",       "PIPE",
-                                "REDIRECT_IN_CHAR",  "REDIRECT_IN_CHAR_HEREDOC",
-                                "REDIRECT_OUT_CHAR", "REDIRECT_OUT_CHAR_APPEND",
-                                "REDIRECT_IN_ROUTE", "REDIRECT_OUT_ROUTE",
-                                "UNDEFINED"};
+static char				*token_strings[] = {"ARGUMENT", "COMMAND_ROUTE",
+					"COMMAND_BUILT_IN", "COMMAND_NOT_FOUND", "HEREDOC_EOF",
+					"PIPE", "REDIRECT_IN_CHAR", "REDIRECT_IN_CHAR_HEREDOC",
+					"REDIRECT_OUT_CHAR", "REDIRECT_OUT_CHAR_APPEND",
+					"REDIRECT_IN_ROUTE", "REDIRECT_OUT_ROUTE", "UNDEFINED"};
 
 /**
  * @struct s_token
@@ -97,10 +96,11 @@ static char *token_strings[] = {"ARGUMENT",          "COMMAND_ROUTE",
  * @param s_token::t_ttype
  *   The type of the token, represented by the t_ttype enum.
  */
-typedef struct s_token {
-  char *string;
-  t_ttype token_type;
-} t_token;
+typedef struct s_token
+{
+	char				*string;
+	t_ttype				token_type;
+}						t_token;
 
 /**
  * @struct s_line_analysis
@@ -119,73 +119,93 @@ typedef struct s_token {
  * @param is_heredoc  1 if input is heredoc. In that case, theres a tmp file.
  *                    Initialized -1.
  */
-typedef struct s_entry_info {
-  int n_pipes;
-  char *input_file;
-  char *output_file;
-  char is_append;
-  char is_heredoc;
-  char ***commands;
-} t_einfo;
+typedef struct s_entry_info
+{
+	int					n_pipes;
+	char				*input_file;
+	char				*output_file;
+	char				is_append;
+	char				is_heredoc;
+	char				***commands;
+}						t_einfo;
 
-typedef struct s_linked_env {
-  char *key;
-  char *value;
-  struct s_linked_env *next;
-} t_linked_env;
+typedef struct s_linked_env
+{
+	char				*key;
+	char				*value;
+	struct s_linked_env	*next;
+}						t_linked_env;
 
-typedef struct s_envp {
-  t_linked_env *envp;
-  t_linked_env *ordered_envp;
-  char **envp_exec;
-  int len_env;
-} t_envp;
+// TODO: Jose, tambien te voy a asesinar por llamarlo "envp" en vez de "env"
+typedef struct s_envp
+{
+	t_linked_env		*envp;
+	t_linked_env		*ordered_envp;
+	char				**envp_exec;
+	int					len_env;
+}						t_envp;
 
+// TODO: Jose, te voy a matar por poner "envi"
 // No me mola como ha quedado esta estrucutura
-typedef struct s_shell_data {
-  t_envp shell_envi;
-  t_token **tokens;
-  pid_t pid_fork;
-  t_einfo *einfo;
-} t_shell_data;
+typedef struct s_shell_data
+{
+	t_envp				shell_envi;
+	t_token				**tokens;
+	pid_t				pid_fork;
+	t_einfo				*einfo;
+}						t_shell_data;
 
 //////////////////////////////////// PARSER ////////////////////////////////////
 
 /**
- * @brief Parses the given command line string into an array of token
- *        structures.
+ * @brief Parses the given command line string into an array of tokens.
  *
  * This function performs the following steps:
  *
- * 1. Splits the command line by pipes.
+ * 1. Checks if the command line is valid and non-empty.
  *
- * 2. Splits each segment by quotes.
+ * 2. Splits the command line by pipes.
  *
- * 3. Splits each segment into arguments.
+ * 3. Splits the resulting strings by quotes.
  *
- * 4. Expands environment variables in the segments.
+ * 4. Splits the strings into arguments.
  *
- * 5. Tokenizes the processed segments into t_token structures.
+ * 5. Expands environment variables using the provided linked environment.
+ *
+ * 6. Tokenizes the processed strings into an array of tokens.
+ *
+ * 7. Frees any temporary memory used for splitting.
+ *
  *
  * @param command_line The input command line string to parse.
- * @return An array of pointers to t_token structures representing the parsed
- *         tokens.
+ * @param linked_env   Pointer to the linked list of environment variables
+ *                     for expansion.
+ * @return             Pointer to an array of token pointers, or NULL if input
+ *                     is invalid.
  */
-t_token **parse(char *command_line);
+t_token					**parse(char *command_line, t_linked_env *linked_env);
 
 /**
  * @brief Expands environment variables in an array of strings.
  *
- * Iterates over each string in the array `splitted`. For strings not
- * starting with a single quote ('), searches for '$' indicating an
- * environment variable. Replaces the variable with its value using
- * `expand_env`. If no variable is found, or if the string starts with
- * a single quote, calls `clean_quote` to handle quotes.
+ * This function iterates through the given array of strings (`splitted`),
+ * and for each string that does not start with a single quote, it searches
+ * for occurrences of the '$' character, indicating an environment variable.
+ * It then expands each environment variable found using the provided
+ * linked list of environment variables (`linked_env`). If no environment
+ * variable is found, or if the string starts with a single quote, it
+ * removes quotes from the string.
  *
- * @param splitted Array of strings to process for environment expansion.
- * @return Modified array of strings with environment variables expanded.
+ * @param splitted   Array of strings to process and expand environment
+ *                   variables.
+ * @param linked_env Linked list containing environment variable names and
+ *                   values.
+ *
+ * @return           The modified array of strings with environment variables
+ *                   expanded.
  */
-char **parse_expand_env(char **splitted);
+char					**parse_expand_env(char **splitted,
+							t_linked_env *linked_env);
 
 /**
  * @brief Splits a command line string into an array of strings using the pipe
@@ -203,7 +223,7 @@ char **parse_expand_env(char **splitted);
  *
  * @note The caller is responsible for freeing the returned matrix.
  */
-char **split_pipes(char *command_line);
+char					**split_pipes(char *command_line);
 
 /**
  * @brief Splits each string in the array into arguments, handling quotes.
@@ -220,7 +240,7 @@ char **split_pipes(char *command_line);
  *
  * @note The input array is freed inside this function.
  */
-char **split_args(char **array);
+char					**split_args(char **array);
 
 /**
  * @brief Splits each string in the array by quotes and processes results.
@@ -232,7 +252,7 @@ char **split_args(char **array);
  * @param array Array of strings to split and process. Freed in function.
  * @return Newly allocated array of processed strings, or NULL on failure.
  */
-char **split_quotes(char **array);
+char					**split_quotes(char **array);
 
 /**
  * @brief Tokenizes an array of strings into an array of t_token pointers.
@@ -244,7 +264,7 @@ char **split_quotes(char **array);
  * @param array The input array of strings to be tokenized.
  * @return t_token** Pointer to an array of token structures.
  */
-t_token **tokenize(char **array);
+t_token					**tokenize(char **array);
 
 /**
  * @brief Resolves the command type for the token at index `i`.
@@ -257,7 +277,7 @@ t_token **tokenize(char **array);
  * @param tokens Array of token pointers.
  * @param i Index of the token to resolve.
  */
-void cmd_resolver(t_token **tokens, size_t i);
+void					cmd_resolver(t_token **tokens, size_t i);
 
 //////////////////////////////// PARSER - UTILS ////////////////////////////////
 
@@ -272,7 +292,7 @@ void cmd_resolver(t_token **tokens, size_t i);
  * @return A double pointer to a newly allocated 2D array containing all
  *         strings.
  */
-char **collapse_extracted(char ***extracted);
+char					**collapse_extracted(char ***extracted);
 
 /**
  * @brief Cleans a splitted string array by trimming spaces and removing empty
@@ -289,7 +309,7 @@ char **collapse_extracted(char ***extracted);
  * @return A newly allocated NULL-terminated array of cleaned strings. Returns
  * NULL if no strings remain.
  */
-char **clean_splitted(char **splitted);
+char					**clean_splitted(char **splitted);
 
 /**
  * @brief Frees memory allocated for an array of t_token pointers.
@@ -300,7 +320,7 @@ char **clean_splitted(char **splitted);
  *
  * @param tokens Pointer to an array of t_token pointers to be freed.
  */
-void free_tokens(t_token **tokens);
+void					free_tokens(t_token **tokens);
 
 //////////////////////////////////// TOOLS /////////////////////////////////////
 
@@ -317,7 +337,7 @@ void free_tokens(t_token **tokens);
  * @return On success, returns the name of the temporary file (char *).
  *         On failure, returns NULL.
  */
-char *heredoc_behaviour(char *eof);
+char					*heredoc_behaviour(char *eof);
 
 /**
  * @brief Counts the number of tokens of a specific type in a token array.
@@ -329,7 +349,7 @@ char *heredoc_behaviour(char *eof);
  * @param type The token type to count (of type t_ttype).
  * @return The number of tokens in the array that match the specified type.
  */
-int count_tokens(t_token **tokens, t_ttype type);
+int						count_tokens(t_token **tokens, t_ttype type);
 
 /**
  * @brief Parses a list of tokens and constructs a 3D array of
@@ -345,7 +365,7 @@ int count_tokens(t_token **tokens, t_ttype type);
  * @return: Pointer to the 3D array of command arguments, or NULL on
  * allocation failure.
  */
-char ***get_commands(t_token **tokens);
+char					***get_commands(t_token **tokens);
 
 ///////////////////////////////////// UTILS ////////////////////////////////////
 
@@ -361,7 +381,8 @@ char ***get_commands(t_token **tokens);
  * @return Pointer to the first token of the specified type, or NULL if not
  *         found.
  */
-t_token *extract_first_type_token(t_token **tokens, t_ttype type);
+t_token					*extract_first_type_token(t_token **tokens,
+							t_ttype type);
 
 /**
  * @brief Retrieves and initializes entry information from a list of tokens.
@@ -374,47 +395,63 @@ t_token *extract_first_type_token(t_token **tokens, t_ttype type);
  * @param tokens Double pointer to the list of tokens to be analyzed.
  * @return Pointer to the initialized t_einfo structure, or NULL on failure.
  */
-t_einfo *get_entry_info(t_token **tokens);
+t_einfo					*get_entry_info(t_token **tokens);
+
+/**
+ * Retrieves the value for a key from a linked environment list.
+ *
+ * @param key        The key to search for.
+ * @param linked_env Pointer to the head of the list.
+ * @return           The value for the key if found, else NULL.
+ *
+ * Iterates through the list and compares each node's key with the given key.
+ * If both length and content match, returns the value. Else, returns NULL.
+ */
+char					*get_linked_env(const char *key,
+							t_linked_env *linked_env);
 
 // DEBUG
-void print_char_matrix(char **matrix);
-void print_token_matrix(t_token **tokens);
-void print_single_token(t_token *token, int index);
-void debug_einfo(t_einfo *einfo);
+void					print_char_matrix(char **matrix);
+void					print_token_matrix(t_token **tokens);
+void					print_single_token(t_token *token, int index);
+void					debug_einfo(t_einfo *einfo);
 
-void	child_process(t_shell_data *shell_data, int pipes[2], int *pipe_aux ,int index);
-void	parent_process(t_shell_data *shell_data, int pipes[2], int *pipe_aux, int index);
-char **get_full_command(t_token **token);
+void					child_process(t_shell_data *shell_data, int pipes[2],
+							int *pipe_aux, int index);
+void					parent_process(t_shell_data *shell_data, int pipes[2],
+							int *pipe_aux, int index);
+char					**get_full_command(t_token **token);
 
-char *set_heredoc_tmp_file(char *eof);
+char					*set_heredoc_tmp_file(char *eof);
 
-void block_terminal_signals(void);
-void sigint_handler(int sig);
-void restore_terminal_signals(void);
-void exit_cmd(t_shell_data *shell_data);
-void cd_cmd(t_shell_data *shell_data, int *ret);
-void pwd_cmd(int *ret);
-void echo_cmd(t_shell_data *shell_data, int *ret);
-void env_cmd(t_envp *enviroment, int *ret);
-int check_if_is_built_in(t_shell_data *shell_data);
+void					block_terminal_signals(void);
+void					sigint_handler(int sig);
+void					restore_terminal_signals(void);
+void					exit_cmd(t_shell_data *shell_data);
+void					cd_cmd(t_shell_data *shell_data, int *ret);
+void					pwd_cmd(int *ret);
+void					echo_cmd(t_shell_data *shell_data, int *ret);
+void					env_cmd(t_envp *enviroment, int *ret);
+int						check_if_is_built_in(t_shell_data *shell_data);
 
-void clone_environs(t_envp *enviroment);
-void init_shell_data(t_shell_data *shell_data);
+void					clone_environs(t_envp *enviroment);
+void					init_shell_data(t_shell_data *shell_data);
 
-int add_normal_node(t_linked_env **envp, char **key_value);
-int add_ordered_node(t_linked_env **ordered_envp, char **key_value);
-int generate_exec_envp(t_envp *shell_envi);
-void print_envi_list(t_linked_env *envp_list, int mode);
-void export_cmd(t_shell_data *shell_data, int *ret);
+int						add_normal_node(t_linked_env **envp, char **key_value);
+int						add_ordered_node(t_linked_env **ordered_envp,
+							char **key_value);
+int						generate_exec_envp(t_envp *shell_envi);
+void					print_envi_list(t_linked_env *envp_list, int mode);
+void					export_cmd(t_shell_data *shell_data, int *ret);
 
-char **get_key_value(char *env);
-void free_splitted_string(char **splitted);
-void unset_cmd(t_shell_data *shell_data, int *ret);
-int ft_max_len_str(char *str_1, char *str_2);
+char					**get_key_value(char *env);
+void					free_splitted_string(char **splitted);
+void					unset_cmd(t_shell_data *shell_data, int *ret);
+int						ft_max_len_str(char *str_1, char *str_2);
 
-void execution_cycle(t_shell_data *shell_data);
-void free_env_linked_list(t_linked_env **linked_env);
-void free_shell_data(t_shell_data *shell_data);
-void check_if_shelllvl(char **key_value);
-int add_pid_env(t_envp *enviroment);
+void					execution_cycle(t_shell_data *shell_data);
+void					free_env_linked_list(t_linked_env **linked_env);
+void					free_shell_data(t_shell_data *shell_data);
+void					check_if_shelllvl(char **key_value);
+int						add_pid_env(t_envp *enviroment);
 #endif

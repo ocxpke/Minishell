@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   main.c                                             :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: pablo <pablo@student.42.fr>                +#+  +:+       +#+        */
+/*   By: pabmart2 <pabmart2@student.42malaga.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/07/24 20:38:12 by pablo             #+#    #+#             */
-/*   Updated: 2025/08/25 19:07:56 by pablo            ###   ########.fr       */
+/*   Updated: 2025/09/11 21:22:41 by pabmart2         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -187,7 +187,7 @@ int	main(int argc, char **argv, char **envp)
 		if (input == NULL)
 			return (rl_clear_history(), free_shell_data(&shell_data),
 				EXIT_SUCCESS);
-		shell_data.tokens = parse(input);
+		shell_data.tokens = parse(input, shell_data.shell_envi.ordered_envp);
 		if (shell_data.tokens)
 		{
 			shell_data.einfo = get_entry_info(shell_data.tokens);
