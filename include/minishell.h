@@ -6,7 +6,7 @@
 /*   By: pabmart2 <pabmart2@student.42malaga.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/07/24 12:02:38 by pablo             #+#    #+#             */
-/*   Updated: 2025/09/11 21:29:51 by pabmart2         ###   ########.fr       */
+/*   Updated: 2025/09/16 19:19:59 by pabmart2         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -103,21 +103,31 @@ typedef struct s_token
 }						t_token;
 
 /**
- * @struct s_line_analysis
- * @brief Structure to hold information about a parsed command line.
+ * @struct s_entry_info
+ * @brief Structure to hold parsed command line info for minishell.
  *
- * This structure contains details about the number of pipes in the command,
- * the input and output file names, and whether the output is to be appended.
+ * Stores details about the parsed command line, including:
  *
- * @param n_pipes     Number of pipes ('|') in the command line. Initialized -1.
- * @param input_file  Pointer to the input file name for redirection.
- *                    Initialized NULL.
- * @param output_file Pointer to the output file name for redirection.
- *                    Initialized NULL.
+ * - Number of pipes ('|') present.
+ *
+ * - Input/output file names for redirection.
+ *
+ * - Output append mode and heredoc usage.
+ *
+ * - Parsed commands as a triple pointer to strings.
+ *
+ * Members:
+ * @param n_pipes     Number of pipes ('|') in the command line.
+ *                    Initialized to -1.
+ * @param input_file  Pointer to input file name for redirection.
+ *                    Initialized to NULL.
+ * @param output_file Pointer to output file name for redirection.
+ *                    Initialized to NULL.
  * @param is_append   1 if output should be appended, 0 if overwritten.
- *                    Initialized -1.
- * @param is_heredoc  1 if input is heredoc. In that case, theres a tmp file.
- *                    Initialized -1.
+ *                    Initialized to -1.
+ * @param is_heredoc  1 if input uses heredoc (temporary file created),
+ *                    0 otherwise. Initialized to -1.
+ * @param commands    Triple pointer to parsed commands and their arguments.
  */
 typedef struct s_entry_info
 {
@@ -368,6 +378,17 @@ int						count_tokens(t_token **tokens, t_ttype type);
 char					***get_commands(t_token **tokens);
 
 ///////////////////////////////////// UTILS ////////////////////////////////////
+
+/**
+ * @brief Frees all memory associated with a t_einfo structure.
+ *
+ * Releases memory for input/output file strings, the commands array
+ * (including each command), and the t_einfo structure itself.
+ * Safely handles NULL pointers to prevent segmentation faults.
+ *
+ * @param einfo Double pointer to the t_einfo structure to be freed.
+ */
+void	clean_entry_info(t_einfo **einfo);
 
 /**
  * @brief Extracts the first token of a specified type from a token list.

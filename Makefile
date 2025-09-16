@@ -6,7 +6,7 @@
 #    By: pabmart2 <pabmart2@student.42malaga.com    +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2024/09/20 14:34:30 by pabmart2          #+#    #+#              #
-#    Updated: 2025/09/11 21:14:15 by pabmart2         ###   ########.fr        #
+#    Updated: 2025/09/16 18:32:54 by pabmart2         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -68,7 +68,7 @@ TOOLS_SRC = src/tools/tools_aux_envp_linked_list.c \
 			src/tools/tools_modify_env.c
 
 UTILS_SRC = src/utils/utils_extract_tokens.c \
-			src/utils/utils_get_entry_info.c \
+			src/utils/utils_entry_info.c \
 			src/utils/utils_get_linked_env.c \
 			src/utils/utils_set_commands_array.c \
 
