@@ -23,11 +23,8 @@ void	parent_process(t_shell_data *shell_data, int pipes[2], int *pipe_aux, int i
         close(pipes[0]);
     }
 
+	//Agrupar todos los wait?
 	// Ctrl+z suspende un proceso-- > implica controol de tareas-- > no hacer nada,no ?
 	if (!shell_data->einfo->n_pipes)
 		waitpid(shell_data->pid_fork, NULL, 0);
-	//Para el wait de las pipes, lista enlazada de pids
-	else if (index == shell_data->einfo->n_pipes)
-		waitpid(0, NULL, 0);
-
 }

@@ -3,10 +3,10 @@
 #                                                         :::      ::::::::    #
 #    Makefile                                           :+:      :+:    :+:    #
 #                                                     +:+ +:+         +:+      #
-#    By: pablo <pablo@student.42.fr>                +#+  +:+       +#+         #
+#    By: pabmart2 <pabmart2@student.42malaga.com    +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2024/09/20 14:34:30 by pabmart2          #+#    #+#              #
-#    Updated: 2025/08/25 14:15:38 by pablo            ###   ########.fr        #
+#    Updated: 2025/09/16 18:32:54 by pabmart2         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -65,11 +65,13 @@ TOOLS_SRC = src/tools/tools_aux_envp_linked_list.c \
 			src/tools/tools_enviroment.c \
 			src/tools/tools_envp_linked_list.c \
 			src/tools/tools_heredoc.c \
-			src/tools/tools_modify_env.c
+			src/tools/tools_modify_env.c\
+			src/tools/tools_piped_info.c
 
 UTILS_SRC = src/utils/utils_extract_tokens.c \
 			src/utils/utils_get_entry_info.c \
-			src/utils/utils_set_commands_array.c
+			src/utils/utils_set_commands_array.c \
+			src/utils/utils_generate_command_file.c
 
 
 OBJ = $(addprefix $(OBJ_DIR)/, $(SRC:.c=.o))

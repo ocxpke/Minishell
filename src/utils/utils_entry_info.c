@@ -1,12 +1,12 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   utils_get_entry_info.c                             :+:      :+:    :+:   */
+/*   utils_entry_info.c                                 :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: pablo <pablo@student.42.fr>                +#+  +:+       +#+        */
+/*   By: pabmart2 <pabmart2@student.42malaga.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/08/18 12:52:02 by pablo             #+#    #+#             */
-/*   Updated: 2025/08/25 19:15:29 by pablo            ###   ########.fr       */
+/*   Updated: 2025/09/16 19:33:26 by pabmart2         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -124,6 +124,28 @@ t_einfo	*get_entry_info(t_token **tokens)
 	set_output_file(tokens, einfo);
 	einfo->n_pipes = count_tokens(tokens, PIPE);
 	einfo->commands = get_commands(tokens);
+	einfo->piped_info = NULL;
 	//debug_einfo(einfo);
 	return (einfo);
+}
+
+void	clean_entry_info(t_einfo **einfo)
+{
+	int	i;
+
+	if (!einfo || !*einfo)
+		return ;
+	ft_free((void **)&((*einfo)->input_file));
+	ft_free((void **)&((*einfo)->output_file));
+	if ((*einfo)->commands)
+	{
+		i = 0;
+		while ((*einfo)->commands[i])
+		{
+			ft_matrix_free((void **)(*einfo)->commands[i], 0);
+			i++;
+		}
+		ft_free((void **)&((*einfo)->commands));
+	}
+	ft_free((void **)einfo);
 }

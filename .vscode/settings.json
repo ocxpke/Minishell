@@ -44,7 +44,11 @@
 		"stdlib.h": "c",
 		"colors.h": "c",
 		"chrono": "c",
-		"ranges": "c"
+		"ranges": "c",
+		"signals.h": "c",
+		"process_management.h": "c",
+		"tools.h": "c",
+		"shell_data.h": "c"
 	},
 	"makefile.configureOnOpen": false
 }
