@@ -1,6 +1,6 @@
 #include "minishell.h"
 
-void manage_pipes(int pipes[2], int npipes, int pos)
+static void manage_pipes(int pipes[2], int npipes, int pos)
 {
   if (npipes <= 0 || pos == npipes)
     return;
@@ -13,14 +13,23 @@ void execution_cycle(t_shell_data *shell_data) {
   int pipes[2];
   int pipe_aux = -1;
 
+  //Le doy una vuelta?
   while(i < (shell_data->einfo->n_pipes + 1)){
     manage_pipes(pipes, shell_data->einfo->n_pipes, i);
-    if (!check_if_is_built_in(shell_data)) {
+    if (!check_if_is_built_in(shell_data, i)) {
       shell_data->pid_fork = fork();
       if (shell_data->pid_fork == -1)
         exit(EXIT_FAILURE);
+      if (shell_data->einfo->n_pipes)
+        add_piped_info_node(shell_data, shell_data->pid_fork, file_of_piped_command(shell_data, i));
       if (shell_data->pid_fork == 0)
-        child_process(shell_data, pipes, &pipe_aux, i);
+      {
+        //Todo
+        if (0 && check_built_in_name(shell_data))
+          exec_subshell(shell_data, pipes, &pipe_aux, i);
+        else
+          child_process(shell_data, pipes, &pipe_aux, i);
+      }
       else
         parent_process(shell_data, pipes, &pipe_aux, i);
       //Ver que coño estoy haciendo
