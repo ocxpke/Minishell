@@ -119,6 +119,13 @@ typedef struct s_token {
  * @param is_heredoc  1 if input is heredoc. In that case, theres a tmp file.
  *                    Initialized -1.
  */
+
+typedef struct s_piped_info {
+  int pid;
+  char *file_cmmd_name;
+  struct s_piped_info *next;
+} t_piped_info;
+
 typedef struct s_entry_info {
   int n_pipes;
   char *input_file;
@@ -126,6 +133,7 @@ typedef struct s_entry_info {
   char is_append;
   char is_heredoc;
   char ***commands;
+  t_piped_info *piped_info;
 } t_einfo;
 
 typedef struct s_linked_env {
@@ -148,6 +156,12 @@ typedef struct s_shell_data {
   pid_t pid_fork;
   t_einfo *einfo;
 } t_shell_data;
+
+#include "./built_in.h"
+#include "./process_management.h"
+#include "./signals.h"
+#include "./tools.h"
+#include "./shell_data.h"
 
 //////////////////////////////////// PARSER ////////////////////////////////////
 
@@ -382,39 +396,11 @@ void print_token_matrix(t_token **tokens);
 void print_single_token(t_token *token, int index);
 void debug_einfo(t_einfo *einfo);
 
-void	child_process(t_shell_data *shell_data, int pipes[2], int *pipe_aux ,int index);
-void	parent_process(t_shell_data *shell_data, int pipes[2], int *pipe_aux, int index);
 char **get_full_command(t_token **token);
 
-char *set_heredoc_tmp_file(char *eof);
+//char *set_heredoc_tmp_file(char *eof);???
 
-void block_terminal_signals(void);
-void sigint_handler(int sig);
-void restore_terminal_signals(void);
-void exit_cmd(t_shell_data *shell_data);
-void cd_cmd(t_shell_data *shell_data, int *ret);
-void pwd_cmd(int *ret);
-void echo_cmd(t_shell_data *shell_data, int *ret);
-void env_cmd(t_envp *enviroment, int *ret);
-int check_if_is_built_in(t_shell_data *shell_data);
+char *generate_cmmd_file_name(int index);
+int generate_cmmd_file(char *file_name, char *cmmd_to_write);
 
-void clone_environs(t_envp *enviroment);
-void init_shell_data(t_shell_data *shell_data);
-
-int add_normal_node(t_linked_env **envp, char **key_value);
-int add_ordered_node(t_linked_env **ordered_envp, char **key_value);
-int generate_exec_envp(t_envp *shell_envi);
-void print_envi_list(t_linked_env *envp_list, int mode);
-void export_cmd(t_shell_data *shell_data, int *ret);
-
-char **get_key_value(char *env);
-void free_splitted_string(char **splitted);
-void unset_cmd(t_shell_data *shell_data, int *ret);
-int ft_max_len_str(char *str_1, char *str_2);
-
-void execution_cycle(t_shell_data *shell_data);
-void free_env_linked_list(t_linked_env **linked_env);
-void free_shell_data(t_shell_data *shell_data);
-void check_if_shelllvl(char **key_value);
-int add_pid_env(t_envp *enviroment);
 #endif

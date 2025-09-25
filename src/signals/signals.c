@@ -17,6 +17,7 @@ extern sig_atomic_t signal_recv;
 void block_terminal_signals(){
 	signal(SIGINT, sigint_handler);
 	signal(SIGQUIT, SIG_IGN);
+	signal(SIGPIPE, SIG_IGN);
 }
 
 void restore_terminal_signals(){

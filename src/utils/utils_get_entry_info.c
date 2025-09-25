@@ -124,6 +124,7 @@ t_einfo	*get_entry_info(t_token **tokens)
 	set_output_file(tokens, einfo);
 	einfo->n_pipes = count_tokens(tokens, PIPE);
 	einfo->commands = get_commands(tokens);
+	einfo->piped_info = NULL;
 	//debug_einfo(einfo);
 	return (einfo);
 }
