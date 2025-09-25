@@ -9,8 +9,7 @@
 			"type": "cppdbg",
 			"request": "launch",
 			"program": "${workspaceFolder}/src/main.out", // Adjust this to match your output executable
-			"args": [], // Example arguments, adjust as needed
-
+			"args": ["${workspaceFolder}/src/paco"], // Pass paco file as argument
 			"stopAtEntry": false,
 			"cwd": "${workspaceFolder}",
 			"environment": [],

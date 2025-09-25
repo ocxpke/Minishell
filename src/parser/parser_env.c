@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   parser_env.c                                       :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: pablo <pablo@student.42.fr>                +#+  +:+       +#+        */
+/*   By: pabmart2 <pabmart2@student.42malaga.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/07/28 19:39:27 by pablo             #+#    #+#             */
-/*   Updated: 2025/07/30 21:47:51 by pablo            ###   ########.fr       */
+/*   Updated: 2025/09/16 18:27:01 by pabmart2         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -17,49 +17,39 @@
  * @brief Advances pointer past env var name.
  *
  * Increments pointer to skip initial char (e.g., '$'), then
- * continues while current char is alphanumeric.
- * Returns pointer to char after env var name.
+ * continues while current char is alphanumeric or '?'
+ * (for special vars like $?).
+ *
  * @param env_start: Pointer to start of env var (usually at '$').
+ *
+ * @returns Pointer to char after env var name.
  */
 static char	*get_env_end(char *env_start)
 {
 	++env_start;
-	while (ft_isalnum(*env_start))
+	while (ft_isprint(*env_start) && !ft_isspace(*env_start))
 		++env_start;
 	return (env_start);
 }
 
 /**
- * TODO: Expansión de #?. Esto debe ser una variable que necesito leer
- * de algún lado. Por ahora se queda comentado pero, en teoría, debería
- * funcionar así bien,
- * aunque habría que tener cuidado para el caso de las
- * comillas dobles, que sólo interpretan $?. O bien lo hago aqui, o lo
- * modularizo.
+ * @brief Expands an environment variable in a string.
  *
- * if (ft_strlen(env) == 1 && env[0] == '?')
- * ft_strinsert(splitted[i], env_start, env_end, ft_itoa(status));
- * else
+ * Locates an env var at `env_start` in `*current_string`, gets its value
+ * from `linked_env`, and replaces it in the string. Special handling for
+ * `$?` (mapped to "FT_STATUS"). If not found, replaces with empty string.
+ * If just `$`, preserves it. Result is trimmed of double quotes and
+ * search position pointer is updated.
+ *
+ * @param env_start Pointer to start of env var in the string.
+ * @param current_string Pointer to the string being processed; updated.
+ * @param next_search_pos Pointer to next env var search position; updated.
+ * @param linked_env Linked list of env var names and values.
+ *
+ * @return Updated string with env var expanded.
  */
-
-/**
- * @brief Expands an environment variable in a string and updates splitted.
- *
- * Locates an environment variable in the input string, gets its value from
- * the environment, and replaces the variable reference with its value.
- * Trims any surrounding double quotes from the result and updates the
- * position for the next search.
- *
- * @param env_start Pointer to the start of the env variable in the string.
- * @param splitted Array of strings to update with the expanded value.
- * @param i Index in splitted for the string being processed.
- * @param next_search_pos Pointer to a char pointer updated to the position
- *        after the expanded env variable for subsequent searches.
- *
- * @return Pointer to the updated string in splitted after expansion.
- */
-static char	*expand_env(char *env_start, char **splitted, size_t i,
-		char **next_search_pos)
+static char	*expand_env(char *env_start, char **current_string,
+		char **next_search_pos, t_linked_env *linked_env)
 {
 	char	*env;
 	char	*env_end;
@@ -69,44 +59,47 @@ static char	*expand_env(char *env_start, char **splitted, size_t i,
 
 	env_end = get_env_end(env_start);
 	env = ft_strndup(env_start + 1, env_end - env_start);
-	offset = env_start - splitted[i];
+	offset = env_start - *current_string;
 	if (env_end - 1 != env_start)
 	{
-		env_value = getenv(env);
+		if (!ft_strncmp(env, "?", ft_strlen(env)))
+			env_value = get_linked_env("FT_STATUS", linked_env);
+		else
+			env_value = get_linked_env(env, linked_env);
 		if (!env_value)
 			env_value = "";
 	}
 	else
 		env_value = "$";
-	result = ft_strinsert(splitted[i], env_start, env_end, env_value);
-	free(splitted[i]);
+	result = ft_strinsert(*current_string, env_start, env_end, env_value);
+	free(*current_string);
 	free(env);
-	splitted[i] = ft_strtrim(result, "\"");
+	*current_string = ft_strtrim(result, "\"");
 	free(result);
-	*next_search_pos = splitted[i] + offset + ft_strlen(env_value);
-	return (splitted[i]);
+	*next_search_pos = *current_string + offset + ft_strlen(env_value);
+	return (*current_string);
 }
 
 /**
- * @brief Removes leading/trailing quotes from a string in an array.
+ * @brief Removes leading/trailing quotes from a string.
  *
  * Trims leading/trailing single (') or double (") quotes from the string
- * at index `i` in the `splitted` array. Frees the original string and
+ * pointed to by `current_string`. Frees the original string and
  * replaces it with the trimmed version.
  *
- * @param splitted Array of strings to process.
- * @param i Index of the string in the array to clean quotes from.
+ * @param current_string Pointer to the string pointer to clean quotes from.
  */
-static void	clean_quote(char **splitted, size_t i)
+static void	clean_quote(char **current_string)
 {
 	char	*tmp;
 
-	tmp = ft_strtrim(splitted[i], "\"\'");
-	free(splitted[i]);
-	splitted[i] = tmp;
+	tmp = ft_strtrim(*current_string, "\"\'");
+	free(*current_string);
+	*current_string = tmp;
 }
 
-char	**parse_expand_env(char **splitted)
+
+char	**parse_expand_env(char **splitted, t_linked_env *linked_env)
 {
 	size_t	i;
 	char	*env_start;
@@ -119,16 +112,16 @@ char	**parse_expand_env(char **splitted)
 		{
 			env_start = ft_strchr(splitted[i], '$');
 			if (!env_start)
-				clean_quote(splitted, i);
+				clean_quote(&splitted[i]);
 			while (env_start)
 			{
-				splitted[i] = expand_env(env_start, splitted, i,
-						&next_search_pos);
+				expand_env(env_start, &splitted[i], &next_search_pos,
+					linked_env);
 				env_start = ft_strchr(next_search_pos, '$');
 			}
 		}
 		else
-			clean_quote(splitted, i);
+			clean_quote(&splitted[i]);
 		++i;
 	}
 	return (splitted);

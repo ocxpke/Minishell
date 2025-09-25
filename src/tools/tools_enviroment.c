@@ -1,13 +1,13 @@
 #include "minishell.h"
 
-extern char **environ;
+extern char	**environ;
 
-void clone_environs(t_envp *enviroment)
+void	clone_environs(t_envp *enviroment)
 {
-	int i = 0;
-	char **key_value;
+	int		i;
+	char	**key_value;
 
-
+	i = 0;
 	while (environ[i])
 	{
 		key_value = get_key_value(environ[i]);
@@ -23,13 +23,14 @@ void clone_environs(t_envp *enviroment)
 	enviroment->len_env = i + add_pid_env(enviroment);
 }
 
-void free_splitted_string(char **splitted)
+void	free_splitted_string(char **splitted)
 {
-	int i = 0;
+	int	i;
 
+	i = 0;
 	if (!splitted)
-		return;
-	while(splitted[i])
+		return ;
+	while (splitted[i])
 	{
 		free(splitted[i]);
 		i++;
@@ -40,25 +41,25 @@ void free_splitted_string(char **splitted)
 /**
  * @note la palabra 'key' tiene ciertas restricciones, las haremos?????
  */
-char **get_key_value(char *env)
+char	**get_key_value(char *env)
 {
-	char **ret;
-	char *key;
-	char *value;
-	int first_eq;
+	char	**ret;
+	char	*key;
+	char	*value;
+	int		first_eq;
 
-	if(!env || (env[0] == '='))
+	if (!env || (env[0] == '='))
 		return (NULL);
 	ret = (char **)ft_calloc(3, sizeof(char *));
 	if (!ret)
-		return(perror("Error generating matrix key value\n"), NULL);
+		return (perror("Error generating matrix key value\n"), NULL);
 	if (!ft_strchr(env, '='))
 		return (ret[0] = ft_strdup(env), ret[1] = NULL, ret);
 	first_eq = ft_strchr(env, '=') - env;
 	key = ft_substr(env, 0, first_eq);
 	if (!key || !ft_strlen(key))
-		return(free(key), free_splitted_string(ret), NULL);
-	value = ft_strdup(&env[first_eq+1]);
+		return (free(key), free_splitted_string(ret), NULL);
+	value = ft_strdup(&env[first_eq + 1]);
 	ret[0] = key;
 	ret[1] = value;
 	return (ret);
