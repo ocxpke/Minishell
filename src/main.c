@@ -6,7 +6,7 @@
 /*   By: pabmart2 <pabmart2@student.42malaga.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/07/24 20:38:12 by pablo             #+#    #+#             */
-/*   Updated: 2025/09/11 21:22:41 by pabmart2         ###   ########.fr       */
+/*   Updated: 2025/09/27 18:43:17 by pabmart2         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -174,7 +174,7 @@ int	main(int argc, char **argv, char **envp)
 	block_terminal_signals();
 	while (1)
 	{
-		printf("%sMinishell%s@%s%s%s", YELLOW, RED, BLUE, getenv("USER"),
+		 printf("%sMinishell%s@%s%s%s", YELLOW, RED, BLUE, getenv("USER"),
 			RESET);
 		/**
 			* @note Guarreo de prueba,
@@ -183,6 +183,7 @@ int	main(int argc, char **argv, char **envp)
 		if (isatty(STDIN_FILENO))
 			input = readline("--> ");
 		else
+			//TODO: Get_next_line no funciona bien por el buffer estático y por no manejar multiples fds.
 			input = ft_get_next_line(STDIN_FILENO);
 		if (input == NULL)
 			return (rl_clear_history(), free_shell_data(&shell_data),
@@ -194,6 +195,7 @@ int	main(int argc, char **argv, char **envp)
 			add_history(input);
 			free(input);
 			// Analyze each element
+			// TODO: Este for tiene que ser un while
 			for (int i = 0; shell_data.tokens[i]; i++)
 			{
 				printf("%s : %s\n", shell_data.tokens[i]->string,
@@ -201,7 +203,7 @@ int	main(int argc, char **argv, char **envp)
 			}
 			printf("/////////////////////////////////////\n");
 			execution_cycle(&shell_data);
-			//liberar cosas de get_entry_info
+			// liberar cosas de get_entry_info
 		}
 		else
 			free(input);
