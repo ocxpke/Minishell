@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   tools_enviroment.c                                 :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: jose-ara < jose-ara@student.42malaga.co    +#+  +:+       +#+        */
+/*   By: pabmart2 <pabmart2@student.42malaga.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/09/27 19:03:07 by jose-ara          #+#    #+#             */
-/*   Updated: 2025/09/27 19:03:07 by jose-ara         ###   ########.fr       */
+/*   Updated: 2025/09/27 21:10:22 by pabmart2         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -22,6 +22,7 @@ void	clone_environs(t_envp *enviroment)
 	i = 0;
 	while (environ[i])
 	{
+		//TODO: Si esto es NULL, hay que mover erro para arriba
 		key_value = get_key_value(environ[i]);
 		if (key_value)
 		{
@@ -53,6 +54,7 @@ void	free_splitted_string(char **splitted)
 /**
  * @note la palabra 'key' tiene ciertas restricciones, las haremos?????
  */
+
 char	**get_key_value(char *env)
 {
 	char	**ret;

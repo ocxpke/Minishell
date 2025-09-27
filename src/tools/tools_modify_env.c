@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   tools_modify_env.c                                 :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: jose-ara < jose-ara@student.42malaga.co    +#+  +:+       +#+        */
+/*   By: pabmart2 <pabmart2@student.42malaga.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/09/27 19:03:27 by jose-ara          #+#    #+#             */
-/*   Updated: 2025/09/27 19:03:27 by jose-ara         ###   ########.fr       */
+/*   Updated: 2025/09/27 21:10:43 by pabmart2         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -112,6 +112,7 @@ int	add_pid_env(t_envp *enviroment)
 	free_splitted_string(key_value);
 	return (free(pid_from_file), free(env_prepared), 1);
 }
+
 
 inline void	check_if_shelllvl(char **key_value)
 {

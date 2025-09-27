@@ -6,9 +6,13 @@
 /*   By: pabmart2 <pabmart2@student.42malaga.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/07/24 20:38:12 by pablo             #+#    #+#             */
-/*   Updated: 2025/09/27 20:35:51 by pabmart2         ###   ########.fr       */
+/*   Updated: 2025/09/27 21:14:20 by pabmart2         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
+
+//TODO: Seguir limpiando código desde init_shell_data.
+//TODO: Implementar nuevo get_next_line corregido.
+
 
 #include "colors.h"
 #include "minishell.h"

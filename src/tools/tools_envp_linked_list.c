@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   tools_envp_linked_list.c                           :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: jose-ara < jose-ara@student.42malaga.co    +#+  +:+       +#+        */
+/*   By: pabmart2 <pabmart2@student.42malaga.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/09/27 19:03:11 by jose-ara          #+#    #+#             */
-/*   Updated: 2025/09/27 19:03:11 by jose-ara         ###   ########.fr       */
+/*   Updated: 2025/09/27 21:13:26 by pabmart2         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -42,6 +42,7 @@ int	generate_exec_envp(t_envp *shell_envi)
 	}
 	return (1);
 }
+
 
 int	add_normal_node(t_linked_env **envp, char **key_value)
 {
