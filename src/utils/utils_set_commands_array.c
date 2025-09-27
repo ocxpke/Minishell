@@ -3,15 +3,14 @@
 /*                                                        :::      ::::::::   */
 /*   utils_set_commands_array.c                         :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: pablo <pablo@student.42.fr>                +#+  +:+       +#+        */
+/*   By: pabmart2 <pabmart2@student.42malaga.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/08/25 18:24:40 by pablo             #+#    #+#             */
-/*   Updated: 2025/08/25 18:53:07 by pablo            ###   ########.fr       */
+/*   Updated: 2025/09/27 19:09:55 by pabmart2         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
-
 
 t_token	*get_next_command(t_token **tokens, int n, int *token_pos)
 {
@@ -23,7 +22,8 @@ t_token	*get_next_command(t_token **tokens, int n, int *token_pos)
 	while (tokens[i])
 	{
 		if (tokens[i]->token_type == COMMAND_BUILT_IN
-			|| tokens[i]->token_type == COMMAND_ROUTE)
+			|| tokens[i]->token_type == COMMAND_ROUTE
+			|| tokens[i]->token_type == COMMAND_NOT_FOUND)
 		{
 			if (cmd_count == n)
 			{
@@ -82,14 +82,14 @@ void	set_command_and_arguments(t_token **tokens, char **cmd_array, int n_cmd,
 	int		token_pos;
 
 	cmd_token = get_next_command(tokens, n_cmd, &token_pos);
-	cmd_array[0] = cmd_token->string;
+	cmd_array[0] = ft_strdup(cmd_token->string);
 	i = 1;
 	while (i < size)
 	{
 		token_pos++;
 		if (tokens[token_pos]->token_type == ARGUMENT)
 		{
-			cmd_array[i] = tokens[token_pos]->string;
+			cmd_array[i] = ft_strdup(tokens[token_pos]->string);
 			++i;
 		}
 	}
@@ -125,7 +125,7 @@ static char	***set_commands_loop(t_token **tokens, int command_count,
 	{
 		get_next_command(tokens, i, &cmd_pos);
 		command_size = (count_command_args(tokens, cmd_pos) + 1);
-		commands[i] = malloc(sizeof(char *) * command_size + 1);
+		commands[i] = malloc(sizeof(char *) * (command_size + 1));
 		if (!commands[i])
 		{
 			while (i > 0)
@@ -139,13 +139,15 @@ static char	***set_commands_loop(t_token **tokens, int command_count,
 	return (commands);
 }
 
+// TODO: los command not found tienen que entrar en commands*
 char	***get_commands(t_token **tokens)
 {
 	char	***commands;
 	int		command_count;
 
 	command_count = count_tokens(tokens, COMMAND_BUILT_IN)
-		+ count_tokens(tokens, COMMAND_ROUTE);
+		+ count_tokens(tokens, COMMAND_ROUTE) + count_tokens(tokens,
+			COMMAND_NOT_FOUND);
 	commands = malloc((sizeof(char **) * command_count) + 1);
 	if (!commands)
 		return (NULL);

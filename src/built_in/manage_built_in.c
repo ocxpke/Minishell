@@ -51,6 +51,8 @@ static inline int	check_all_built_in(t_shell_data *shell_data, int index)
 	int	ret;
 
 	ret = 0;
+	if (!shell_data->einfo->commands[index])
+    return (0); //TODO: Return 1 quizas?
 	if (!ft_strncmp(shell_data->einfo->commands[index][0], "exit",
 			ft_strlen(shell_data->tokens[0]->string)))
 		exit_cmd(shell_data);
