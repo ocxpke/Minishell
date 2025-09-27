@@ -6,7 +6,7 @@
 /*   By: pabmart2 <pabmart2@student.42malaga.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/07/24 20:38:12 by pablo             #+#    #+#             */
-/*   Updated: 2025/09/27 20:04:05 by pabmart2         ###   ########.fr       */
+/*   Updated: 2025/09/27 20:35:51 by pabmart2         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -149,7 +149,7 @@ int	main(int argc, char **argv, char **envp)
 		{
 			shell_data.einfo = get_entry_info(shell_data.tokens);
 			add_history(input);
-			free(input);
+			//free(input);
 			// Analyze each element
 			// TODO: Este for tiene que ser un while
 			for (int i = 0; shell_data.tokens[i]; i++)
@@ -161,8 +161,9 @@ int	main(int argc, char **argv, char **envp)
 			execution_cycle(&shell_data);
 			// liberar cosas de get_entry_info
 		}
-		else
-			free(input);
+
+		free(input);
 		free_tokens(shell_data.tokens);
+		ft_free((void **)&prompt);
 	}
 }

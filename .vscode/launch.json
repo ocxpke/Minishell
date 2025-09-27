@@ -32,12 +32,12 @@
 					"text": "set trace off",
 					"ignoreFailures": true
 				},
-			{
-          "description": "Follow forked processes",
-          "text": "set follow-fork-mode child", // Sigue al proceso hijo tras fork
-          "ignoreFailures": true
-
-		},
+/* 				{
+					"description": "Follow forked processes",
+					"text": "set follow-fork-mode child", // Sigue al proceso hijo tras fork
+					"ignoreFailures": true
+				},
+ */
 			],
 			"preLaunchTask": "build all C and A files"
 		},
