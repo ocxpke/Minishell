@@ -3,10 +3,10 @@
 #                                                         :::      ::::::::    #
 #    Makefile                                           :+:      :+:    :+:    #
 #                                                     +:+ +:+         +:+      #
-#    By: pabmart2 <pabmart2@student.42malaga.com    +#+  +:+       +#+         #
+#    By: jose-ara < jose-ara@student.42malaga.co    +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2024/09/20 14:34:30 by pabmart2          #+#    #+#              #
-#    Updated: 2025/09/27 17:45:51 by pabmart2         ###   ########.fr        #
+#    Updated: 2025/09/27 18:57:46 by jose-ara         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
