@@ -4,13 +4,12 @@
 	// For more information, visit: https://go.microsoft.com/fwlink/?linkid=830387
 	"version": "0.2.0",
 	"configurations": [
-
 		{
 			"name": "Build and debug all files",
 			"type": "cppdbg",
 			"request": "launch",
 			"program": "${workspaceFolder}/src/main.out", // Adjust this to match your output executable
-			"args": [],
+			"args": [], // Pass paco file as argument
 			"stopAtEntry": false,
 			"cwd": "${workspaceFolder}",
 			"environment": [],
@@ -22,25 +21,51 @@
 					"text": "-enable-pretty-printing",
 					"ignoreFailures": true
 				},
-				{
-					"description": "Disable trace commands",
-					"text": "set trace-commands off",
-					"ignoreFailures": true
-				},
-				{
-					"description": "Disable trace",
-					"text": "set trace off",
-					"ignoreFailures": true
-				},
-/* 				{
-					"description": "Follow forked processes",
-					"text": "set follow-fork-mode child", // Sigue al proceso hijo tras fork
-					"ignoreFailures": true
-				},
- */
+				/*         {
+          "description": "Follow forked processes",
+          "text": "set follow-fork-mode child", // Sigue al proceso hijo tras fork
+          "ignoreFailures": true
+
+		}, */
 			],
 			"preLaunchTask": "build all C and A files"
 		},
-
+		{
+			"name": "Debug with input redirection",
+			"type": "cppdbg",
+			"request": "launch",
+			"program": "${workspaceFolder}/src/main.out",
+			"args": [],
+			"stopAtEntry": false,
+			"cwd": "${workspaceFolder}",
+			"environment": [
+				{
+					"name": "MINISHELL_STDIN_FILE",
+					"value": "${input:stdinFile}"
+				}
+			],
+			"externalConsole": false,
+			"MIMode": "gdb",
+			"setupCommands": [
+				{
+					"description": "Enable pretty-printing for gdb",
+					"text": "-enable-pretty-printing",
+					"ignoreFailures": true
+				},
+				{
+					"description": "Wrap inferior to feed stdin from file",
+					"text": "-gdb-set exec-wrapper ${workspaceFolder}/.vscode/stdin_redirect_wrapper.sh"
+				}
+			],
+			"preLaunchTask": "build all C and A files"
+		}
+	],
+	"inputs": [
+		{
+			"id": "stdinFile",
+			"type": "promptString",
+			"description": "Archivo que se redirigirá a la entrada estándar de minishell",
+			"default": "${workspaceFolder}/test_input.txt"
+		}
 	]
 }

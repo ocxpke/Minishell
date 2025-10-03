@@ -3,16 +3,15 @@
 /*                                                        :::      ::::::::   */
 /*   main.c                                             :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: pabmart2 <pabmart2@student.42malaga.com    +#+  +:+       +#+        */
+/*   By: pablo <pablo@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/07/24 20:38:12 by pablo             #+#    #+#             */
-/*   Updated: 2025/09/27 21:14:20 by pabmart2         ###   ########.fr       */
+/*   Updated: 2025/10/03 17:38:48 by pablo            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-//TODO: Seguir limpiando código desde init_shell_data.
-//TODO: Implementar nuevo get_next_line corregido.
-
+// TODO: Seguir limpiando código desde init_shell_data.
+// TODO: Implementar nuevo get_next_line corregido.
 
 #include "colors.h"
 #include "minishell.h"
@@ -117,6 +116,33 @@ char	*get_shell_prompt(void)
 	return (final_prompt);
 }
 
+/**
+ * @brief Cleans the input string by replacing the first non-printable character
+ *        or newline character with a null terminator.
+ *
+ * This function iterates through the input string and checks each character.
+ * If a character is not printable (as determined by ft_isprint) or is a newline
+ * character ('\n'), it replaces that character with a null terminator ('\0')
+ * and returns, effectively truncating the string at that point.
+ *
+ * @param input Pointer to the input string to be cleaned.
+ */
+void	clean_input(char *input)
+{
+	size_t	i;
+
+	i = 0;
+	while (input[i])
+	{
+		if (!ft_isprint(input[i]) || input[i] == '\n')
+		{
+			input[i] = 0;
+			return ;
+		}
+		++i;
+	}
+}
+
 // TODO Eliminar el tmp del heredoc
 int	main(int argc, char **argv, char **envp)
 {
@@ -126,7 +152,7 @@ int	main(int argc, char **argv, char **envp)
 	char			*prompt;
 
 	init_shell_data(&shell_data);
-	init_minishell();
+	// init_minishell();
 	block_terminal_signals();
 	prompt = NULL;
 	while (1)
@@ -143,8 +169,11 @@ int	main(int argc, char **argv, char **envp)
 			input = readline(prompt);
 		}
 		else
-			// TODO: Get_next_line no funciona bien por el buffer estático y por no manejar multiples fds.
+		{
 			input = ft_get_next_line(STDIN_FILENO);
+			if (input)
+				clean_input(input);
+		}
 		if (input == NULL)
 			return (rl_clear_history(), free_shell_data(&shell_data),
 				EXIT_SUCCESS);
@@ -153,7 +182,7 @@ int	main(int argc, char **argv, char **envp)
 		{
 			shell_data.einfo = get_entry_info(shell_data.tokens);
 			add_history(input);
-			//free(input);
+			// free(input);
 			// Analyze each element
 			// TODO: Este for tiene que ser un while
 			for (int i = 0; shell_data.tokens[i]; i++)
@@ -165,7 +194,6 @@ int	main(int argc, char **argv, char **envp)
 			execution_cycle(&shell_data);
 			// liberar cosas de get_entry_info
 		}
-
 		free(input);
 		free_tokens(shell_data.tokens);
 		ft_free((void **)&prompt);

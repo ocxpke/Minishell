@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   libft.h                                            :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: pabmart2 <pabmart2@student.42malaga.com    +#+  +:+       +#+        */
+/*   By: pablo <pablo@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/09/10 18:17:00 by pabmart2          #+#    #+#             */
-/*   Updated: 2025/08/01 13:15:50 by pabmart2         ###   ########.fr       */
+/*   Updated: 2025/10/03 16:26:16 by pablo            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -803,10 +803,14 @@ size_t				ft_strlcat(char *dst, const char *src, size_t size);
 size_t				ft_strlcpy(char *dst, const char *src, size_t size);
 
 /**
- * Calculates the length of a null-terminated string.
+ * @brief Calculates the length of a null-terminated string.
  *
- * @param str The string to calculate the length of.
- * @return The length of the string.
+ * This function returns the number of characters in the string
+ * pointed to by `str`, excluding the terminating null byte ('\0').
+ * If `str` is NULL, the function returns 0.
+ *
+ * @param str Pointer to the null-terminated string to be measured.
+ * @return The length of the string, or 0 if `str` is NULL.
  */
 size_t				ft_strlen(const char *str);
 

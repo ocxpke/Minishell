@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   tools_modify_env.c                                 :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: pabmart2 <pabmart2@student.42malaga.com    +#+  +:+       +#+        */
+/*   By: pablo <pablo@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/09/27 19:03:27 by jose-ara          #+#    #+#             */
-/*   Updated: 2025/09/27 21:10:43 by pabmart2         ###   ########.fr       */
+/*   Updated: 2025/10/03 16:45:40 by pablo            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -50,7 +50,6 @@ static char	*get_pid_from_file(void)
 		if (!found)
 			free(env);
 	}
-	ft_get_next_line(-1);
 	close(fd);
 	if (!found)
 		return (NULL);
