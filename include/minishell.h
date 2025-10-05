@@ -132,7 +132,6 @@ typedef struct s_token
 
 typedef struct s_piped_info {
   int pid;
-  char *file_cmmd_name;
   struct s_piped_info *next;
 } t_piped_info;
 
@@ -176,6 +175,7 @@ typedef struct s_shell_data {
 #include "./signals.h"
 #include "./tools.h"
 #include "./shell_data.h"
+#include "./enviroment_management.h"
 
 //////////////////////////////////// PARSER ////////////////////////////////////
 
@@ -449,11 +449,9 @@ void					print_token_matrix(t_token **tokens);
 void					print_single_token(t_token *token, int index);
 void					debug_einfo(t_einfo *einfo);
 
+
+// @TODO Que hacemos con estas 2 lineas?
 char **get_full_command(t_token **token);
-
-//char *set_heredoc_tmp_file(char *eof);???
-
-char *generate_cmmd_file_name(int index);
-int generate_cmmd_file(char *file_name, char *cmmd_to_write);
+//char *set_heredoc_tmp_file(char *eof);
 
 #endif

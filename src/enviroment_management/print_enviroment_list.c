@@ -13,18 +13,6 @@
 #include "colors.h"
 #include "minishell.h"
 
-inline int	ft_max_len_str(char *str_1, char *str_2)
-{
-	int	len_1;
-	int	len_2;
-
-	len_1 = ft_strlen(str_1);
-	len_2 = ft_strlen(str_2);
-	if (len_1 >= len_2)
-		return (len_1);
-	return (len_2);
-}
-
 static int	print_literal(const char *s)
 {
 	int	cont;
