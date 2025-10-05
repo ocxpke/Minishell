@@ -14,7 +14,7 @@
 
 static void	manage_pipes(int pipes[2], int npipes, int pos)
 {
-	if (npipes <= 0 || pos == npipes)
+	if ((npipes <= 0) || (pos == npipes))
 		return ;
 	if (pipe(pipes) == -1)
 		return ;
@@ -28,7 +28,6 @@ void	execution_cycle(t_shell_data *shell_data)
 
 	i = 0;
 	pipe_aux = -1;
-	// Le doy una vuelta?
 	while (i < (shell_data->einfo->n_pipes + 1))
 	{
 		manage_pipes(pipes, shell_data->einfo->n_pipes, i);
@@ -38,12 +37,10 @@ void	execution_cycle(t_shell_data *shell_data)
 			if (shell_data->pid_fork == -1)
 				exit(EXIT_FAILURE);
 			if (shell_data->einfo->n_pipes)
-				add_piped_info_node(shell_data, shell_data->pid_fork,
-					file_of_piped_command(shell_data, i));
+				add_piped_info_node(shell_data, shell_data->pid_fork);
 			if (shell_data->pid_fork == 0)
 			{
-				// Todo
-				if (0 && check_built_in_name(shell_data))
+				if (check_built_in_name(shell_data, i))
 					exec_subshell(shell_data, pipes, &pipe_aux, i);
 				else
 					child_process(shell_data, pipes, &pipe_aux, i);

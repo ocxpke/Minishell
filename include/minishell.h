@@ -6,7 +6,7 @@
 /*   By: pabmart2 <pabmart2@student.42malaga.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/07/24 12:02:38 by pablo             #+#    #+#             */
-/*   Updated: 2025/09/16 19:19:59 by pabmart2         ###   ########.fr       */
+/*   Updated: 2025/09/27 20:19:21 by pabmart2         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -132,7 +132,6 @@ typedef struct s_token
 
 typedef struct s_piped_info {
   int pid;
-  char *file_cmmd_name;
   struct s_piped_info *next;
 } t_piped_info;
 
@@ -176,6 +175,7 @@ typedef struct s_shell_data {
 #include "./signals.h"
 #include "./tools.h"
 #include "./shell_data.h"
+#include "./enviroment_management.h"
 
 //////////////////////////////////// PARSER ////////////////////////////////////
 
@@ -194,16 +194,20 @@ typedef struct s_shell_data {
  *
  * 5. Expands environment variables using the provided linked environment.
  *
- * 6. Tokenizes the processed strings into an array of tokens.
+ * 6. Checks for NULL elements in the processed array; returns NULL if any
+ *    are found.
  *
- * 7. Frees any temporary memory used for splitting.
+ * 7. Tokenizes the processed strings into an array of tokens.
+ *
+ * 8. Frees any temporary memory used for splitting.
  *
  *
  * @param command_line The input command line string to parse.
  * @param linked_env   Pointer to the linked list of environment variables
  *                     for expansion.
  * @return             Pointer to an array of token pointers, or NULL if input
- *                     is invalid.
+ *                     is invalid or if NULL elements are found in the processed
+ *                     array.
  */
 t_token					**parse(char *command_line, t_linked_env *linked_env);
 
@@ -449,11 +453,9 @@ void					print_token_matrix(t_token **tokens);
 void					print_single_token(t_token *token, int index);
 void					debug_einfo(t_einfo *einfo);
 
+
+// @TODO Que hacemos con estas 2 lineas?
 char **get_full_command(t_token **token);
-
-//char *set_heredoc_tmp_file(char *eof);???
-
-char *generate_cmmd_file_name(int index);
-int generate_cmmd_file(char *file_name, char *cmmd_to_write);
+//char *set_heredoc_tmp_file(char *eof);
 
 #endif

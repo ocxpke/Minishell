@@ -63,9 +63,9 @@ static char	*expand_env(char *env_start, char **current_string,
 	if (env_end - 1 != env_start)
 	{
 		if (!ft_strncmp(env, "?", ft_strlen(env)))
-			env_value = get_linked_env("FT_STATUS", linked_env);
+			env_value = get_enviroment_value("FT_STATUS", linked_env);
 		else
-			env_value = get_linked_env(env, linked_env);
+			env_value = get_enviroment_value(env, linked_env);
 		if (!env_value)
 			env_value = "";
 	}

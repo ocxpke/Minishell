@@ -28,7 +28,7 @@ HEADERS = \
 	include/colors.h \
 
 SRC = src/main.c $(SHELL_DATA_SRC) $(PROC_MNG_SRC) $(SIGNALS_SRC) $(PARSER_SRC) \
-	$(TOOLS_SRC) $(BUILT_IN_SRC) $(UTILS_SRC)
+	$(TOOLS_SRC) $(BUILT_IN_SRC) $(UTILS_SRC) $(ENVIROMENT_MANAGEMENT_SRC)
 
 BUILT_IN_SRC = src/built_in/manage_built_in.c \
 				src/built_in/echo_command.c \
@@ -59,21 +59,22 @@ SHELL_DATA_SRC = src/shell_data/manage_shell_data.c
 SIGNALS_SRC = src/signals/signals.c \
 				src/signals/sig_handlers.c
 
-
-TOOLS_SRC = src/tools/tools_aux_envp_linked_list.c \
-			src/tools/tools_count_tokens.c \
-			src/tools/tools_enviroment.c \
-			src/tools/tools_envp_linked_list.c \
+TOOLS_SRC = src/tools/tools_count_tokens.c \
 			src/tools/tools_heredoc.c \
-			src/tools/tools_modify_env.c\
-			src/tools/tools_piped_info.c
+			src/tools/tools_piped_info.c \
+			src/tools/tools_key_value.c \
+			src/tools/tools_strings.c
+
 
 UTILS_SRC =	src/utils/utils_entry_info.c \
 			src/utils/utils_extract_tokens.c \
-			src/utils/utils_generate_command_file.c \
-			src/utils/utils_get_linked_env.c \
-			src/utils/utils_set_commands_array.c \
+			src/utils/utils_set_commands_array.c
 
+ENVIROMENT_MANAGEMENT_SRC = src/enviroment_management/add_enviroment_node.c \
+							src/enviroment_management/generate_enviroment.c \
+							src/enviroment_management/minishell_enviroment.c \
+							src/enviroment_management/print_enviroment_list.c \
+							src/enviroment_management/search_enviroment.c
 
 OBJ = $(addprefix $(OBJ_DIR)/, $(SRC:.c=.o))
 

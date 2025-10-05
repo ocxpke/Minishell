@@ -12,7 +12,7 @@
 
 #include "minishell.h"
 
-int	add_piped_info_node(t_shell_data *shell_data, int pid, char *file_name)
+int	add_piped_info_node(t_shell_data *shell_data, int pid)
 {
 	t_piped_info	*new_node;
 	t_piped_info	*aux;
@@ -21,7 +21,6 @@ int	add_piped_info_node(t_shell_data *shell_data, int pid, char *file_name)
 	if (!new_node)
 		return (0);
 	new_node->pid = pid;
-	new_node->file_cmmd_name = file_name;
 	new_node->next = NULL;
 	if (!shell_data->einfo->piped_info)
 		return (shell_data->einfo->piped_info = new_node, 1);
