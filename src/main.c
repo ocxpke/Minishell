@@ -3,109 +3,20 @@
 /*                                                        :::      ::::::::   */
 /*   main.c                                             :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: pabmart2 <pabmart2@student.42malaga.com    +#+  +:+       +#+        */
+/*   By: pablo <pablo@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/07/24 20:38:12 by pablo             #+#    #+#             */
-/*   Updated: 2025/09/27 18:43:17 by pabmart2         ###   ########.fr       */
+/*   Updated: 2025/10/03 17:38:48 by pablo            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
+
+// TODO: Seguir limpiando código desde init_shell_data.
+// TODO: Implementar nuevo get_next_line corregido.
 
 #include "colors.h"
 #include "minishell.h"
 
 extern char				**environ;
-/*
-void	print_char_matrix(char **matrix)
-{
-	int	i;
-
-	i = 0;
-	if (!matrix)
-		return ;
-	while (matrix[i])
-	{
-		printf("|%s|\n", matrix[i]);
-		i++;
-	}
-}
-
-static char	*get_token_type_name(t_ttype type)
-{
-	if (type == ARGUMENT)
-		return ("ARGUMENT");
-	else if (type == COMMAND_ROUTE)
-		return ("COMMAND_ROUTE");
-	else if (type == COMMAND_BUILT_IN)
-		return ("COMMAND_BUILT_IN");
-	else if (type == HEREDOC_EOF)
-		return ("HEREDOC_EOF");
-	else if (type == PIPE)
-		return ("PIPE");
-	else if (type == REDIRECT_IN_CHAR)
-		return ("REDIRECT_IN_CHAR");
-	else if (type == REDIRECT_IN_CHAR_HEREDOC)
-		return ("REDIRECT_IN_CHAR_HEREDOC");
-	else if (type == REDIRECT_OUT_CHAR)
-		return ("REDIRECT_OUT_CHAR");
-	else if (type == REDIRECT_OUT_CHAR_APPEND)
-		return ("REDIRECT_OUT_CHAR_APPEND");
-	else if (type == REDIRECT_IN_ROUTE)
-		return ("REDIRECT_IN_ROUTE");
-	else if (type == REDIRECT_OUT_ROUTE)
-		return ("REDIRECT_OUT_ROUTE");
-	else if (type == UNDEFINED)
-		return ("UNDEFINED");
-	else
-		return ("UNKNOWN");
-}
-
-void	print_token_matrix(t_token **tokens)
-{
-	int	i;
-
-	i = 0;
-	if (!tokens)
-	{
-		printf("Token matrix is NULL\n");
-		return ;
-	}
-	printf("=== TOKEN MATRIX DEBUG ===\n");
-	while (tokens[i])
-	{
-		printf("[%d] String: |%s| -> Type: %s\n", i,
-			tokens[i]->string ? tokens[i]->string : "NULL",
-			get_token_type_name(tokens[i]->token_type));
-		i++;
-	}
-	printf("=== END TOKEN MATRIX ===\n");
-}
-
-void	print_single_token(t_token *token, int index)
-{
-	if (!token)
-	{
-		printf("Token[%d] is NULL\n", index);
-		return ;
-	}
-	printf("=== SINGLE TOKEN DEBUG ===\n");
-	printf("Index: %d\n", index);
-	printf("String: |%s|\n", token->string ? token->string : "NULL");
-	printf("Type: %s\n", get_token_type_name(token->token_type));
-	printf("=== END SINGLE TOKEN ===\n");
-}
-
-
-int	main(void)
-{
-	t_token	**tokens;
-
-	tokens = parse("echo $HOME$USER | patata > 4");
-	print_token_matrix(tokens);
-	free_tokens(tokens);
-	return (0);
-}
-	*/
-
 volatile sig_atomic_t	signal_recv = 0;
 
 /**
@@ -162,29 +73,107 @@ void	init_minishell(void)
 	}
 }
 
+/**
+ * @brief Generates a colored shell prompt string.
+ *
+ * Constructs a shell prompt that includes the shell name ("Minishell"),
+ * the current user's username, and the current working directory, all with
+ * color formatting. The prompt is dynamically allocated and must be freed by
+ * the caller.
+ *
+ * The format of the prompt is:
+ *
+ * [YELLOW]Minishell[RED]@[BLUE][USER][RESET] [GREEN][CWD][RESET] -->
+ *
+ * @return char* Pointer to the dynamically allocated prompt string on success,
+ *               or NULL if a memory allocation or system call fails.
+ */
+char	*get_shell_prompt(void)
+{
+	char	*base_prompt;
+	char	*colored_prompt;
+	char	*current_dir;
+	char	*prompt_with_cwd;
+	char	*final_prompt;
+
+	base_prompt = ft_strjoin(YELLOW "Minishell" RED "@" BLUE, getenv("USER"));
+	if (!base_prompt)
+		return (NULL);
+	colored_prompt = ft_strjoin(base_prompt, RESET " " GREEN);
+	ft_free((void **)&base_prompt);
+	if (!colored_prompt)
+		return (NULL);
+	current_dir = getcwd(NULL, 0);
+	if (!current_dir)
+		return (ft_free((void **)&colored_prompt), NULL);
+	prompt_with_cwd = ft_strjoin(colored_prompt, current_dir);
+	ft_free((void **)&colored_prompt);
+	ft_free((void **)&current_dir);
+	if (!prompt_with_cwd)
+		return (NULL);
+	final_prompt = ft_strjoin(prompt_with_cwd, RESET " --> ");
+	ft_free((void **)&prompt_with_cwd);
+	return (final_prompt);
+}
+
+/**
+ * @brief Cleans the input string by replacing the first non-printable character
+ *        or newline character with a null terminator.
+ *
+ * This function iterates through the input string and checks each character.
+ * If a character is not printable (as determined by ft_isprint) or is a newline
+ * character ('\n'), it replaces that character with a null terminator ('\0')
+ * and returns, effectively truncating the string at that point.
+ *
+ * @param input Pointer to the input string to be cleaned.
+ */
+void	clean_input(char *input)
+{
+	size_t	i;
+
+	i = 0;
+	while (input[i])
+	{
+		if (!ft_isprint(input[i]) || input[i] == '\n')
+		{
+			input[i] = 0;
+			return ;
+		}
+		++i;
+	}
+}
+
 // TODO Eliminar el tmp del heredoc
 int	main(int argc, char **argv, char **envp)
 {
 	char			*input;
 	char			**get_full_cmd;
 	t_shell_data	shell_data;
+	char			*prompt;
 
 	init_shell_data(&shell_data);
-	init_minishell();
+	// init_minishell();
 	block_terminal_signals();
+	prompt = NULL;
 	while (1)
 	{
-		 printf("%sMinishell%s@%s%s%s", YELLOW, RED, BLUE, getenv("USER"),
-			RESET);
 		/**
 			* @note Guarreo de prueba,
 				ver como pablo pilla las variables de entorno.
 			*/
 		if (isatty(STDIN_FILENO))
-			input = readline("--> ");
+		{
+			prompt = get_shell_prompt();
+			if (!prompt)
+				return (free_shell_data(&shell_data), 1);
+			input = readline(prompt);
+		}
 		else
-			//TODO: Get_next_line no funciona bien por el buffer estático y por no manejar multiples fds.
+		{
 			input = ft_get_next_line(STDIN_FILENO);
+			if (input)
+				clean_input(input);
+		}
 		if (input == NULL)
 			return (rl_clear_history(), free_shell_data(&shell_data),
 				EXIT_SUCCESS);
@@ -193,7 +182,7 @@ int	main(int argc, char **argv, char **envp)
 		{
 			shell_data.einfo = get_entry_info(shell_data.tokens);
 			add_history(input);
-			free(input);
+			// free(input);
 			// Analyze each element
 			// TODO: Este for tiene que ser un while
 			for (int i = 0; shell_data.tokens[i]; i++)
@@ -205,8 +194,8 @@ int	main(int argc, char **argv, char **envp)
 			execution_cycle(&shell_data);
 			// liberar cosas de get_entry_info
 		}
-		else
-			free(input);
+		free(input);
 		free_tokens(shell_data.tokens);
+		ft_free((void **)&prompt);
 	}
 }

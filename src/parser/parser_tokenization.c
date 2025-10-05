@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   parser_tokenization.c                              :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: pablo <pablo@student.42.fr>                +#+  +:+       +#+        */
+/*   By: pabmart2 <pabmart2@student.42malaga.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/07/30 16:21:57 by pablo             #+#    #+#             */
-/*   Updated: 2025/08/25 19:00:16 by pablo            ###   ########.fr       */
+/*   Updated: 2025/09/27 20:25:42 by pabmart2         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -115,6 +115,7 @@ static void	arg_classification(t_token **tokens, size_t i)
 			tokens[i]->token_type = HEREDOC_EOF;
 		else if (i > 0 && (tokens[i - 1]->token_type == COMMAND_BUILT_IN
 				|| tokens[i - 1]->token_type == COMMAND_ROUTE || tokens[i
+				- 1]->token_type == COMMAND_NOT_FOUND || tokens[i
 				- 1]->token_type == ARGUMENT))
 			tokens[i]->token_type = ARGUMENT;
 		else
