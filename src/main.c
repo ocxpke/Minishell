@@ -17,7 +17,7 @@
 #include "minishell.h"
 
 extern char				**environ;
-volatile sig_atomic_t	signal_recv = 0;
+sig_atomic_t	signal_recv = 0;
 
 /**
  * @note Me da el comando + todos los argumentos, todo lo demas lo omite

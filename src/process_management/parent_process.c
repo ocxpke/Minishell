@@ -32,7 +32,7 @@ void	parent_process(t_shell_data *shell_data, int pipes[2], int *pipe_aux,
 	// Ctrl+z suspende un proceso-- > implica controol de tareas-- > no hacer nada,no ?
 	if (shell_data->einfo->n_pipes)
 	{
-		if (!shell_data->einfo->n_pipes == index)
+		if (shell_data->einfo->n_pipes != index)
 			return;
 		wait_node = shell_data->einfo->piped_info;
 		while(wait_node)
