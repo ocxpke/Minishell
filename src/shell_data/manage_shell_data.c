@@ -16,6 +16,7 @@ extern char	**environ;
 
 void	free_shell_data(t_shell_data *shell_data)
 {
+	clean_entry_info(&shell_data->einfo);
 	free_splitted_string(shell_data->shell_envi.envp_exec);
 	free_env_linked_list(&(shell_data->shell_envi.envp));
 	free_env_linked_list(&(shell_data->shell_envi.ordered_envp));

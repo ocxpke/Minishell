@@ -38,6 +38,7 @@ static t_einfo	*initialize_einfo(void)
 	einfo->is_heredoc = -1;
 	einfo->n_pipes = -1;
 	einfo->commands = NULL;
+	einfo->piped_info = NULL;
 	return (einfo);
 }
 
@@ -135,6 +136,7 @@ void	clean_entry_info(t_einfo **einfo)
 
 	if (!einfo || !*einfo)
 		return ;
+	free_piped_info_list(*einfo);
 	ft_free((void **)&((*einfo)->input_file));
 	ft_free((void **)&((*einfo)->output_file));
 	if ((*einfo)->commands)
