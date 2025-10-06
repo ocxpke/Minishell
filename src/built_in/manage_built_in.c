@@ -58,7 +58,7 @@ inline int	check_all_built_in(t_shell_data *shell_data, int index)
 	else if (!ft_strncmp(shell_data->einfo->commands[index][0], "unset",
 			ft_strlen(shell_data->einfo->commands[index][0])))
 		unset_cmd(shell_data, &ret);
-	return (0);
+	return (ret);
 }
 
 int	check_if_is_built_in(t_shell_data *shell_data, int index)

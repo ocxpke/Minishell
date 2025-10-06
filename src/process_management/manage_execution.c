@@ -47,7 +47,6 @@ void	execution_cycle(t_shell_data *shell_data)
 			}
 			else
 				parent_process(shell_data, pipes, &pipe_aux, i);
-			// Ver que coño estoy haciendo
 		}
 		i++;
 	}

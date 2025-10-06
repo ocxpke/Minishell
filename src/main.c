@@ -17,51 +17,7 @@
 #include "minishell.h"
 
 extern char				**environ;
-sig_atomic_t	signal_recv = 0;
-
-/**
- * @note Me da el comando + todos los argumentos, todo lo demas lo omite
- */
-char	**get_full_command(t_token **token)
-{
-	char	**ret;
-	int		nmeb;
-	int		i;
-
-	nmeb = 0;
-	while (token[nmeb] && ((token[nmeb]->token_type == COMMAND_ROUTE)
-			|| (token[nmeb]->token_type == COMMAND_BUILT_IN)
-			|| (token[nmeb]->token_type == ARGUMENT)))
-		nmeb++;
-	if (nmeb == 0)
-		return (NULL);
-	ret = ft_calloc(nmeb + 1, sizeof(char *));
-	if (!ret)
-		return (NULL);
-	i = 0;
-	while (i < nmeb)
-	{
-		ret[i] = ft_strdup(token[i]->string);
-		i++;
-	}
-	return (ret);
-}
-
-void	free_full_command(char **command)
-{
-	int	i;
-
-	i = 0;
-	if (command == NULL)
-		return ;
-	while (command[i])
-	{
-		free(command[i]);
-		i++;
-	}
-	free(command);
-	command = NULL;
-}
+volatile sig_atomic_t	signal_recv = 0;
 
 void	init_minishell(void)
 {
@@ -152,15 +108,10 @@ int	main(int argc, char **argv, char **envp)
 	char			*prompt;
 
 	init_shell_data(&shell_data);
-	// init_minishell();
 	block_terminal_signals();
 	prompt = NULL;
 	while (1)
 	{
-		/**
-			* @note Guarreo de prueba,
-				ver como pablo pilla las variables de entorno.
-			*/
 		if (isatty(STDIN_FILENO))
 		{
 			prompt = get_shell_prompt();
@@ -182,9 +133,7 @@ int	main(int argc, char **argv, char **envp)
 		{
 			shell_data.einfo = get_entry_info(shell_data.tokens);
 			add_history(input);
-			// free(input);
-			// Analyze each element
-			// TODO: Este for tiene que ser un while
+			// TODO: Este for se elimina antes de entregar
 			for (int i = 0; shell_data.tokens[i]; i++)
 			{
 				printf("%s : %s\n", shell_data.tokens[i]->string,
@@ -192,7 +141,6 @@ int	main(int argc, char **argv, char **envp)
 			}
 			printf("/////////////////////////////////////\n");
 			execution_cycle(&shell_data);
-			// liberar cosas de get_entry_info
 		}
 		free(input);
 		free_tokens(shell_data.tokens);
