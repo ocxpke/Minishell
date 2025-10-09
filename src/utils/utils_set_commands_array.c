@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   utils_set_commands_array.c                         :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: pabmart2 <pabmart2@student.42malaga.com    +#+  +:+       +#+        */
+/*   By: jose-ara < jose-ara@student.42malaga.co    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/08/25 18:24:40 by pablo             #+#    #+#             */
-/*   Updated: 2025/09/27 19:09:55 by pabmart2         ###   ########.fr       */
+/*   Updated: 2025/10/09 19:54:20 by jose-ara         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -148,7 +148,7 @@ char	***get_commands(t_token **tokens)
 	command_count = count_tokens(tokens, COMMAND_BUILT_IN)
 		+ count_tokens(tokens, COMMAND_ROUTE) + count_tokens(tokens,
 			COMMAND_NOT_FOUND);
-	commands = malloc((sizeof(char **) * command_count) + 1);
+	commands = malloc((sizeof(char **) * (command_count + 1)));
 	if (!commands)
 		return (NULL);
 	commands[command_count] = NULL;
