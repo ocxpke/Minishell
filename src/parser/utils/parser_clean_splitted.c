@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   parser_clean_splitted.c                            :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: pablo <pablo@student.42.fr>                +#+  +:+       +#+        */
+/*   By: pabmart2 <pabmart2@student.42malaga.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/07/30 15:48:25 by pablo             #+#    #+#             */
-/*   Updated: 2025/07/30 19:20:49 by pablo            ###   ########.fr       */
+/*   Updated: 2025/10/26 14:48:17 by pabmart2         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,40 +14,62 @@
 #include "minishell.h"
 
 /**
- * @brief Cleans a splitted string array by trimming spaces and removing empty
- * strings.
+ * @brief Processes and adds a trimmed string to the result array.
  *
- * Iterates over the input array of strings (`splitted`), trims leading and
- * trailing spaces from each string, and adds non-empty trimmed strings to a
- * new array. Empty strings (after trimming) are freed and not included in the
- * result. The resulting array is dynamically resized as needed and is
- * NULL-terminated. The original `splitted` array is freed before returning.
+ * Trims whitespace from the input string and reallocates the result array
+ * to accommodate the new string. Handles memory allocation failures by
+ * cleaning up all allocated resources.
  *
- * @param splitted The input array of strings to be cleaned. Must be
- * NULL-terminated.
- * @return A newly allocated NULL-terminated array of cleaned strings. Returns
- * NULL if no strings remain.
+ * @param splitted Original array of strings (freed on error).
+ * @param tmp Current result array (may be reallocated).
+ * @param str String to trim and add.
+ * @param j Pointer to the current index in the result array.
+ * @return Updated result array on success, or NULL on failure.
  */
+static char	**process_and_add_trimmed(char **splitted, char **tmp, char *str,
+		size_t *j)
+{
+	char	*trimmed;
+	char	**new_tmp;
+
+	trimmed = ft_strtrim(str, " ");
+	if (!trimmed)
+		return (ft_matrix_free((void ***)&tmp, 0),
+			ft_matrix_free((void ***)&splitted, 0), NULL);
+	new_tmp = (char **)ft_realloc(tmp, sizeof(char *) * (*j), sizeof(char *)
+			* ((*j) + 1));
+	if (!new_tmp)
+		return (free(trimmed), ft_matrix_free((void ***)&tmp, 0),
+			ft_matrix_free((void ***)&splitted, 0), NULL);
+	new_tmp[(*j)++] = trimmed;
+	return (new_tmp);
+}
+
 char	**clean_splitted(char **splitted)
 {
 	char	**tmp;
-	char	*trimmed;
-	size_t	i;
-	size_t	j;
+	char	**new_tmp;
+	size_t	ij[2];
 
-	i = 0;
-	j = 0;
+	if (!splitted)
+		return (NULL);
+	ij[0] = 0;
+	ij[1] = 0;
 	tmp = NULL;
-	while (splitted[i])
+	while (splitted[ij[0]])
 	{
-		trimmed = ft_strtrim(splitted[i], " ");
-		tmp = (char **)ft_realloc(tmp, sizeof(char *) * j, sizeof(char *) * (j
-					+ 1));
-		tmp[j++] = trimmed;
-		i++;
+		tmp = process_and_add_trimmed(splitted, tmp, splitted[ij[0]++], &ij[1]);
+		if (!tmp)
+			return (NULL);
 	}
-	if (j != 0)
-		tmp = (char **)ft_realloc(tmp, sizeof(char *) * j, sizeof(char *) * (j
-					+ 1));
-	return (tmp[j] = NULL, ft_matrix_free((void **)splitted, 0), tmp);
+	if (ij[1] != 0)
+	{
+		new_tmp = (char **)ft_realloc(tmp, sizeof(char *) * ij[1],
+				sizeof(char *) * (ij[1] + 1));
+		if (!new_tmp)
+			return (ft_matrix_free((void ***)&tmp, 0),
+				ft_matrix_free((void ***)&splitted, 0), NULL);
+		tmp = new_tmp;
+	}
+	return (tmp[ij[1]] = NULL, ft_matrix_free((void ***)&splitted, 0), tmp);
 }

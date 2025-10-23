@@ -6,7 +6,7 @@
 /*   By: pabmart2 <pabmart2@student.42malaga.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/07/30 16:21:57 by pablo             #+#    #+#             */
-/*   Updated: 2025/09/27 20:25:42 by pabmart2         ###   ########.fr       */
+/*   Updated: 2025/10/26 14:56:04 by pabmart2         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -38,7 +38,8 @@ static void	first_token_assign(char **array, t_token **tokens, size_t i)
 	else if (!ft_strncmp(array[i], "<", ft_strlen("<"))
 		&& ft_strlen(array[i]) == ft_strlen("<"))
 		tokens[i]->token_type = REDIRECT_IN_CHAR;
-	else if (!ft_strncmp(array[i], ">", ft_strlen(array[i])))
+	else if (!ft_strncmp(array[i], ">", ft_strlen(">"))
+		&& ft_strlen(array[i]) == ft_strlen(">"))
 		tokens[i]->token_type = REDIRECT_OUT_CHAR;
 	else
 		tokens[i]->token_type = UNDEFINED;
@@ -63,18 +64,18 @@ static t_token	**first_token_parse(char **array, size_t size)
 
 	tokens = ft_calloc(size + 1, sizeof(t_token *));
 	if (!tokens)
-		return (ft_matrix_free((void **)array, 0), NULL);
+		return (ft_matrix_free((void ***)&array, 0), NULL);
 	i = 0;
 	while (i < size)
 	{
 		tokens[i] = ft_calloc(1, sizeof(t_token));
 		if (!tokens[i])
-		{
-			while (i > 0)
-				free(tokens[--i]);
-			return (free(tokens), ft_matrix_free((void **)array, 0), NULL);
-		}
-		tokens[i]->string = array[i];
+			return (free_tokens(tokens), ft_matrix_free((void ***)&array, 0),
+				NULL);
+		tokens[i]->string = ft_strdup(array[i]);
+		if (!tokens[i]->string)
+			return (free_tokens(tokens), ft_matrix_free((void ***)&array, 0),
+				NULL);
 		first_token_assign(array, tokens, i);
 		i++;
 	}

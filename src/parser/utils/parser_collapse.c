@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   parser_collapse.c                                  :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: pablo <pablo@student.42.fr>                +#+  +:+       +#+        */
+/*   By: pabmart2 <pabmart2@student.42malaga.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/07/30 15:01:32 by pablo             #+#    #+#             */
-/*   Updated: 2025/07/30 15:09:23 by pablo            ###   ########.fr       */
+/*   Updated: 2025/10/26 14:57:36 by pabmart2         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -35,9 +35,9 @@ static char	**collapse_loop(char ***extracted, size_t extracted_size,
 	size_t	j;
 	size_t	k;
 
-	collapsed = malloc(sizeof(char *) * (final_size + 1));
+	collapsed = ft_calloc(final_size + 1, sizeof(char *));
 	if (!collapsed)
-		return (ft_matrix_free((void **)extracted, 0), NULL);
+		return (ft_matrix_free((void ***)extracted, 0), NULL);
 	i = 0;
 	k = 0;
 	while (k < extracted_size)
@@ -45,13 +45,15 @@ static char	**collapse_loop(char ***extracted, size_t extracted_size,
 		j = 0;
 		while (extracted[k][j])
 		{
-			collapsed[i++] = extracted[k][j];
-			++j;
+			collapsed[i++] = ft_strdup(extracted[k][j++]);
+			if (!collapsed[i - 1])
+				return (ft_matrix_free((void ***)extracted, 0),
+					ft_matrix_free((void ***)collapsed, 0), NULL);
 		}
 		++k;
 	}
 	collapsed[i] = NULL;
-	ft_matrix_free((void **)extracted, 0);
+	ft_matrix_free((void ***)extracted, 0);
 	return (collapsed);
 }
 

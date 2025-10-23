@@ -6,7 +6,7 @@
 /*   By: pabmart2 <pabmart2@student.42malaga.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/07/30 18:08:16 by pablo             #+#    #+#             */
-/*   Updated: 2025/08/01 12:39:06 by pabmart2         ###   ########.fr       */
+/*   Updated: 2025/10/26 15:02:36 by pabmart2         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -56,6 +56,21 @@ static int	is_built_in(char *cmd)
 	return (0);
 }
 
+/**
+ * @brief Searches for a command in the given paths array.
+ *
+ * Iterates through the paths array, constructs full command paths by
+ * appending the command name to each path, and checks if the resulting
+ * path is executable. Returns the first executable path found.
+ *
+ * Note: This function does NOT free the paths array. The caller is
+ * responsible for freeing paths after calling this function.
+ *
+ * @param paths Array of directory paths to search in (not freed by function).
+ * @param cmd The command name to search for.
+ * @return The full path to the executable command on success, or NULL if
+ *         not found or on allocation failure.
+ */
 static char	*search_path(char **paths, char *cmd)
 {
 	char	*cmd_path;
@@ -136,7 +151,7 @@ static void	cmd_path_resolver(t_token *token)
 	if (!paths)
 		return (token->token_type = UNDEFINED, (void)0);
 	cmd_path = search_path(paths, token->string);
-	ft_matrix_free((void **)paths, 0);
+	ft_matrix_free((void ***)&paths, 0);
 	if (cmd_path)
 	{
 		free(token->string);

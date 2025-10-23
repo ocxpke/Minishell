@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   debug_functions.c                                  :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: pablo <pablo@student.42.fr>                +#+  +:+       +#+        */
+/*   By: pabmart2 <pabmart2@student.42malaga.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/07/30 19:45:00 by pablo             #+#    #+#             */
-/*   Updated: 2025/08/25 18:41:16 by pablo            ###   ########.fr       */
+/*   Updated: 2025/10/26 13:33:46 by pabmart2         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -92,42 +92,127 @@ void	print_single_token(t_token *token, int index)
 	printf("=== END SINGLE TOKEN ===\n");
 }
 
-void	debug_einfo(t_einfo *einfo)
+void	print_cinfo(t_cinfo *cinfo, int index)
+{
+	if (!cinfo)
+	{
+		printf("Cinfo[%d] is NULL\n", index);
+		return ;
+	}
+	printf("=== CINFO[%d] DEBUG ===\n", index);
+	printf("Input file: %s\n", cinfo->input_file);
+	printf("Output file: %s\n", cinfo->output_file);
+	printf("Is append: %d\n", cinfo->is_append);
+	printf("Is heredoc: %d\n", cinfo->is_heredoc);
+	printf("Command: %s\n", cinfo->command);
+	printf("Args:\n");
+	if (cinfo->args)
+		print_char_matrix(cinfo->args);
+	else
+		printf("NULL\n");
+	printf("=== END CINFO[%d] ===\n", index);
+}
+
+void	print_cinfos(t_cinfo **cinfos)
 {
 	int	i;
-	int	j;
 
+	i = 0;
+	if (!cinfos)
+	{
+		printf("Cinfos is NULL\n");
+		return ;
+	}
+	printf("=== CINfos DEBUG ===\n");
+	while (cinfos[i])
+	{
+		print_cinfo(cinfos[i], i);
+		i++;
+	}
+	printf("=== END CINfos ===\n");
+}
+
+void	print_piped_info(t_piped_info *piped_info)
+{
+	t_piped_info	*current;
+
+	if (!piped_info)
+	{
+		printf("Piped info is NULL\n");
+		return ;
+	}
+	printf("=== PIPED INFO DEBUG ===\n");
+	current = piped_info;
+	while (current)
+	{
+		printf("PID: %d, File command name: %s\n", current->pid,
+			current->file_cmmd_name ? current->file_cmmd_name : "NULL");
+		current = current->next;
+	}
+	printf("=== END PIPED INFO ===\n");
+}
+
+void	print_einfo(t_einfo *einfo)
+{
 	if (!einfo)
 	{
-		printf("einfo is NULL\n");
+		printf("Einfo is NULL\n");
 		return ;
 	}
 	printf("=== EINFO DEBUG ===\n");
-	printf("n_pipes: %d\n", einfo->n_pipes);
-	printf("input_file: %s\n", einfo->input_file ? einfo->input_file : "NULL");
-	printf("output_file: %s\n", einfo->output_file ? einfo->output_file : "NULL");
-	printf("is_append: %d\n", einfo->is_append);
-	printf("is_heredoc: %d\n", einfo->is_heredoc);
+	printf("N pipes: %d\n", einfo->n_pipes);
+	print_cinfos(einfo->cinfos);
+	print_piped_info(einfo->piped_info);
+	printf("=== END EINFO ===\n");
+}
 
-	if (!einfo->commands)
+extern void	print_envi_list(t_linked_env *envp_list, int mode);
+
+void	print_shell_envi(t_envp *shell_envi)
+{
+	if (!shell_envi)
 	{
-		printf("commands: NULL\n");
+		printf("Shell envi is NULL\n");
+		return ;
 	}
+	printf("=== SHELL ENVI DEBUG ===\n");
+	printf("Len env: %d\n", shell_envi->len_env);
+	printf("Envp:\n");
+	if (shell_envi->envp)
+		print_envi_list(shell_envi->envp, 1);
 	else
+		printf("NULL\n");
+	printf("Ordered envp:\n");
+	if (shell_envi->ordered_envp)
+		print_envi_list(shell_envi->ordered_envp, 1);
+	else
+		printf("NULL\n");
+	printf("Envp exec:\n");
+	if (shell_envi->envp_exec)
+		print_char_matrix(shell_envi->envp_exec);
+	else
+		printf("NULL\n");
+	printf("=== END SHELL ENVI ===\n");
+}
+
+void	debug_shell_info(t_shell_data *shell_data)
+{
+	if (!shell_data)
 	{
-		printf("commands:\n");
-		i = 0;
-		while (einfo->commands[i])
-		{
-			printf("  Command[%d]:\n", i);
-			j = 0;
-			while (einfo->commands[i][j])
-			{
-				printf("    [%d]: |%s|\n", j, einfo->commands[i][j]);
-				j++;
-			}
-			i++;
-		}
+		printf("Shell data is NULL\n");
+		return ;
 	}
-	printf("=== END EINFO DEBUG ===\n");
+	printf("========================================\n");
+	printf("========== SHELL INFO DEBUG ============\n");
+	printf("========================================\n");
+	print_shell_envi(&shell_data->shell_envi);
+	printf("\n");
+	print_token_matrix(shell_data->tokens);
+	printf("\n");
+	printf("PID fork: %d\n", shell_data->pid_fork);
+	printf("\n");
+	print_einfo(shell_data->einfo);
+	printf("========================================\n");
+	printf("======= END SHELL INFO DEBUG ==========\n");
+	printf("========================================\n");
 }
