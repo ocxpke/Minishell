@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   libft.h                                            :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: pablo <pablo@student.42.fr>                +#+  +:+       +#+        */
+/*   By: pabmart2 <pabmart2@student.42malaga.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/09/10 18:17:00 by pabmart2          #+#    #+#             */
-/*   Updated: 2025/10/03 16:26:16 by pablo            ###   ########.fr       */
+/*   Updated: 2025/10/26 13:25:57 by pabmart2         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -374,17 +374,17 @@ t_list				*ft_lstnew(void *content);
 int					ft_lstsize(t_list *lst);
 
 /**
- * @brief Frees a dynamically allocated 2D array.
+ * @brief Frees a null-terminated array of pointers and sets the array pointer
+ *        to NULL.
  *
- * This function frees each element of a 2D array and then frees the array
- * itself.
- * It can handle arrays where the size is known or unknown.
+ * This function frees each element of the array using ft_free, then frees the
+ * array itself, and finally sets the provided pointer to NULL to prevent
+ * dangling pointers.
  *
- * @param array The 2D array to be freed.
- * @param size The number of elements in the array. If size is 0, the function
- *             will free elements until a NULL pointer is encountered.
+ * @param array A pointer to the array pointer to be freed and set to NULL.
+ * @param size The size of the array. If 0, assumes null-terminated array.
  */
-void				ft_matrix_free(void **array, size_t size);
+void				ft_matrix_free(void ***array, size_t size);
 
 /**
  * @brief Calculates the length of a null-terminated array of pointers.

@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   ft_extractm.c                                      :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: pablo <pablo@student.42.fr>                +#+  +:+       +#+        */
+/*   By: pabmart2 <pabmart2@student.42malaga.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/09/13 18:26:29 by pabmart2          #+#    #+#             */
-/*   Updated: 2025/07/28 14:33:44 by pablo            ###   ########.fr       */
+/*   Updated: 2025/10/26 13:29:10 by pabmart2         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -159,7 +159,7 @@ char	**ft_extractm(char const *s, char const *separators)
 		return (NULL);
 	if (!set_substrs(s, str_cont, separators, fragment_count))
 	{
-		ft_matrix_free((void **)str_cont, 0);
+		ft_matrix_free((void ***)&str_cont, 0);
 		return (NULL);
 	}
 	str_cont[fragment_count] = NULL;

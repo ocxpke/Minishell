@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   child_process.c                                    :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: jose-ara < jose-ara@student.42malaga.co    +#+  +:+       +#+        */
+/*   By: pabmart2 <pabmart2@student.42malaga.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/08/01 12:04:16 by jose-ara          #+#    #+#             */
-/*   Updated: 2025/09/27 19:02:33 by jose-ara         ###   ########.fr       */
+/*   Updated: 2025/10/26 13:30:18 by pabmart2         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -18,9 +18,9 @@ static void	redirect_input(t_shell_data *shell_data, int *pipe_aux, int index)
 {
 	int	fd;
 
-	if (index == 0 && shell_data->einfo->input_file)
+	if (index == 0 && shell_data->einfo->cinfos[index]->command)
 	{
-		fd = open(shell_data->einfo->input_file, O_RDONLY);
+		fd = open(shell_data->einfo->cinfos[index]->input_file, O_RDONLY);
 		if (fd == -1)
 			return (perror("Error\n"), (void)0);
 		dup2(fd, STDIN_FILENO);
@@ -40,9 +40,9 @@ static void	redirect_output(t_shell_data *shell_data, int pipes[2], int index)
 {
 	int	fd;
 
-	if ((index == shell_data->einfo->n_pipes) && shell_data->einfo->output_file)
+	if ((index == shell_data->einfo->n_pipes) && shell_data->einfo->cinfos[index]->output_file)
 	{
-		fd = open(shell_data->einfo->output_file, O_WRONLY | O_CREAT, 0644);
+		fd = open(shell_data->einfo->cinfos[index]->output_file, O_WRONLY | O_CREAT, 0644);
 		if (fd == -1)
 			return (perror("Error\n"), (void)0);
 		dup2(fd, STDOUT_FILENO);
@@ -65,10 +65,10 @@ void	child_process(t_shell_data *shell_data, int pipes[2], int *pipe_aux,
 	free_splitted_string(shell_data->shell_envi.envp_exec);
 	generate_exec_envp(&(shell_data->shell_envi));
 	restore_terminal_signals();
-	if (shell_data->einfo->commands[index]
-		&& shell_data->einfo->commands[index][0] != NULL)
-		execve(shell_data->einfo->commands[index][0],
-			shell_data->einfo->commands[index],
+	if (shell_data->einfo->cinfos[index]->command
+		&& shell_data->einfo->cinfos[index]->command[0])
+		execve(shell_data->einfo->cinfos[index]->command,
+			shell_data->einfo->cinfos[index]->args,
 			shell_data->shell_envi.envp_exec);
 	// liberar todo de einfo
 	rl_clear_history();

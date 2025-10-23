@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   main.c                                             :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: jose-ara < jose-ara@student.42malaga.co    +#+  +:+       +#+        */
+/*   By: pabmart2 <pabmart2@student.42malaga.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/07/24 20:38:12 by pablo             #+#    #+#             */
-/*   Updated: 2025/10/09 20:01:54 by jose-ara         ###   ########.fr       */
+/*   Updated: 2025/10/26 13:23:16 by pabmart2         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -103,7 +103,10 @@ void	clean_input(char *input)
 int	main(int argc, char **argv, char **envp)
 {
 	char			*input;
-	char			**get_full_cmd;
+	//char			**get_full_cmd;
+	(void)argc;
+	(void)argv;
+	(void)envp;
 	t_shell_data	shell_data;
 	char			*prompt;
 

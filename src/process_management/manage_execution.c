@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   manage_execution.c                                 :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: jose-ara < jose-ara@student.42malaga.co    +#+  +:+       +#+        */
+/*   By: pabmart2 <pabmart2@student.42malaga.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/09/27 19:02:41 by jose-ara          #+#    #+#             */
-/*   Updated: 2025/09/27 19:02:42 by jose-ara         ###   ########.fr       */
+/*   Updated: 2025/10/26 13:28:30 by pabmart2         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -40,7 +40,7 @@ void	execution_cycle(t_shell_data *shell_data)
 				add_piped_info_node(shell_data, shell_data->pid_fork);
 			if (shell_data->pid_fork == 0)
 			{
-				if (check_built_in_name(shell_data, i))
+				if (check_built_in_name(shell_data))
 					exec_subshell(shell_data, pipes, &pipe_aux, i);
 				else
 					child_process(shell_data, pipes, &pipe_aux, i);

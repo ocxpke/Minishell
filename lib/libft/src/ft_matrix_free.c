@@ -12,7 +12,7 @@
 
 #include "libft.h"
 
-void	ft_matrix_free(void **array, size_t size)
+void	ft_matrix_free(void ***array, size_t size)
 {
 	size_t	i;
 
@@ -21,17 +21,18 @@ void	ft_matrix_free(void **array, size_t size)
 	{
 		while (i < size)
 		{
-			ft_free((void **)&array[i]);
+			ft_free((void **)&(*array)[i]);
 			++i;
 		}
 	}
 	else
 	{
-		while (array[i])
+		while ((*array)[i])
 		{
-			ft_free((void **)&array[i]);
+			ft_free((void **)&(*array)[i]);
 			++i;
 		}
 	}
-	ft_free((void **)&array);
+	ft_free((void **)array);
+	*array = NULL;
 }
