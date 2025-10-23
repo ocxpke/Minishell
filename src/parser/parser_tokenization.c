@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   parser_tokenization.c                              :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: pabmart2 <pabmart2@student.42malaga.com    +#+  +:+       +#+        */
+/*   By: pablo <pablo@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/07/30 16:21:57 by pablo             #+#    #+#             */
-/*   Updated: 2025/09/27 20:25:42 by pabmart2         ###   ########.fr       */
+/*   Updated: 2025/10/21 10:30:35 by pablo            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -38,7 +38,8 @@ static void	first_token_assign(char **array, t_token **tokens, size_t i)
 	else if (!ft_strncmp(array[i], "<", ft_strlen("<"))
 		&& ft_strlen(array[i]) == ft_strlen("<"))
 		tokens[i]->token_type = REDIRECT_IN_CHAR;
-	else if (!ft_strncmp(array[i], ">", ft_strlen(array[i])))
+	else if (!ft_strncmp(array[i], ">", ft_strlen(">"))
+		&& ft_strlen(array[i]) == ft_strlen(">"))
 		tokens[i]->token_type = REDIRECT_OUT_CHAR;
 	else
 		tokens[i]->token_type = UNDEFINED;
