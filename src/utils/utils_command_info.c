@@ -6,7 +6,7 @@
 /*   By: pablo <pablo@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/08/25 18:24:40 by pablo             #+#    #+#             */
-/*   Updated: 2025/10/23 17:09:15 by pablo            ###   ########.fr       */
+/*   Updated: 2025/10/24 19:00:15 by pablo            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -70,6 +70,7 @@ static t_cinfo	*initialize_cinfo(void)
 	cinfo->is_append = -1;
 	cinfo->is_heredoc = -1;
 	cinfo->output_file = NULL;
+	return (cinfo);
 }
 
 /**
@@ -117,6 +118,7 @@ static int	set_cinfos_loop(t_token **tokens, t_cinfo **cinfos,
 			return (1);
 		++i;
 	}
+	return (0);
 }
 
 void	clean_cinfos(t_cinfo **cinfos)
@@ -127,7 +129,7 @@ void	clean_cinfos(t_cinfo **cinfos)
 	while (cinfos[i])
 	{
 		if (cinfos[i]->args)
-			ft_matrix_free(cinfos[i]->args, 0);
+			ft_matrix_free((void ***)&cinfos[i]->args, 0);
 		ft_free((void **)&(cinfos[i]->command));
 		ft_free((void **)&(cinfos[i]->input_file));
 		ft_free((void **)&(cinfos[i]->output_file));

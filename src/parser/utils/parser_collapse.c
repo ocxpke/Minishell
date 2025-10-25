@@ -6,7 +6,7 @@
 /*   By: pablo <pablo@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/07/30 15:01:32 by pablo             #+#    #+#             */
-/*   Updated: 2025/07/30 15:09:23 by pablo            ###   ########.fr       */
+/*   Updated: 2025/10/24 18:40:08 by pablo            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -37,7 +37,7 @@ static char	**collapse_loop(char ***extracted, size_t extracted_size,
 
 	collapsed = malloc(sizeof(char *) * (final_size + 1));
 	if (!collapsed)
-		return (ft_matrix_free((void **)extracted, 0), NULL);
+		return (ft_matrix_free((void ***)&extracted, 0), NULL);
 	i = 0;
 	k = 0;
 	while (k < extracted_size)
@@ -51,7 +51,7 @@ static char	**collapse_loop(char ***extracted, size_t extracted_size,
 		++k;
 	}
 	collapsed[i] = NULL;
-	ft_matrix_free((void **)extracted, 0);
+	ft_matrix_free((void ***)&extracted, 0);
 	return (collapsed);
 }
 

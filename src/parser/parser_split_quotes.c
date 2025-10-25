@@ -1,12 +1,12 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   parser_split_quote.c                               :+:      :+:    :+:   */
+/*   parser_split_quotes.c                              :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: pabmart2 <pabmart2@student.42malaga.com    +#+  +:+       +#+        */
+/*   By: pablo <pablo@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/07/30 16:10:16 by pablo             #+#    #+#             */
-/*   Updated: 2025/07/31 13:20:19 by pabmart2         ###   ########.fr       */
+/*   Updated: 2025/10/24 18:40:08 by pablo            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -24,7 +24,7 @@ char	**split_quotes(char **array)
 	size = ft_matrix_len((void **)array);
 	extracted = malloc(sizeof(char **) * (size + 1));
 	if (!extracted)
-		return (ft_matrix_free((void **)array, 0), NULL);
+		return (ft_matrix_free((void ***)&array, 0), NULL);
 	i = 0;
 	while (i < size)
 	{
@@ -32,6 +32,6 @@ char	**split_quotes(char **array)
 		++i;
 	}
 	extracted[i] = NULL;
-	ft_matrix_free((void **)array, 0);
+	ft_matrix_free((void ***)&array, 0);
 	return (collapse_extracted(extracted));
 }

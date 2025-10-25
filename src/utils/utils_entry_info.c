@@ -6,7 +6,7 @@
 /*   By: pablo <pablo@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/08/18 12:52:02 by pablo             #+#    #+#             */
-/*   Updated: 2025/10/23 17:09:10 by pablo            ###   ########.fr       */
+/*   Updated: 2025/10/24 18:34:42 by pablo            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -32,10 +32,6 @@ static t_einfo	*initialize_einfo(void)
 	einfo = malloc(sizeof(t_einfo));
 	if (!einfo)
 		return (NULL);
-	einfo->input_file = NULL;
-	einfo->output_file = NULL;
-	einfo->is_append = -1;
-	einfo->is_heredoc = -1;
 	einfo->n_pipes = -1;
 	einfo->cinfos = NULL;
 	return (einfo);
@@ -44,7 +40,6 @@ static t_einfo	*initialize_einfo(void)
 t_einfo	*get_entry_info(t_token **tokens)
 {
 	t_einfo	*einfo;
-	size_t	n_commands;
 
 	einfo = initialize_einfo();
 	if (!einfo)
@@ -59,8 +54,6 @@ t_einfo	*get_entry_info(t_token **tokens)
 
 void	clean_entry_info(t_einfo **einfo)
 {
-	int	i;
-
 	if (!einfo || !*einfo)
 		return ;
 	if ((*einfo)->cinfos)

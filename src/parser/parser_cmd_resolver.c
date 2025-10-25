@@ -6,7 +6,7 @@
 /*   By: pablo <pablo@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/07/30 18:08:16 by pablo             #+#    #+#             */
-/*   Updated: 2025/10/21 10:22:34 by pablo            ###   ########.fr       */
+/*   Updated: 2025/10/24 18:40:06 by pablo            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -136,7 +136,7 @@ static void	cmd_path_resolver(t_token *token)
 	if (!paths)
 		return (token->token_type = UNDEFINED, (void)0);
 	cmd_path = search_path(paths, token->string);
-	ft_matrix_free((void **)paths, 0);
+	ft_matrix_free((void ***)&paths, 0);
 	if (cmd_path)
 	{
 		free(token->string);

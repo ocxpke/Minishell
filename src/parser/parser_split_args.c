@@ -6,7 +6,7 @@
 /*   By: pablo <pablo@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/07/30 15:51:04 by pablo             #+#    #+#             */
-/*   Updated: 2025/07/30 16:14:16 by pablo            ###   ########.fr       */
+/*   Updated: 2025/10/24 18:40:06 by pablo            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -39,5 +39,5 @@ char	**split_args(char **array)
 		++i;
 	}
 	tmp[i] = NULL;
-	return (ft_matrix_free((void **)array, 0), collapse_extracted(tmp));
+	return (ft_matrix_free((void ***)&array, 0), collapse_extracted(tmp));
 }

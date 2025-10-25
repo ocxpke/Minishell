@@ -6,7 +6,7 @@
 /*   By: pablo <pablo@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/07/30 15:48:25 by pablo             #+#    #+#             */
-/*   Updated: 2025/07/30 19:20:49 by pablo            ###   ########.fr       */
+/*   Updated: 2025/10/24 18:40:08 by pablo            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -49,5 +49,5 @@ char	**clean_splitted(char **splitted)
 	if (j != 0)
 		tmp = (char **)ft_realloc(tmp, sizeof(char *) * j, sizeof(char *) * (j
 					+ 1));
-	return (tmp[j] = NULL, ft_matrix_free((void **)splitted, 0), tmp);
+	return (tmp[j] = NULL, ft_matrix_free((void ***)&splitted, 0), tmp);
 }

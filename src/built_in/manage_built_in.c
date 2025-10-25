@@ -6,7 +6,7 @@
 /*   By: pablo <pablo@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/09/27 19:01:07 by jose-ara          #+#    #+#             */
-/*   Updated: 2025/10/20 21:42:55 by pablo            ###   ########.fr       */
+/*   Updated: 2025/10/24 18:29:35 by pablo            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -41,7 +41,8 @@ char	*file_of_piped_command(t_shell_data *shell_data, int index)
 	file_name = generate_cmmd_file_name(index);
 	if (!file_name)
 		return (0);
-	if (!generate_cmmd_file(file_name, shell_data->einfo->commands[index][0]))
+	if (!generate_cmmd_file(file_name, shell_data->einfo->cinfos[index]->command))
+	//if (!generate_cmmd_file(file_name, shell_data->einfo->commands[index][0]))
 		return (free(file_name), NULL);
 	return (file_name);
 }

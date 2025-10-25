@@ -6,7 +6,7 @@
 #    By: pablo <pablo@student.42.fr>                +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2024/09/20 14:34:30 by pabmart2          #+#    #+#              #
-#    Updated: 2025/10/23 17:19:56 by pablo            ###   ########.fr        #
+#    Updated: 2025/10/25 12:32:37 by pablo            ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -28,7 +28,7 @@ HEADERS = \
 	include/colors.h \
 
 SRC = src/main.c $(SHELL_DATA_SRC) $(PROC_MNG_SRC) $(SIGNALS_SRC) $(PARSER_SRC) \
-	$(TOOLS_SRC) $(BUILT_IN_SRC) $(UTILS_SRC)
+	$(TOOLS_SRC) $(BUILT_IN_SRC) $(UTILS_SRC) $(DEBUG_SRC)
 
 BUILT_IN_SRC = src/built_in/manage_built_in.c \
 				src/built_in/echo_command.c \
@@ -74,7 +74,8 @@ UTILS_SRC =	src/utils/utils_command_info_helpers.c \
 			src/utils/utils_extract_tokens.c \
 			src/utils/utils_generate_command_file.c \
 			src/utils/utils_get_linked_env.c \
-			src/utils/utils_set_commands_array.c \
+
+DEBUG_SRC = tests/utils/debug_functions.c
 
 
 OBJ = $(addprefix $(OBJ_DIR)/, $(SRC:.c=.o))

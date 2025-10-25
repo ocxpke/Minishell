@@ -6,7 +6,7 @@
 /*   By: pablo <pablo@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/09/10 18:17:00 by pabmart2          #+#    #+#             */
-/*   Updated: 2025/10/03 16:26:16 by pablo            ###   ########.fr       */
+/*   Updated: 2025/10/24 18:40:05 by pablo            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -377,14 +377,14 @@ int					ft_lstsize(t_list *lst);
  * @brief Frees a dynamically allocated 2D array.
  *
  * This function frees each element of a 2D array and then frees the array
- * itself.
+ * itself, setting the array to NULL.
  * It can handle arrays where the size is known or unknown.
  *
  * @param array The 2D array to be freed.
  * @param size The number of elements in the array. If size is 0, the function
  *             will free elements until a NULL pointer is encountered.
  */
-void				ft_matrix_free(void **array, size_t size);
+void				ft_matrix_free(void ***array, size_t size);
 
 /**
  * @brief Calculates the length of a null-terminated array of pointers.

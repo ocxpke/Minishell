@@ -6,7 +6,7 @@
 /*   By: pablo <pablo@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/07/30 16:21:57 by pablo             #+#    #+#             */
-/*   Updated: 2025/10/21 10:30:35 by pablo            ###   ########.fr       */
+/*   Updated: 2025/10/24 18:40:10 by pablo            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -64,7 +64,7 @@ static t_token	**first_token_parse(char **array, size_t size)
 
 	tokens = ft_calloc(size + 1, sizeof(t_token *));
 	if (!tokens)
-		return (ft_matrix_free((void **)array, 0), NULL);
+		return (ft_matrix_free((void ***)&array, 0), NULL);
 	i = 0;
 	while (i < size)
 	{
@@ -73,7 +73,7 @@ static t_token	**first_token_parse(char **array, size_t size)
 		{
 			while (i > 0)
 				free(tokens[--i]);
-			return (free(tokens), ft_matrix_free((void **)array, 0), NULL);
+			return (free(tokens), ft_matrix_free((void ***)&array, 0), NULL);
 		}
 		tokens[i]->string = array[i];
 		first_token_assign(array, tokens, i);

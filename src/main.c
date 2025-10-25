@@ -6,7 +6,7 @@
 /*   By: pablo <pablo@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/07/24 20:38:12 by pablo             #+#    #+#             */
-/*   Updated: 2025/10/03 17:38:48 by pablo            ###   ########.fr       */
+/*   Updated: 2025/10/25 12:27:55 by pablo            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -191,6 +191,7 @@ int	main(int argc, char **argv, char **envp)
 					token_strings[shell_data.tokens[i]->token_type]);
 			}
 			printf("/////////////////////////////////////\n");
+			debug_shell_info(&shell_data);
 			execution_cycle(&shell_data);
 			// liberar cosas de get_entry_info
 		}

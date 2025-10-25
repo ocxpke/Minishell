@@ -12,7 +12,16 @@
 
 #include "libft.h"
 
-void	ft_matrix_free(void **array, size_t size)
+/**
+ * @brief Frees a null-terminated array of pointers and sets the array pointer to NULL.
+ *
+ * This function frees each element of the array using ft_free, then frees the array itself,
+ * and finally sets the provided pointer to NULL to prevent dangling pointers.
+ *
+ * @param array A pointer to the array pointer to be freed and set to NULL.
+ * @param size The size of the array. If 0, assumes null-terminated array.
+ */
+void	ft_matrix_free(void ***array, size_t size)
 {
 	size_t	i;
 
@@ -21,17 +30,18 @@ void	ft_matrix_free(void **array, size_t size)
 	{
 		while (i < size)
 		{
-			ft_free((void **)&array[i]);
+			ft_free((void **)&(*array)[i]);
 			++i;
 		}
 	}
 	else
 	{
-		while (array[i])
+		while ((*array)[i])
 		{
-			ft_free((void **)&array[i]);
+			ft_free((void **)&(*array)[i]);
 			++i;
 		}
 	}
-	ft_free((void **)&array);
+	ft_free((void **)array);
+	*array = NULL;
 }
