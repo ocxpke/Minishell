@@ -6,7 +6,7 @@
 /*   By: pabmart2 <pabmart2@student.42malaga.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/07/24 12:02:38 by pablo             #+#    #+#             */
-/*   Updated: 2025/10/26 14:03:25 by pabmart2         ###   ########.fr       */
+/*   Updated: 2025/10/26 15:13:37 by pabmart2         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -562,10 +562,10 @@ int						set_command_output_file(t_token **tokens,
 							t_cinfo *cinfo);
 
 // DEBUG
+void					debug_shell_info(t_shell_data *shell_data);
 void					print_char_matrix(char **matrix);
 void					print_token_matrix(t_token **tokens);
 void					print_single_token(t_token *token, int index);
-void					debug_einfo(t_einfo *einfo);
 
 char					**get_full_command(t_token **token);
 

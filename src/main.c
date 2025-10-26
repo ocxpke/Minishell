@@ -6,7 +6,7 @@
 /*   By: pabmart2 <pabmart2@student.42malaga.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/07/24 20:38:12 by pablo             #+#    #+#             */
-/*   Updated: 2025/10/26 13:23:16 by pabmart2         ###   ########.fr       */
+/*   Updated: 2025/10/26 15:14:36 by pabmart2         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -143,6 +143,7 @@ int	main(int argc, char **argv, char **envp)
 					token_strings[shell_data.tokens[i]->token_type]);
 			}
 			printf("/////////////////////////////////////\n");
+			debug_shell_info(&shell_data);
 			execution_cycle(&shell_data);
 		}
 		free(input);

@@ -6,7 +6,7 @@
 /*   By: pabmart2 <pabmart2@student.42malaga.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/07/30 19:45:00 by pablo             #+#    #+#             */
-/*   Updated: 2025/10/26 13:33:46 by pabmart2         ###   ########.fr       */
+/*   Updated: 2025/10/26 15:18:14 by pabmart2         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -216,3 +216,4 @@ void	debug_shell_info(t_shell_data *shell_data)
 	printf("======= END SHELL INFO DEBUG ==========\n");
 	printf("========================================\n");
 }
+

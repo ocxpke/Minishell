@@ -6,7 +6,7 @@
 #    By: pabmart2 <pabmart2@student.42malaga.com    +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2024/09/20 14:34:30 by pabmart2          #+#    #+#              #
-#    Updated: 2025/10/26 13:26:41 by pabmart2         ###   ########.fr        #
+#    Updated: 2025/10/26 15:13:17 by pabmart2         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -28,7 +28,7 @@ HEADERS = \
 	include/colors.h \
 
 SRC = src/main.c $(SHELL_DATA_SRC) $(PROC_MNG_SRC) $(SIGNALS_SRC) $(PARSER_SRC) \
-	$(TOOLS_SRC) $(BUILT_IN_SRC) $(UTILS_SRC) $(ENVIROMENT_MANAGEMENT_SRC)
+	$(TOOLS_SRC) $(BUILT_IN_SRC) $(UTILS_SRC) $(ENVIROMENT_MANAGEMENT_SRC) $(DEBUG_SRC)
 
 BUILT_IN_SRC = src/built_in/manage_built_in.c \
 				src/built_in/echo_command.c \
@@ -76,6 +76,11 @@ ENVIROMENT_MANAGEMENT_SRC = src/enviroment_management/add_enviroment_node.c \
 							src/enviroment_management/print_enviroment_list.c \
 							src/enviroment_management/search_enviroment.c\
 							src/enviroment_management/modify_enviroment_node.c
+			src/utils/utils_generate_command_file.c \
+			src/utils/utils_get_linked_env.c \
+
+DEBUG_SRC = tests/utils/debug_functions.c
+
 
 OBJ = $(addprefix $(OBJ_DIR)/, $(SRC:.c=.o))
 
