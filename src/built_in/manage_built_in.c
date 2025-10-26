@@ -6,7 +6,7 @@
 /*   By: pabmart2 <pabmart2@student.42malaga.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/09/27 19:01:07 by jose-ara          #+#    #+#             */
-/*   Updated: 2025/10/26 13:17:37 by pabmart2         ###   ########.fr       */
+/*   Updated: 2025/10/26 15:15:13 by pabmart2         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -32,7 +32,22 @@ inline int	check_built_in_name(t_shell_data *shell_data)
 	return (1);
 }
 
-inline int	check_all_built_in(t_shell_data *shell_data, int index)
+char	*file_of_piped_command(t_shell_data *shell_data, int index)
+{
+	char	*file_name;
+
+	if (!shell_data->einfo->n_pipes || !check_built_in_name(shell_data))
+		return (NULL);
+	file_name = generate_cmmd_file_name(index);
+	if (!file_name)
+		return (0);
+	if (!generate_cmmd_file(file_name, shell_data->einfo->cinfos[index]->command))
+	//if (!generate_cmmd_file(file_name, shell_data->einfo->commands[index][0]))
+		return (free(file_name), NULL);
+	return (file_name);
+}
+
+static inline int	check_all_built_in(t_shell_data *shell_data, int index)
 {
 	int		ret;
 	size_t	cmd_len;
