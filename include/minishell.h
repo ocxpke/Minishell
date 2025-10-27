@@ -6,7 +6,7 @@
 /*   By: pablo <pablo@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/07/24 12:02:38 by pablo             #+#    #+#             */
-/*   Updated: 2025/10/27 10:30:48 by pablo            ###   ########.fr       */
+/*   Updated: 2025/10/27 17:15:51 by pablo            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -116,8 +116,7 @@ typedef struct s_command_info
 	char				*output_file;
 	char				is_append;
 	char				is_heredoc;
-	char				*command;
-	char				**args;
+	char				**cmd_and_args;
 }						t_cinfo;
 
 /**
