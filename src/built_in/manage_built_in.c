@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   manage_built_in.c                                  :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: pabmart2 <pabmart2@student.42malaga.com    +#+  +:+       +#+        */
+/*   By: pablo <pablo@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/09/27 19:01:07 by jose-ara          #+#    #+#             */
-/*   Updated: 2025/10/26 15:15:13 by pabmart2         ###   ########.fr       */
+/*   Updated: 2025/10/27 10:33:16 by pablo            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -47,7 +47,7 @@ char	*file_of_piped_command(t_shell_data *shell_data, int index)
 	return (file_name);
 }
 
-static inline int	check_all_built_in(t_shell_data *shell_data, int index)
+inline int	check_all_built_in(t_shell_data *shell_data, int index)
 {
 	int		ret;
 	size_t	cmd_len;

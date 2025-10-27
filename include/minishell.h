@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   minishell.h                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: pabmart2 <pabmart2@student.42malaga.com    +#+  +:+       +#+        */
+/*   By: pablo <pablo@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/07/24 12:02:38 by pablo             #+#    #+#             */
-/*   Updated: 2025/10/26 15:13:37 by pabmart2         ###   ########.fr       */
+/*   Updated: 2025/10/27 10:30:48 by pablo            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -78,11 +78,12 @@ typedef enum e_token_type
 	UNDEFINED
 }						t_ttype;
 
-static char				*token_strings[] = {"ARGUMENT", "COMMAND_ROUTE",
+/* static char				*token_strings[] = {"ARGUMENT", "COMMAND_ROUTE",
 					"COMMAND_BUILT_IN", "COMMAND_NOT_FOUND", "HEREDOC_EOF",
 					"PIPE", "REDIRECT_IN_CHAR", "REDIRECT_IN_CHAR_HEREDOC",
 					"REDIRECT_OUT_CHAR", "REDIRECT_OUT_CHAR_APPEND",
 					"REDIRECT_IN_ROUTE", "REDIRECT_OUT_ROUTE", "UNDEFINED"};
+ */
 
 /**
  * @struct s_token

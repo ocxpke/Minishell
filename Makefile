@@ -3,10 +3,10 @@
 #                                                         :::      ::::::::    #
 #    Makefile                                           :+:      :+:    :+:    #
 #                                                     +:+ +:+         +:+      #
-#    By: pabmart2 <pabmart2@student.42malaga.com    +#+  +:+       +#+         #
+#    By: pablo <pablo@student.42.fr>                +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2024/09/20 14:34:30 by pabmart2          #+#    #+#              #
-#    Updated: 2025/10/26 15:13:17 by pabmart2         ###   ########.fr        #
+#    Updated: 2025/10/27 10:40:02 by pablo            ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -70,14 +70,13 @@ UTILS_SRC =	src/utils/utils_command_info_helpers.c \
 			src/utils/utils_entry_info.c \
 			src/utils/utils_extract_tokens.c \
 
+
 ENVIROMENT_MANAGEMENT_SRC = src/enviroment_management/add_enviroment_node.c \
 							src/enviroment_management/generate_enviroment.c \
 							src/enviroment_management/minishell_enviroment.c \
 							src/enviroment_management/print_enviroment_list.c \
 							src/enviroment_management/search_enviroment.c\
-							src/enviroment_management/modify_enviroment_node.c
-			src/utils/utils_generate_command_file.c \
-			src/utils/utils_get_linked_env.c \
+							src/enviroment_management/modify_enviroment_node.c \
 
 DEBUG_SRC = tests/utils/debug_functions.c
 
