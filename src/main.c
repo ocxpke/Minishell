@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   main.c                                             :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: pabmart2 <pabmart2@student.42malaga.com    +#+  +:+       +#+        */
+/*   By: pablo <pablo@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/07/24 20:38:12 by pablo             #+#    #+#             */
-/*   Updated: 2025/10/26 15:14:36 by pabmart2         ###   ########.fr       */
+/*   Updated: 2025/10/27 10:47:33 by pablo            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -137,12 +137,12 @@ int	main(int argc, char **argv, char **envp)
 			shell_data.einfo = get_entry_info(shell_data.tokens);
 			add_history(input);
 			// TODO: Este for se elimina antes de entregar
-			for (int i = 0; shell_data.tokens[i]; i++)
+			/* for (int i = 0; shell_data.tokens[i]; i++)
 			{
-				printf("%s : %s\n", shell_data.tokens[i]->string,
-					token_strings[shell_data.tokens[i]->token_type]);
+				printf("%s : %d\n", shell_data.tokens[i]->string,
+					shell_data.tokens[i]->token_type);
 			}
-			printf("/////////////////////////////////////\n");
+			printf("/////////////////////////////////////\n"); */
 			debug_shell_info(&shell_data);
 			execution_cycle(&shell_data);
 		}

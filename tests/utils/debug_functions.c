@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   debug_functions.c                                  :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: pabmart2 <pabmart2@student.42malaga.com    +#+  +:+       +#+        */
+/*   By: pablo <pablo@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/07/30 19:45:00 by pablo             #+#    #+#             */
-/*   Updated: 2025/10/26 15:18:14 by pabmart2         ###   ########.fr       */
+/*   Updated: 2025/10/27 10:45:42 by pablo            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -123,7 +123,7 @@ void	print_cinfos(t_cinfo **cinfos)
 		printf("Cinfos is NULL\n");
 		return ;
 	}
-	printf("=== CINfos DEBUG ===\n");
+	printf("=== CINFOS DEBUG ===\n");
 	while (cinfos[i])
 	{
 		print_cinfo(cinfos[i], i);
@@ -215,5 +215,47 @@ void	debug_shell_info(t_shell_data *shell_data)
 	printf("========================================\n");
 	printf("======= END SHELL INFO DEBUG ==========\n");
 	printf("========================================\n");
+}
+
+char	*generate_cmmd_file_name(int index)
+{
+	char	*tmp_name;
+	char	*tmp_n;
+
+	tmp_n = ft_itoa(index);
+	if (!tmp_n)
+		return (NULL);
+	tmp_name = ft_strjoin("cmd_", tmp_n);
+	if (!tmp_name)
+		return (ft_free((void **)&tmp_n), NULL);
+	ft_free((void **)&tmp_n);
+	tmp_n = ft_strjoin(tmp_name, ".tmp");
+	ft_free((void **)&tmp_name);
+	if (!tmp_n)
+		return (NULL);
+	return (tmp_n);
+}
+
+int	generate_cmmd_file(char *file_name, char *cmmd_to_write)
+{
+	int	fd;
+
+	if (!file_name || !cmmd_to_write)
+		return (0);
+	fd = open(file_name, O_CREAT | O_WRONLY | O_TRUNC, 0644);
+	if (fd == -1)
+		return (0);
+	if (write(fd, cmmd_to_write, ft_strlen(cmmd_to_write)) == -1)
+	{
+		close(fd);
+		return (0);
+	}
+	if (write(fd, "\n", 1) == -1)
+	{
+		close(fd);
+		return (0);
+	}
+	close(fd);
+	return (1);
 }
 

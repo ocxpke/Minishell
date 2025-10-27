@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   child_process.c                                    :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: pabmart2 <pabmart2@student.42malaga.com    +#+  +:+       +#+        */
+/*   By: pablo <pablo@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/08/01 12:04:16 by jose-ara          #+#    #+#             */
-/*   Updated: 2025/10/26 15:17:38 by pabmart2         ###   ########.fr       */
+/*   Updated: 2025/10/27 10:32:43 by pablo            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -66,11 +66,6 @@ static void	redirect_output(t_shell_data *shell_data, int pipes[2], int index)
 void	child_process(t_shell_data *shell_data, int pipes[2], int *pipe_aux,
 		int index)
 {
-	char	*cmd;
-	char	**args;
-
-	cmd = shell_data->einfo->cinfos[index]->command;
-	args = shell_data->einfo->cinfos[index]->args;
 	redirect_input(shell_data, pipe_aux, index);
 	redirect_output(shell_data, pipes, index);
 	free_splitted_string(shell_data->shell_envi.envp_exec);
