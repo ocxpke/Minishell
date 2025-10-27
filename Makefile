@@ -3,10 +3,10 @@
 #                                                         :::      ::::::::    #
 #    Makefile                                           :+:      :+:    :+:    #
 #                                                     +:+ +:+         +:+      #
-#    By: jose-ara < jose-ara@student.42malaga.co    +#+  +:+       +#+         #
+#    By: pablo <pablo@student.42.fr>                +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2024/09/20 14:34:30 by pabmart2          #+#    #+#              #
-#    Updated: 2025/09/27 18:57:46 by jose-ara         ###   ########.fr        #
+#    Updated: 2025/10/27 10:40:02 by pablo            ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -28,7 +28,7 @@ HEADERS = \
 	include/colors.h \
 
 SRC = src/main.c $(SHELL_DATA_SRC) $(PROC_MNG_SRC) $(SIGNALS_SRC) $(PARSER_SRC) \
-	$(TOOLS_SRC) $(BUILT_IN_SRC) $(UTILS_SRC) $(ENVIROMENT_MANAGEMENT_SRC)
+	$(TOOLS_SRC) $(BUILT_IN_SRC) $(UTILS_SRC) $(ENVIROMENT_MANAGEMENT_SRC) $(DEBUG_SRC)
 
 BUILT_IN_SRC = src/built_in/manage_built_in.c \
 				src/built_in/echo_command.c \
@@ -65,16 +65,21 @@ TOOLS_SRC = src/tools/tools_count_tokens.c \
 			src/tools/tools_key_value.c \
 			src/tools/tools_strings.c
 
-UTILS_SRC =	src/utils/utils_entry_info.c \
+UTILS_SRC =	src/utils/utils_command_info_helpers.c \
+			src/utils/utils_command_info.c \
+			src/utils/utils_entry_info.c \
 			src/utils/utils_extract_tokens.c \
-			src/utils/utils_set_commands_array.c
+
 
 ENVIROMENT_MANAGEMENT_SRC = src/enviroment_management/add_enviroment_node.c \
 							src/enviroment_management/generate_enviroment.c \
 							src/enviroment_management/minishell_enviroment.c \
 							src/enviroment_management/print_enviroment_list.c \
 							src/enviroment_management/search_enviroment.c\
-							src/enviroment_management/modify_enviroment_node.c
+							src/enviroment_management/modify_enviroment_node.c \
+
+DEBUG_SRC = tests/utils/debug_functions.c
+
 
 OBJ = $(addprefix $(OBJ_DIR)/, $(SRC:.c=.o))
 

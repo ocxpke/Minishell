@@ -6,7 +6,7 @@
 /*   By: pabmart2 <pabmart2@student.42malaga.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/07/28 19:39:27 by pablo             #+#    #+#             */
-/*   Updated: 2025/09/16 18:27:01 by pabmart2         ###   ########.fr       */
+/*   Updated: 2025/10/26 14:59:07 by pabmart2         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -33,33 +33,31 @@ static char	*get_env_end(char *env_start)
 }
 
 /**
- * @brief Expands an environment variable in a string.
+ * @brief Expands an environment variable substring into its value.
  *
- * Locates an env var at `env_start` in `*current_string`, gets its value
- * from `linked_env`, and replaces it in the string. Special handling for
- * `$?` (mapped to "FT_STATUS"). If not found, replaces with empty string.
- * If just `$`, preserves it. Result is trimmed of double quotes and
- * search position pointer is updated.
+ * This function extracts the environment variable name from the substring
+ * between `env_start` and `env_end`, looks up its value in the linked
+ * environment list, and returns a duplicated string of that value. If the
+ * variable is "$?", it retrieves the exit status. If the substring is just
+ * "$", it returns "$". If the variable is not found, it returns an empty
+ * string.
  *
- * @param env_start Pointer to start of env var in the string.
- * @param current_string Pointer to the string being processed; updated.
- * @param next_search_pos Pointer to next env var search position; updated.
- * @param linked_env Linked list of env var names and values.
- *
- * @return Updated string with env var expanded.
+ * @param env_start Pointer to the start of the environment variable
+ * substring (after '$').
+ * @param env_end Pointer to the end of the environment variable substring.
+ * @param linked_env Pointer to the linked list of environment variables.
+ * @return A newly allocated string containing the expanded value, or NULL
+ * on failure.
  */
-static char	*expand_env(char *env_start, char **current_string,
-		char **next_search_pos, t_linked_env *linked_env)
+static char	*get_expanded_value(char *env_start, char *env_end,
+		t_linked_env *linked_env)
 {
 	char	*env;
-	char	*env_end;
 	char	*env_value;
-	char	*result;
-	size_t	offset;
 
-	env_end = get_env_end(env_start);
-	env = ft_strndup(env_start + 1, env_end - env_start);
-	offset = env_start - *current_string;
+	env = ft_strndup(env_start + 1, env_end - env_start - 1);
+	if (!env)
+		return (NULL);
 	if (env_end - 1 != env_start)
 	{
 		if (!ft_strncmp(env, "?", ft_strlen(env)))
@@ -67,16 +65,70 @@ static char	*expand_env(char *env_start, char **current_string,
 		else
 			env_value = get_enviroment_value(env, linked_env);
 		if (!env_value)
-			env_value = "";
+			env_value = ft_strdup("");
+		if (!env_value)
+			return (free(env), NULL);
 	}
 	else
-		env_value = "$";
-	result = ft_strinsert(*current_string, env_start, env_end, env_value);
-	free(*current_string);
+	{
+		env_value = ft_strdup("$");
+		if (!env_value)
+			return (free(env), NULL);
+	}
 	free(env);
-	*current_string = ft_strtrim(result, "\"");
+	return (env_value);
+}
+
+/**
+ * @brief Expands an environment variable in the current string and
+ * updates the string accordingly.
+ *
+ * This function identifies the environment variable starting at
+ * `env_start`, retrieves its value, inserts it into the
+ * `current_string` by replacing the variable reference, trims
+ * surrounding quotes, and updates the `next_search_pos` to point
+ * after the inserted value.
+ *
+ * @param env_start Pointer to the start of the environment variable
+ * (e.g., after '$').
+ * @param current_string Pointer to the string being processed; will
+ * be modified and reallocated.
+ * @param next_search_pos Pointer to update with the position after
+ * the expanded value.
+ * @param linked_env Linked list of environment variables for lookup.
+ *
+ * @return The updated `current_string` on success, or NULL on failure
+ * (e.g., memory allocation error).
+ *
+ * @note The function frees the original `current_string` and any
+ * intermediate strings on success. On failure, it frees allocated
+ * resources and returns NULL.
+ */
+static char	*expand_env(char *env_start, char **current_string,
+		char **next_search_pos, t_linked_env *linked_env)
+{
+	char	*env_end;
+	char	*env_value;
+	char	*result;
+	char	*trimmed;
+	size_t	offset;
+
+	env_end = get_env_end(env_start);
+	env_value = get_expanded_value(env_start, env_end, linked_env);
+	if (!env_value)
+		return (NULL);
+	offset = env_start - *current_string;
+	result = ft_strinsert(*current_string, env_start, env_end, env_value);
+	if (!result)
+		return (free(env_value), NULL);
+	trimmed = ft_strtrim(result, "\"");
 	free(result);
+	if (!trimmed)
+		return (free(env_value), NULL);
+	free(*current_string);
+	*current_string = trimmed;
 	*next_search_pos = *current_string + offset + ft_strlen(env_value);
+	free(env_value);
 	return (*current_string);
 }
 
@@ -98,7 +150,6 @@ static void	clean_quote(char **current_string)
 	*current_string = tmp;
 }
 
-
 char	**parse_expand_env(char **splitted, t_linked_env *linked_env)
 {
 	size_t	i;
@@ -115,8 +166,9 @@ char	**parse_expand_env(char **splitted, t_linked_env *linked_env)
 				clean_quote(&splitted[i]);
 			while (env_start)
 			{
-				expand_env(env_start, &splitted[i], &next_search_pos,
-					linked_env);
+				if (!expand_env(env_start, &splitted[i], &next_search_pos,
+						linked_env))
+					return (ft_matrix_free((void ***)&splitted, 0), NULL);
 				env_start = ft_strchr(next_search_pos, '$');
 			}
 		}

@@ -6,7 +6,7 @@
 /*   By: pabmart2 <pabmart2@student.42malaga.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/07/24 11:57:25 by pablo             #+#    #+#             */
-/*   Updated: 2025/09/27 20:19:31 by pabmart2         ###   ########.fr       */
+/*   Updated: 2025/10/26 14:48:37 by pabmart2         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -35,9 +35,17 @@ t_token	**parse(char *command_line, t_linked_env *linked_env)
 	if (!command_line || !ft_strlen(command_line))
 		return (NULL);
 	splitted = split_pipes(command_line);
+	if (!splitted)
+		return (NULL);
 	splitted = split_quotes(splitted);
+	if (!splitted)
+		return (NULL);
 	splitted = split_args(splitted);
+	if (!splitted)
+		return (NULL);
 	splitted = parse_expand_env(splitted, linked_env);
+	if (!splitted)
+		return (NULL);
 	if (has_null_in_array(splitted))
 		return (ft_free((void **)&splitted), NULL);
 	tokens = tokenize(splitted);

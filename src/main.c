@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   main.c                                             :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: jose-ara < jose-ara@student.42malaga.co    +#+  +:+       +#+        */
+/*   By: pablo <pablo@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/07/24 20:38:12 by pablo             #+#    #+#             */
-/*   Updated: 2025/10/09 20:01:54 by jose-ara         ###   ########.fr       */
+/*   Updated: 2025/10/27 10:47:33 by pablo            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -103,7 +103,10 @@ void	clean_input(char *input)
 int	main(int argc, char **argv, char **envp)
 {
 	char			*input;
-	char			**get_full_cmd;
+	//char			**get_full_cmd;
+	(void)argc;
+	(void)argv;
+	(void)envp;
 	t_shell_data	shell_data;
 	char			*prompt;
 
@@ -134,12 +137,13 @@ int	main(int argc, char **argv, char **envp)
 			shell_data.einfo = get_entry_info(shell_data.tokens);
 			add_history(input);
 			// TODO: Este for se elimina antes de entregar
-			for (int i = 0; shell_data.tokens[i]; i++)
+			/* for (int i = 0; shell_data.tokens[i]; i++)
 			{
-				printf("%s : %s\n", shell_data.tokens[i]->string,
-					token_strings[shell_data.tokens[i]->token_type]);
+				printf("%s : %d\n", shell_data.tokens[i]->string,
+					shell_data.tokens[i]->token_type);
 			}
-			printf("/////////////////////////////////////\n");
+			printf("/////////////////////////////////////\n"); */
+			debug_shell_info(&shell_data);
 			execution_cycle(&shell_data);
 		}
 		free(input);

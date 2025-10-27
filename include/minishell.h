@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   minishell.h                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: pabmart2 <pabmart2@student.42malaga.com    +#+  +:+       +#+        */
+/*   By: pablo <pablo@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/07/24 12:02:38 by pablo             #+#    #+#             */
-/*   Updated: 2025/09/27 20:19:21 by pabmart2         ###   ########.fr       */
+/*   Updated: 2025/10/27 17:15:51 by pablo            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -78,11 +78,12 @@ typedef enum e_token_type
 	UNDEFINED
 }						t_ttype;
 
-static char				*token_strings[] = {"ARGUMENT", "COMMAND_ROUTE",
+/* static char				*token_strings[] = {"ARGUMENT", "COMMAND_ROUTE",
 					"COMMAND_BUILT_IN", "COMMAND_NOT_FOUND", "HEREDOC_EOF",
 					"PIPE", "REDIRECT_IN_CHAR", "REDIRECT_IN_CHAR_HEREDOC",
 					"REDIRECT_OUT_CHAR", "REDIRECT_OUT_CHAR_APPEND",
 					"REDIRECT_IN_ROUTE", "REDIRECT_OUT_ROUTE", "UNDEFINED"};
+ */
 
 /**
  * @struct s_token
@@ -101,6 +102,22 @@ typedef struct s_token
 	char				*string;
 	t_ttype				token_type;
 }						t_token;
+
+typedef struct s_piped_info
+{
+	int					pid;
+	char				*file_cmmd_name;
+	struct s_piped_info	*next;
+}						t_piped_info;
+
+typedef struct s_command_info
+{
+	char				*input_file;
+	char				*output_file;
+	char				is_append;
+	char				is_heredoc;
+	char				**cmd_and_args;
+}						t_cinfo;
 
 /**
  * @struct s_entry_info
@@ -129,21 +146,12 @@ typedef struct s_token
  *                    0 otherwise. Initialized to -1.
  * @param commands    Triple pointer to parsed commands and their arguments.
  */
-
-typedef struct s_piped_info {
-  int pid;
-  struct s_piped_info *next;
-} t_piped_info;
-
-typedef struct s_entry_info {
-  int n_pipes;
-  char *input_file;
-  char *output_file;
-  char is_append;
-  char is_heredoc;
-  char ***commands;
-  t_piped_info *piped_info;
-} t_einfo;
+typedef struct s_entry_info
+{
+	int					n_pipes;
+	t_cinfo				**cinfos;
+	t_piped_info		*piped_info;
+}						t_einfo;
 
 typedef struct s_linked_env
 {
@@ -163,12 +171,13 @@ typedef struct s_envp
 
 // TODO: Jose, te voy a matar por poner "envi"
 // No me mola como ha quedado esta estrucutura
-typedef struct s_shell_data {
-  t_envp shell_envi;
-  t_token **tokens;
-  pid_t pid_fork;
-  t_einfo *einfo;
-} t_shell_data;
+typedef struct s_shell_data
+{
+	t_envp				shell_envi;
+	t_token				**tokens;
+	pid_t				pid_fork;
+	t_einfo				*einfo;
+}						t_shell_data;
 
 #include "./built_in.h"
 #include "./process_management.h"
@@ -252,19 +261,16 @@ char					**parse_expand_env(char **splitted,
 char					**split_pipes(char *command_line);
 
 /**
- * @brief Splits each string in the array into arguments, handling quotes.
+ * @brief Splits and processes arguments from an array of strings.
  *
- * For each element in the input array:
- * - If it does not start with a quote, split by spaces.
- * - If it starts with a quote, treat as a single argument.
+ * This function takes an array of strings representing command-line
+ * arguments, processes each argument (potentially splitting on spaces,
+ * handling quotes, expansions, etc.), and returns a new array of processed
+ * arguments. The original array is freed during the process.
  *
- * Allocates a new array of string arrays, processes each element,
- * and returns a collapsed array of arguments.
- *
- * @param array Input array of strings to split into arguments.
- * @return Newly allocated array of argument strings, or NULL on failure.
- *
- * @note The input array is freed inside this function.
+ * @param array The input array of strings to be split and processed.
+ * @return A new array of strings containing the processed arguments, or
+ *         NULL if allocation fails or processing encounters an error.
  */
 char					**split_args(char **array);
 
@@ -333,7 +339,7 @@ char					**collapse_extracted(char ***extracted);
  * @param splitted The input array of strings to be cleaned. Must be
  * NULL-terminated.
  * @return A newly allocated NULL-terminated array of cleaned strings. Returns
- * NULL if no strings remain.
+ * NULL if no strings remain or if splitted is NULL
  */
 char					**clean_splitted(char **splitted);
 
@@ -404,7 +410,7 @@ char					***get_commands(t_token **tokens);
  *
  * @param einfo Double pointer to the t_einfo structure to be freed.
  */
-void	clean_entry_info(t_einfo **einfo);
+void					clean_entry_info(t_einfo **einfo);
 
 /**
  * @brief Extracts the first token of a specified type from a token list.
@@ -447,15 +453,126 @@ t_einfo					*get_entry_info(t_token **tokens);
 char					*get_linked_env(const char *key,
 							t_linked_env *linked_env);
 
+//////////////////////////////// UTILS - CINFO /////////////////////////////////
+/**
+ * @brief Counts the number of argument tokens following a command token.
+ *
+ * @param tokens   Array of pointers to t_token structures.
+ * @param cmd_pos  Index of the command token in the array.
+ * @return         Number of consecutive argument tokens after the command.
+ */
+int						count_command_args(t_token **tokens, int cmd_pos);
+
+/**
+ * @brief Retrieve the n-th command token from a NULL-terminated token array.
+ *
+ * Scans the provided NULL-terminated array of t_token pointers and counts
+ * only tokens whose token_type is one of:
+ *
+ *   - COMMAND_BUILT_IN
+ *
+ *   - COMMAND_ROUTE
+ *
+ *   - COMMAND_NOT_FOUND
+ *
+ * The index n is zero-based (n == 0 returns the first matching command
+ * token). Scanning stops at the first NULL entry in the array.
+ *
+ * @param tokens NULL-terminated array of pointers to t_token to search.
+ * @param n      Zero-based index of the command token to retrieve.
+ * @param token_pos Optional output pointer. If non-NULL, receives the index
+ *                  within the tokens array of the returned token. If no
+ *                  matching token is found, *token_pos is set to -1.
+ *
+ * @return Pointer to the n-th matching t_token on success, or NULL if fewer
+ *         than n+1 matching command tokens exist. If NULL is returned and
+ *         token_pos is non-NULL, *token_pos is set to -1.
+ */
+t_token					*get_next_command(t_token **tokens, int n,
+							int *token_pos);
+
+/**
+ * @brief Cleans up an array of command info structures by freeing
+ * allocated memory.
+ *
+ * This function iterates through the array of t_cinfo pointers, freeing
+ * the memory associated with each structure's members (args, command,
+ * input_file, output_file) and then the structure itself. Finally, it
+ * frees the array of pointers.
+ *
+ * @param cinfos A pointer to an array of t_cinfo pointers, terminated by
+ * a NULL pointer. The array and its contents will be deallocated.
+ */
+void					clean_cinfos(t_cinfo **cinfos);
+
+/**
+ * @brief Sets up command information structures in the execution info.
+ *
+ * This function calculates the number of commands by counting tokens of types
+ * COMMAND_BUILT_IN, COMMAND_NOT_FOUND, and COMMAND_ROUTE. It then allocates
+ * memory for an array of command info pointers in the execution info structure
+ * and populates it by calling set_cinfos_loop.
+ *
+ * @param tokens A pointer to an array of tokens representing the command line.
+ * @param einfo A pointer to the execution info structure where command infos
+ *              will be stored.
+ * @return 0 on success, 1 on memory allocation failure.
+ *
+ * @note TODO: Consider making count_tokens variadic for better flexibility.
+ */
+int						set_cinfos(t_token **tokens, t_einfo *einfo);
+
+/**
+ * @brief Set command input file from tokens.
+ *
+ * Scans tokens for input redirections: '<' or '<<'.
+ * For '<', sets cinfo->input_file to the route token's string and is_heredoc
+ * to 0.
+ * For '<<', resets GNL state, calls heredoc_behaviour(), sets input_file to
+ * the returned path, and is_heredoc to 1.
+ * If no redirection, leaves cinfo unchanged.
+ *
+ * @param tokens Pointer to token list head.
+ * @param cinfo Command info structure to update.
+ *
+ * @note Ownership: input_file points to token's string or heap-allocated path
+ *       from heredoc_behaviour(); caller must free if from heredoc.
+ */
+int						set_command_input_file(t_token **tokens,
+							t_cinfo *cinfo);
+
+/**
+ * @brief Sets the output file for a command based on redirection tokens.
+ *
+ * This function processes redirection tokens from the token list to determine
+ * the output file for the command. It handles both standard output redirection
+ * ('>') and append redirection ('>>'). If a redirection token is found, it
+ * extracts the subsequent file name token and stores it in the command info
+ * structure. The function also sets a flag indicating whether the output
+ * should be appended or overwritten.
+ *
+ * @param tokens A pointer to the pointer of the token list. The list may be
+ *               modified as tokens are extracted.
+ * @param cinfo  A pointer to the command info structure where the output file
+ *               and append flag will be set.
+ * @return       0 on success, or 1 if memory allocation fails during string
+ *               duplication.
+ */
+int						set_command_output_file(t_token **tokens,
+							t_cinfo *cinfo);
+
 // DEBUG
+void					debug_shell_info(t_shell_data *shell_data);
 void					print_char_matrix(char **matrix);
 void					print_token_matrix(t_token **tokens);
 void					print_single_token(t_token *token, int index);
-void					debug_einfo(t_einfo *einfo);
 
+char					**get_full_command(t_token **token);
 
-// @TODO Que hacemos con estas 2 lineas?
-char **get_full_command(t_token **token);
-//char *set_heredoc_tmp_file(char *eof);
+// char *set_heredoc_tmp_file(char *eof);???
+
+char					*generate_cmmd_file_name(int index);
+int						generate_cmmd_file(char *file_name,
+							char *cmmd_to_write);
 
 #endif
