@@ -6,7 +6,7 @@
 /*   By: pablo <pablo@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/07/30 19:45:00 by pablo             #+#    #+#             */
-/*   Updated: 2025/10/27 10:45:42 by pablo            ###   ########.fr       */
+/*   Updated: 2025/10/27 19:01:18 by pablo            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -104,10 +104,10 @@ void	print_cinfo(t_cinfo *cinfo, int index)
 	printf("Output file: %s\n", cinfo->output_file);
 	printf("Is append: %d\n", cinfo->is_append);
 	printf("Is heredoc: %d\n", cinfo->is_heredoc);
-	printf("Command: %s\n", cinfo->command);
+	printf("Command: %s\n", cinfo->cmd_and_args[0]);
 	printf("Args:\n");
-	if (cinfo->args)
-		print_char_matrix(cinfo->args);
+	if (cinfo->cmd_and_args)
+		print_char_matrix(cinfo->cmd_and_args + 1);
 	else
 		printf("NULL\n");
 	printf("=== END CINFO[%d] ===\n", index);
@@ -129,7 +129,7 @@ void	print_cinfos(t_cinfo **cinfos)
 		print_cinfo(cinfos[i], i);
 		i++;
 	}
-	printf("=== END CINfos ===\n");
+	printf("=== END CINFOS ===\n");
 }
 
 void	print_piped_info(t_piped_info *piped_info)

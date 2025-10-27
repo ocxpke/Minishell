@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   utils_command_info.c                               :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: pabmart2 <pabmart2@student.42malaga.com    +#+  +:+       +#+        */
+/*   By: pablo <pablo@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/08/25 18:24:40 by pablo             #+#    #+#             */
-/*   Updated: 2025/10/26 15:17:51 by pabmart2         ###   ########.fr       */
+/*   Updated: 2025/10/27 19:01:38 by pablo            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -33,14 +33,17 @@ static int	set_cinfo_args(t_token **tokens, t_cinfo *cinfo, int cmd_pos)
 	int	i;
 
 	args_count = count_command_args(tokens, cmd_pos);
-	cinfo->args = ft_calloc(args_count + 1, sizeof(char *));
-	if (!cinfo->args)
+	cinfo->cmd_and_args = ft_calloc(args_count + 2, sizeof(char *));
+	if (!cinfo->cmd_and_args)
 		return (1);
-	i = 0;
-	while (i < args_count)
+	cinfo->cmd_and_args[0] = ft_strdup(tokens[cmd_pos]->string);
+	if (!cinfo->cmd_and_args[0])
+		return (1);
+	i = 1;
+	while (i < args_count + 1)
 	{
-		cinfo->args[i] = ft_strdup(tokens[cmd_pos + 1 + i]->string);
-		if (!cinfo->args[i])
+		cinfo->cmd_and_args[i] = ft_strdup(tokens[cmd_pos+ i]->string);
+		if (!cinfo->cmd_and_args[i])
 			return (1);
 		++i;
 	}
@@ -64,8 +67,7 @@ static t_cinfo	*initialize_cinfo(void)
 	cinfo = malloc(sizeof(t_cinfo));
 	if (!cinfo)
 		return (NULL);
-	cinfo->args = NULL;
-	cinfo->command = NULL;
+	cinfo->cmd_and_args = NULL;
 	cinfo->input_file = NULL;
 	cinfo->is_append = -1;
 	cinfo->is_heredoc = -1;
@@ -106,9 +108,6 @@ static int	set_cinfos_loop(t_token **tokens, t_cinfo **cinfos,
 		cmd_token = get_next_command(tokens, i, &token_pos);
 		if (!cmd_token)
 			return (1);
-		cinfos[i]->command = ft_strdup(cmd_token->string);
-		if (!cinfos[i]->command)
-			return (1);
 		if (set_cinfo_args(tokens, cinfos[i], token_pos))
 			return (1);
 		if (token_pos > 0)
@@ -128,9 +127,8 @@ void	clean_cinfos(t_cinfo **cinfos)
 	i = 0;
 	while (cinfos[i])
 	{
-		if (cinfos[i]->args)
-			ft_matrix_free((void ***)&cinfos[i]->args, 0);
-		ft_free((void **)&(cinfos[i]->command));
+		if (cinfos[i]->cmd_and_args)
+			ft_matrix_free((void ***)&cinfos[i]->cmd_and_args, 0);
 		ft_free((void **)&(cinfos[i]->input_file));
 		ft_free((void **)&(cinfos[i]->output_file));
 		ft_free((void **)&(cinfos[i]));

@@ -6,7 +6,7 @@
 /*   By: pablo <pablo@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/08/01 12:04:16 by jose-ara          #+#    #+#             */
-/*   Updated: 2025/10/27 10:32:43 by pablo            ###   ########.fr       */
+/*   Updated: 2025/10/27 17:25:37 by pablo            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -71,10 +71,10 @@ void	child_process(t_shell_data *shell_data, int pipes[2], int *pipe_aux,
 	free_splitted_string(shell_data->shell_envi.envp_exec);
 	generate_exec_envp(&(shell_data->shell_envi));
 	restore_terminal_signals();
-	if (shell_data->einfo->cinfos[index]->command
-		&& shell_data->einfo->cinfos[index]->command[0])
-		execve(shell_data->einfo->cinfos[index]->command,
-			shell_data->einfo->cinfos[index]->args,
+	if (shell_data->einfo->cinfos[index]->cmd_and_args[0]
+		&& shell_data->einfo->cinfos[index]->cmd_and_args[0][0])
+		execve(shell_data->einfo->cinfos[index]->cmd_and_args[0],
+			shell_data->einfo->cinfos[index]->cmd_and_args,
 			shell_data->shell_envi.envp_exec);
 	// liberar todo de einfo
 	rl_clear_history();
