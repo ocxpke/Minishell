@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   tools.h                                            :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: pabmart2 <pabmart2@student.42malaga.com    +#+  +:+       +#+        */
+/*   By: pablo <pablo@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/09/27 20:39:24 by pabmart2          #+#    #+#             */
-/*   Updated: 2025/09/27 21:13:33 by pabmart2         ###   ########.fr       */
+/*   Updated: 2025/10/29 10:59:47 by pablo            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -61,6 +61,24 @@ void			clone_environs(t_envp *enviroment);
  */
 int				add_normal_node(t_linked_env **envp, char **key_value);
 int				add_ordered_node(t_linked_env **ordered_envp, char **key_value);
+
+/**
+ * @brief Generates an array of environment variable strings for
+ * execution.
+ *
+ * This function allocates memory for an array of strings (envp_exec)
+ * based on the length of the environment list (len_env). It then
+ * iterates through the linked list of environment variables (envp),
+ * building a string representation for each using the
+ * build_env_string function, and stores them in the array.
+ *
+ * @param shell_envi A pointer to the t_envp structure containing the
+ *                   environment list and related data.
+ * @return 1 on success, 0 if memory allocation fails, or 1 if
+ *         build_env_string fails. Note: The return value is
+ *         inconsistent; it returns 0 on calloc failure but 1 on
+ *         build_env_string failure, which might be an error.
+ */
 int				generate_exec_envp(t_envp *shell_envi);
 
 /**
@@ -81,7 +99,7 @@ int				generate_exec_envp(t_envp *shell_envi);
 char			**get_key_value(char *env);
 
 void			free_splitted_string(char **splitted);
-int	ft_max_len_str(const char *str_1, const char *str_2);
+int				ft_max_len_str(const char *str_1, const char *str_2);
 
 /**
  * @brief Checks if the given environment variable is "SHLVL" and

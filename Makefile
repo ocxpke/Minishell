@@ -6,7 +6,7 @@
 #    By: pablo <pablo@student.42.fr>                +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2024/09/20 14:34:30 by pabmart2          #+#    #+#              #
-#    Updated: 2025/10/27 10:40:02 by pablo            ###   ########.fr        #
+#    Updated: 2025/10/29 10:53:00 by pablo            ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -77,6 +77,7 @@ ENVIROMENT_MANAGEMENT_SRC = src/enviroment_management/add_enviroment_node.c \
 							src/enviroment_management/print_enviroment_list.c \
 							src/enviroment_management/search_enviroment.c\
 							src/enviroment_management/modify_enviroment_node.c \
+							src/enviroment_management/enviroment_helpers.c \
 
 DEBUG_SRC = tests/utils/debug_functions.c
 

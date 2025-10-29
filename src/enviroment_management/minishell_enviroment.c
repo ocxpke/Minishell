@@ -1,6 +1,17 @@
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   minishell_enviroment.c                             :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: pablo <pablo@student.42.fr>                +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2025/10/28 18:25:03 by pablo             #+#    #+#             */
+/*   Updated: 2025/10/29 11:04:35 by pablo            ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
+
 #include "minishell.h"
 
-//Generamos el string PID="XXXX" PARA DESPUES OBTENER EL PAR KEY_VALUE
 char	*get_pid_env(char *pid)
 {
 	char	env[256];
@@ -21,8 +32,6 @@ char	*get_pid_env(char *pid)
 	return (ft_strdup(env));
 }
 
-//Nos devuelve la linea que contiene el PID
-// del arvhivo /proc/self/status, hay que liberar dsps
 char	*get_pid_from_file(void)
 {
 	int		fd;
@@ -42,7 +51,6 @@ char	*get_pid_from_file(void)
 		if (!found)
 			free(env);
 	}
-	//TODO: Pablo arregla get_next_line, que hacemos con esto?
 	ft_get_next_line(-1);
 	close(fd);
 	if (!found)
