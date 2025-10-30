@@ -6,7 +6,7 @@
 #    By: pablo <pablo@student.42.fr>                +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2024/09/20 14:34:30 by pabmart2          #+#    #+#              #
-#    Updated: 2025/10/29 10:53:00 by pablo            ###   ########.fr        #
+#    Updated: 2025/10/30 10:16:48 by pablo            ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -69,6 +69,7 @@ UTILS_SRC =	src/utils/utils_command_info_helpers.c \
 			src/utils/utils_command_info.c \
 			src/utils/utils_entry_info.c \
 			src/utils/utils_extract_tokens.c \
+			src/utils/utils_get_shell_prompt.c \
 
 
 ENVIROMENT_MANAGEMENT_SRC = src/enviroment_management/add_enviroment_node.c \

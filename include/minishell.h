@@ -6,7 +6,7 @@
 /*   By: pablo <pablo@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/07/24 12:02:38 by pablo             #+#    #+#             */
-/*   Updated: 2025/10/28 18:09:44 by pablo            ###   ########.fr       */
+/*   Updated: 2025/10/30 10:15:58 by pablo            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -17,12 +17,12 @@
 # define _GNU_SOURCE
 
 # include "../lib/libft/include/libft.h"
+# include "./structs.h"
 # include "./built_in.h"
 # include "./enviroment_management.h"
 # include "./process_management.h"
 # include "./shell_data.h"
 # include "./signals.h"
-# include "./structs.h"
 # include "./tools.h"
 # include "parser.h"
 # include <aio.h>

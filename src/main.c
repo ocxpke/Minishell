@@ -6,7 +6,7 @@
 /*   By: pablo <pablo@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/07/24 20:38:12 by pablo             #+#    #+#             */
-/*   Updated: 2025/10/28 18:32:30 by pablo            ###   ########.fr       */
+/*   Updated: 2025/10/30 10:30:52 by pablo            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -78,6 +78,7 @@ int	main(int argc, char **argv, char **envp)
 			if (!prompt)
 				return (free_shell_data(&shell_data), 1);
 			input = readline(prompt);
+			shell_data.prompt = prompt;
 		}
 		else
 		{
@@ -100,11 +101,12 @@ int	main(int argc, char **argv, char **envp)
 					shell_data.tokens[i]->token_type);
 			}
 			printf("/////////////////////////////////////\n"); */
-			debug_shell_info(&shell_data);
+			//debug_shell_info(&shell_data);
 			execution_cycle(&shell_data);
 		}
 		free(input);
 		free_tokens(shell_data.tokens);
 		ft_free((void **)&prompt);
+		clean_entry_info(&shell_data.einfo);
 	}
 }

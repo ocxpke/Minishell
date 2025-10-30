@@ -20,6 +20,16 @@
 void	block_terminal_signals(void);
 
 /**
+ * @brief Restores terminal signals to their default behavior.
+ *
+ * This function resets the signal handlers for SIGINT (interrupt signal,
+ * typically Ctrl+C) and SIGQUIT (quit signal, typically Ctrl+\) to their
+ * default actions, allowing the terminal to handle these signals normally
+ * without custom handling.
+ */
+void	restore_terminal_signals(void);
+
+/**
  * @brief Signal handler for SIGINT (interrupt signal).
  *
  * This function is called when a SIGINT signal is received, typically
@@ -31,14 +41,6 @@ void	block_terminal_signals(void);
  */
 void	sigint_handler(int sig);
 
-/**
- * @brief Restores terminal signals to their default behavior.
- *
- * This function resets the signal handlers for SIGINT (interrupt signal,
- * typically Ctrl+C) and SIGQUIT (quit signal, typically Ctrl+\) to their
- * default actions, allowing the terminal to handle these signals normally
- * without custom handling.
- */
-void	restore_terminal_signals(void);
+
 
 #endif
