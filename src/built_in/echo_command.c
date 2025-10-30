@@ -12,7 +12,7 @@
 
 #include "minishell.h"
 
-void	echo_cmd(t_shell_data *shell_data, int *ret)
+void	echo_cmd(t_shell_data *shell_data, t_cinfo *cinfo, int *ret)
 {
 	int	i;
 

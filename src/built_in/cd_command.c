@@ -12,21 +12,24 @@
 
 #include "minishell.h"
 
-void	cd_cmd(t_shell_data *shell_data, int *ret)
+void	cd_cmd(t_shell_data *shell_data, t_cinfo *cinfo, int *ret)
 {
 	char	*home;
 
 	*ret = 1;
-	if (!shell_data->tokens[1])
+	//TODO: Pablo la len de cmmd_args
+	//Esto peta
+	if (cinfo->cmd_and_args[2])
+		return (errno = EINVAL ,perror("Too many arguments\n"));
+	else if (!cinfo->cmd_and_args[1])
 	{
-		home = getenv("HOME");
+		home = get_enviroment_value("HOME", shell_data->shell_envi.envp);
 		if (!home)
-			printf("HOME not set\n");
+			return (errno = ENOENT , perror("HOME not set\n"));
 		else
 			chdir(home);
-		return ;
+		//TODO: actualizar el valor de pwd;
 	}
-	if (shell_data->tokens[2])
-		return (printf("Too much arguments\n"), (void)0);
+
 	chdir(shell_data->tokens[1]->string);
 }

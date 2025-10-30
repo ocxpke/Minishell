@@ -14,6 +14,8 @@
 
 void	exit_cmd(t_shell_data *shell_data)
 {
+	//TODO: Exitea con el numero pasado o exitea con rl ultimo codigo de retorno
+	//TODO: Comprobar num de args
 	rl_clear_history();
 	free_shell_data(shell_data);
 	exit(EXIT_SUCCESS);

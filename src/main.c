@@ -143,7 +143,7 @@ int	main(int argc, char **argv, char **envp)
 					shell_data.tokens[i]->token_type);
 			}
 			printf("/////////////////////////////////////\n"); */
-			debug_shell_info(&shell_data);
+			//debug_shell_info(&shell_data);
 			execution_cycle(&shell_data);
 		}
 		free(input);

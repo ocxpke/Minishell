@@ -12,26 +12,28 @@
 
 #include "minishell.h"
 
-inline int	check_built_in_name(t_shell_data *shell_data)
+inline int	check_built_in_name(t_cinfo *cinfo)
 {
-	if (ft_strncmp(shell_data->tokens[0]->string, "exit",
-			ft_strlen(shell_data->tokens[0]->string))
-		|| ft_strncmp(shell_data->tokens[0]->string, "pwd",
-			ft_strlen(shell_data->tokens[0]->string))
-		|| ft_strncmp(shell_data->tokens[0]->string, "cd",
-			ft_strlen(shell_data->tokens[0]->string))
-		|| ft_strncmp(shell_data->tokens[0]->string, "echo",
-			ft_strlen(shell_data->tokens[0]->string))
-		|| ft_strncmp(shell_data->tokens[0]->string, "env",
-			ft_strlen(shell_data->tokens[0]->string))
-		|| ft_strncmp(shell_data->tokens[0]->string, "export",
-			ft_strlen(shell_data->tokens[0]->string))
-		|| ft_strncmp(shell_data->tokens[0]->string, "unset",
-			ft_strlen(shell_data->tokens[0]->string)))
+	if (ft_strncmp(cinfo->cmd_and_args[0], "exit",
+			ft_strlen(cinfo->cmd_and_args[0]))
+		|| ft_strncmp(cinfo->cmd_and_args[0], "pwd",
+			ft_strlen(cinfo->cmd_and_args[0]))
+		|| ft_strncmp(cinfo->cmd_and_args[0], "cd",
+			ft_strlen(cinfo->cmd_and_args[0]))
+		|| ft_strncmp(cinfo->cmd_and_args[0], "echo",
+			ft_strlen(cinfo->cmd_and_args[0]))
+		|| ft_strncmp(cinfo->cmd_and_args[0], "env",
+			ft_strlen(cinfo->cmd_and_args[0]))
+		|| ft_strncmp(cinfo->cmd_and_args[0], "export",
+			ft_strlen(cinfo->cmd_and_args[0]))
+		|| ft_strncmp(cinfo->cmd_and_args[0], "unset",
+			ft_strlen(cinfo->cmd_and_args[0])))
 		return (0);
 	return (1);
 }
 
+/*
+	TODO: Esto que coño hace, aqui?
 char	*file_of_piped_command(t_shell_data *shell_data, int index)
 {
 	char	*file_name;
@@ -45,17 +47,16 @@ char	*file_of_piped_command(t_shell_data *shell_data, int index)
 		return (free(file_name), NULL);
 	return (file_name);
 }
+*/
 
-inline int	check_all_built_in(t_shell_data *shell_data, int index)
+inline int	check_all_built_in(t_shell_data *shell_data, t_cinfo *cinfo,int index)
 {
 	int		ret;
 	size_t	cmd_len;
-	t_cinfo	*cinfo;
 
-	cinfo = shell_data->einfo->cinfos[index];
 	ret = 0;
-	if (!cinfo || !cinfo->cmd_and_args[0])
-		return (1);
+	if (!cinfo || !cinfo->cmd_and_args ||!cinfo->cmd_and_args[0])
+		return (0);
 	cmd_len = ft_strlen(cinfo->cmd_and_args[0]);
 	if (!ft_strncmp(cinfo->cmd_and_args[0], "exit", cmd_len))
 		exit_cmd(shell_data);
@@ -79,5 +80,5 @@ int	check_if_is_built_in(t_shell_data *shell_data, int index)
 {
 	if (shell_data->einfo->n_pipes || !shell_data->einfo->cinfos)
 		return (0);
-	return (check_all_built_in(shell_data, index));
+	return (check_all_built_in(shell_data, shell_data->einfo->cinfos[index], index));
 }
