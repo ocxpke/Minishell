@@ -6,7 +6,7 @@
 /*   By: pablo <pablo@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/10/29 10:39:22 by pablo             #+#    #+#             */
-/*   Updated: 2025/10/30 10:44:32 by pablo            ###   ########.fr       */
+/*   Updated: 2025/10/30 16:36:20 by pablo            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -124,24 +124,6 @@ static void	insert_node_ordered(t_linked_env **ordered_envp,
 }
 
 int	add_ordered_node(t_linked_env **ordered_envp, char **key_value)
-{
-	t_linked_env	*new_node;
-
-	new_node = create_env_node(key_value);
-	if (!new_node)
-		return (0);
-	if (!(*ordered_envp))
-		return (*ordered_envp = new_node, 1);
-	if (ft_strncmp(new_node->key, (*ordered_envp)->key,
-			ft_max_len_str(new_node->key, (*ordered_envp)->key)) < 0)
-	{
-		new_node->next = *ordered_envp;
-		*ordered_envp = new_node;
-		return (1);
-	}
-	insert_node_ordered(ordered_envp, new_node);
-	return (1);
-}
 {
 	t_linked_env	*new_node;
 
