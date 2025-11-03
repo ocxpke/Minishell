@@ -70,7 +70,6 @@ inline int	exec_built_in(t_shell_data *shell_data, t_cinfo *cinfo)
 	int		ret;
 	size_t	cmd_len;
 
-	cinfo = shell_data->einfo->cinfos[index];
 	ret = 0;
 	if (!cinfo || !cinfo->cmd_and_args ||!cinfo->cmd_and_args[0])
 		return (0);
