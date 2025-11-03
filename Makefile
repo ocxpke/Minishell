@@ -69,6 +69,7 @@ UTILS_SRC =	src/utils/utils_command_info_helpers.c \
 			src/utils/utils_command_info.c \
 			src/utils/utils_entry_info.c \
 			src/utils/utils_extract_tokens.c \
+			src/utils/utils_get_shell_prompt.c \
 
 
 ENVIROMENT_MANAGEMENT_SRC = src/enviroment_management/add_enviroment_node.c \
@@ -77,6 +78,7 @@ ENVIROMENT_MANAGEMENT_SRC = src/enviroment_management/add_enviroment_node.c \
 							src/enviroment_management/print_enviroment_list.c \
 							src/enviroment_management/search_enviroment.c\
 							src/enviroment_management/modify_enviroment_node.c \
+							src/enviroment_management/enviroment_helpers.c \
 
 DEBUG_SRC = tests/utils/debug_functions.c
 

@@ -12,21 +12,40 @@
 
 #include "minishell.h"
 
-void	cd_cmd(t_shell_data *shell_data, int *ret)
+static int act_pwd_and_oldpwd_env(t_shell_data *shell_data, char *newpwd)
 {
-	char	*home;
+	char *old_pwd;
+
+	old_pwd = get_enviroment_value("PWD", shell_data->shell_envi.envp);
+	if (!old_pwd)
+		return (0);
+	old_pwd = ft_strdup(old_pwd);
+	modify_value_env_node(&(shell_data->shell_envi), "PWD", newpwd);
+	modify_value_env_node(&(shell_data->shell_envi), "OLDPWD", old_pwd);
+	free(old_pwd);
+	return (1);
+}
+
+void	cd_cmd(t_shell_data *shell_data, t_cinfo *cinfo, int *ret)
+{
+	char	*new_wd;
 
 	*ret = 1;
-	if (!shell_data->tokens[1])
+	//TODO: Pablo la len de cmmd_args
+	if (ft_matrix_len((void **) cinfo->cmd_and_args) > 2)
+		return (errno = EINVAL ,perror("Too many arguments\n"));
+	else if (!cinfo->cmd_and_args[1])
 	{
-		home = getenv("HOME");
-		if (!home)
-			printf("HOME not set\n");
-		else
-			chdir(home);
-		return ;
+		new_wd = get_enviroment_value("HOME", shell_data->shell_envi.envp);
+		if (!new_wd)
+			return (errno = ENOENT , perror("HOME not set\n"));
+		chdir(new_wd);
+		act_pwd_and_oldpwd_env(shell_data, new_wd);
+		return;
 	}
-	if (shell_data->tokens[2])
-		return (printf("Too much arguments\n"), (void)0);
-	chdir(shell_data->tokens[1]->string);
+	chdir(cinfo->cmd_and_args[1]);
+	new_wd = getcwd(NULL, 0);
+	if (new_wd)
+		act_pwd_and_oldpwd_env(shell_data, new_wd);
+	free(new_wd);
 }

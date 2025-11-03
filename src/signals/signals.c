@@ -3,16 +3,16 @@
 /*                                                        :::      ::::::::   */
 /*   signals.c                                          :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: jose-ara < jose-ara@student.42malaga.co    +#+  +:+       +#+        */
+/*   By: pablo <pablo@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/07/31 15:44:48 by jose-ara          #+#    #+#             */
-/*   Updated: 2025/09/27 19:03:00 by jose-ara         ###   ########.fr       */
+/*   Updated: 2025/10/28 18:21:30 by pablo            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
 
-extern sig_atomic_t	signal_recv;
+extern sig_atomic_t	g_signal_recv;
 
 void	block_terminal_signals(void)
 {

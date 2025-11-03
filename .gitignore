@@ -5,3 +5,4 @@ build
 .heredoc*
 *.txt
 *.gdb
+*.supp

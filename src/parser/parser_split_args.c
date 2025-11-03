@@ -6,7 +6,7 @@
 /*   By: pabmart2 <pabmart2@student.42malaga.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/07/30 15:51:04 by pablo             #+#    #+#             */
-/*   Updated: 2025/10/26 15:15:37 by pabmart2         ###   ########.fr       */
+/*   Updated: 2025/10/28 18:10:40 by pablo            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -98,7 +98,6 @@ static int	process_arg(char *arg, char ***tmp, size_t i)
 	}
 	return (1);
 }
-
 
 char	**split_args(char **array)
 {

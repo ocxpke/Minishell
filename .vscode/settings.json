@@ -48,7 +48,9 @@
 		"signals.h": "c",
 		"process_management.h": "c",
 		"tools.h": "c",
-		"shell_data.h": "c"
+		"shell_data.h": "c",
+		"readline.h": "c",
+		"enviroment_management.h": "c"
 	},
 	"makefile.configureOnOpen": false
 }
