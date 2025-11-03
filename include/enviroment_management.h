@@ -1,7 +1,7 @@
 #include "minishell.h"
 
 #ifndef ENVIROMENT_MANAGEMENT_H
-# define ENVIROMENT_MANAGEMENT_H
+#define ENVIROMENT_MANAGEMENT_H
 
 /**
  * @brief Adds a new environment variable node to the ordered linked list
@@ -21,7 +21,7 @@
  * @return             1 on success (node added), 0 on failure (e.g.,
  *                     memory allocation error).
  */
-int				add_normal_node(t_linked_env **envp, char **key_value);
+int add_normal_node(t_linked_env **envp, char **key_value);
 
 /**
  * @brief Adds a new environment variable node to the ordered linked
@@ -41,7 +41,7 @@ int				add_normal_node(t_linked_env **envp, char **key_value);
  * @return 1 on success (node added), 0 on failure (e.g., memory
  *         allocation error).
  */
-int				add_ordered_node(t_linked_env **ordered_envp, char **key_value);
+int add_ordered_node(t_linked_env **ordered_envp, char **key_value);
 
 /**
  * @brief Clones the environment variables from the global 'environ'
@@ -60,7 +60,7 @@ int				add_ordered_node(t_linked_env **ordered_envp, char **key_value);
  * @param enviroment A pointer to the t_envp structure where the cloned
  *                   environment will be stored and managed.
  */
-void			clone_environs(t_envp *enviroment);
+void clone_environs(t_envp *enviroment);
 
 /**
  * @brief Edits or adds environment variables in the shell's environment lists.
@@ -77,7 +77,7 @@ void			clone_environs(t_envp *enviroment);
  * @return 0 if the variable was found and updated, 1 if a new variable
  *         was added.
  */
-int				edit_env_lists(t_envp *shell_env, char **key_value);
+int edit_env_lists(t_envp *shell_env, char **key_value);
 
 /**
  * @brief Frees the entire linked list of environment variables.
@@ -91,9 +91,15 @@ int				edit_env_lists(t_envp *shell_env, char **key_value);
  *                   freed. The list is modified in place, and the pointer is
  *                   set to NULL upon completion.
  */
-void			free_env_linked_list(t_linked_env **linked_env);
+void free_env_linked_list(t_linked_env **linked_env);
 
 int modify_value_env_node(t_envp *shell_env, const char *key, char *new_key);
 int modify_exit_status_value(t_envp *shell_envp, int new_exit_status);
+
+char	*get_enviroment_value(const char *key, t_linked_env *linked_env);
+t_linked_env	*get_enviroment_node(const char *key, t_linked_env *linked_env);
+char	*get_pid_from_file(void);
+char	*get_pid_env(char *pid);
+void	check_if_shelllvl(char **key_value);
 
 #endif
