@@ -20,7 +20,7 @@ void	free_shell_data(t_shell_data *shell_data)
 	free_splitted_string(shell_data->shell_envi.envp_exec);
 	free_env_linked_list(&(shell_data->shell_envi.envp));
 	free_env_linked_list(&(shell_data->shell_envi.ordered_envp));
-	clean_entry_info(&(shell_data->einfo));
+	ft_free((void **)&shell_data->prompt);
 }
 
 void	init_shell_data(t_shell_data *shell_data)
@@ -32,5 +32,6 @@ void	init_shell_data(t_shell_data *shell_data)
 	shell_data->shell_envi.len_env = 0;
 	shell_data->shell_envi.envp_exec = NULL;
 	shell_data->einfo = NULL;
+	shell_data->prompt = NULL;
 	clone_environs(&(shell_data->shell_envi));
 }

@@ -17,7 +17,7 @@
 #include "minishell.h"
 
 extern char				**environ;
-volatile sig_atomic_t	signal_recv = 0;
+volatile sig_atomic_t	g_signal_recv = 0;
 
 void	init_minishell(void)
 {
@@ -27,49 +27,6 @@ void	init_minishell(void)
 		// Tenemos que leer el archivo de entrada linea a linea y ejcutarlo linea a linea
 		printf("No es una entrada interactiva\n");
 	}
-}
-
-/**
- * @brief Generates a colored shell prompt string.
- *
- * Constructs a shell prompt that includes the shell name ("Minishell"),
- * the current user's username, and the current working directory, all with
- * color formatting. The prompt is dynamically allocated and must be freed by
- * the caller.
- *
- * The format of the prompt is:
- *
- * [YELLOW]Minishell[RED]@[BLUE][USER][RESET] [GREEN][CWD][RESET] -->
- *
- * @return char* Pointer to the dynamically allocated prompt string on success,
- *               or NULL if a memory allocation or system call fails.
- */
-char	*get_shell_prompt(void)
-{
-	char	*base_prompt;
-	char	*colored_prompt;
-	char	*current_dir;
-	char	*prompt_with_cwd;
-	char	*final_prompt;
-
-	base_prompt = ft_strjoin(YELLOW "Minishell" RED "@" BLUE, getenv("USER"));
-	if (!base_prompt)
-		return (NULL);
-	colored_prompt = ft_strjoin(base_prompt, RESET " " GREEN);
-	ft_free((void **)&base_prompt);
-	if (!colored_prompt)
-		return (NULL);
-	current_dir = getcwd(NULL, 0);
-	if (!current_dir)
-		return (ft_free((void **)&colored_prompt), NULL);
-	prompt_with_cwd = ft_strjoin(colored_prompt, current_dir);
-	ft_free((void **)&colored_prompt);
-	ft_free((void **)&current_dir);
-	if (!prompt_with_cwd)
-		return (NULL);
-	final_prompt = ft_strjoin(prompt_with_cwd, RESET " --> ");
-	ft_free((void **)&prompt_with_cwd);
-	return (final_prompt);
 }
 
 /**
@@ -132,10 +89,11 @@ int	main(int argc, char **argv, char **envp)
 	{
 		if (isatty(STDIN_FILENO))
 		{
-			prompt = get_shell_prompt();
+			prompt = get_shell_prompt(shell_data.shell_envi.ordered_envp);
 			if (!prompt)
 				return (free_shell_data(&shell_data), 1);
 			input = readline(prompt);
+			shell_data.prompt = prompt;
 		}
 		else
 		{
@@ -163,5 +121,6 @@ int	main(int argc, char **argv, char **envp)
 		free(input);
 		free_tokens(shell_data.tokens);
 		ft_free((void **)&prompt);
+		clean_entry_info(&shell_data.einfo);
 	}
 }

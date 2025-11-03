@@ -6,13 +6,13 @@
 /*   By: pablo <pablo@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/08/01 12:04:16 by jose-ara          #+#    #+#             */
-/*   Updated: 2025/10/27 17:25:37 by pablo            ###   ########.fr       */
+/*   Updated: 2025/10/28 18:14:03 by pablo            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
 
-extern sig_atomic_t	signal_recv;
+extern sig_atomic_t	g_signal_recv;
 
 //TODO: Hacer un exit on file error
 

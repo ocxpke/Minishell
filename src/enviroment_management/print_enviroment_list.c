@@ -1,18 +1,30 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   tools_aux_envp_linked_list.c                       :+:      :+:    :+:   */
+/*   print_enviroment_list.c                            :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: jose-ara < jose-ara@student.42malaga.co    +#+  +:+       +#+        */
+/*   By: pablo <pablo@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/09/27 19:03:18 by jose-ara          #+#    #+#             */
-/*   Updated: 2025/09/27 19:03:19 by jose-ara         ###   ########.fr       */
+/*   Updated: 2025/10/28 23:43:31 by pablo            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "colors.h"
 #include "minishell.h"
 
+/**
+ * @brief Prints a string with literal representation, escaping
+ * non-printable characters and backslashes.
+ *
+ * This function iterates through the input string and prints each
+ * character. Non-printable characters are printed in hexadecimal
+ * escape sequence format (e.g., \x00). Backslashes are escaped as
+ * double backslashes (\\). Printable characters are printed as-is.
+ *
+ * @param s The null-terminated string to be printed.
+ * @return The total number of characters printed.
+ */
 static int	print_literal(const char *s)
 {
 	int	cont;
@@ -32,6 +44,9 @@ static int	print_literal(const char *s)
 	printf("\"");
 	return (cont);
 }
+
+// TODO: Esta función está dentro de enviroment_management pero se declara en
+// built_in.h
 
 void	print_envi_list(t_linked_env *envp_list, int mode)
 {

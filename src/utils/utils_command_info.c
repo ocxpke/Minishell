@@ -6,7 +6,7 @@
 /*   By: pablo <pablo@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/08/25 18:24:40 by pablo             #+#    #+#             */
-/*   Updated: 2025/10/27 19:01:38 by pablo            ###   ########.fr       */
+/*   Updated: 2025/10/30 16:52:53 by pablo            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -33,6 +33,7 @@ static int	set_cinfo_args(t_token **tokens, t_cinfo *cinfo, int cmd_pos)
 	int	i;
 
 	args_count = count_command_args(tokens, cmd_pos);
+	cinfo->array_size = args_count + 1;
 	cinfo->cmd_and_args = ft_calloc(args_count + 2, sizeof(char *));
 	if (!cinfo->cmd_and_args)
 		return (1);
@@ -42,7 +43,7 @@ static int	set_cinfo_args(t_token **tokens, t_cinfo *cinfo, int cmd_pos)
 	i = 1;
 	while (i < args_count + 1)
 	{
-		cinfo->cmd_and_args[i] = ft_strdup(tokens[cmd_pos+ i]->string);
+		cinfo->cmd_and_args[i] = ft_strdup(tokens[cmd_pos + i]->string);
 		if (!cinfo->cmd_and_args[i])
 			return (1);
 		++i;
@@ -72,6 +73,7 @@ static t_cinfo	*initialize_cinfo(void)
 	cinfo->is_append = -1;
 	cinfo->is_heredoc = -1;
 	cinfo->output_file = NULL;
+	cinfo->array_size = 0;
 	return (cinfo);
 }
 
@@ -117,7 +119,7 @@ static int	set_cinfos_loop(t_token **tokens, t_cinfo **cinfos,
 			return (1);
 		++i;
 	}
-	return(0);
+	return (0);
 }
 
 void	clean_cinfos(t_cinfo **cinfos)
@@ -141,7 +143,6 @@ int	set_cinfos(t_token **tokens, t_einfo *einfo)
 {
 	size_t	n_commands;
 
-	// TODO: Quizás sería mejor que count_tokens fuese variádico;
 	n_commands = count_tokens(tokens, COMMAND_BUILT_IN) + count_tokens(tokens,
 			COMMAND_NOT_FOUND) + count_tokens(tokens, COMMAND_ROUTE);
 	einfo->cinfos = malloc(sizeof(t_cinfo *) * (n_commands + 1));
