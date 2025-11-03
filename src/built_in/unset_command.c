@@ -39,26 +39,23 @@ static int	search_in_env_list(t_linked_env **env_list, char *key)
 	return (free(aux->key), free(aux->value), free(aux), 1);
 }
 
-void	unset_cmd(t_shell_data *shell_data, int *ret)
+/**
+ * @note en el 'if' se usa el && por eficiencia solo se busca en una lista
+ * si no existe el objetivo
+ */
+void	unset_cmd(t_shell_data *shell_data, t_cinfo *cinfo, int *ret)
 {
 	int	i;
 
-	i = 0;
+	i = 1;
 	*ret = 1;
-	while (shell_data->tokens[i])
+	while (cinfo->cmd_and_args[i])
 	{
-		if (shell_data->tokens[i]->string)
-		{
-			/** Aqui en el if nos vale && y
-				|| pues si no lo encuntra en uno no debria de buscar en el otro
-				*  pongo && por eficiencia
-				*/
-			if (search_in_env_list(&(shell_data->shell_envi.envp),
-					shell_data->tokens[i]->string)
-				&& search_in_env_list(&(shell_data->shell_envi.ordered_envp),
-					shell_data->tokens[i]->string))
-				shell_data->shell_envi.len_env--;
-		}
+		if (search_in_env_list(&(shell_data->shell_envi.envp),
+				cinfo->cmd_and_args[i])
+			&& search_in_env_list(&(shell_data->shell_envi.ordered_envp),
+				cinfo->cmd_and_args[i]))
+			shell_data->shell_envi.len_env--;
 		i++;
 	}
 }

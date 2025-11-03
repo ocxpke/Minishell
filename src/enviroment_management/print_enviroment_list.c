@@ -17,7 +17,8 @@ static int	print_literal(const char *s)
 {
 	int	cont;
 
-	cont = 0;
+	cont = 2;
+	printf("=\"");
 	while (*s)
 	{
 		if (!ft_isprint(*s))
@@ -28,6 +29,7 @@ static int	print_literal(const char *s)
 			cont += printf("%c", *s);
 		s++;
 	}
+	printf("\"");
 	return (cont);
 }
 
@@ -46,12 +48,8 @@ void	print_envi_list(t_linked_env *envp_list, int mode)
 		else
 		{
 			printf("declare -x %s", envp_list->key);
-			/**
-				* @note Este if es de las cosas mas gitanas que he hecho en mi vida
-				*/
-			if (envp_list->value && printf("=\"")
-					&& print_literal(envp_list->value))
-				printf("\"");
+			if (envp_list->value)
+				print_literal(envp_list->value);
 			printf("\n");
 		}
 		envp_list = envp_list->next;

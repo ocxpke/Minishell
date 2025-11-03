@@ -19,5 +19,6 @@ int	add_normal_node(t_linked_env **envp, char **key_value);
 int	add_ordered_node(t_linked_env **ordered_envp, char **key_value);
 
 int modify_value_env_node(t_envp *shell_env, const char *key, char *new_key);
+int modify_exit_status_value(t_envp *shell_envp, int new_exit_status);
 
 #endif

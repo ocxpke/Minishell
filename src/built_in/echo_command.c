@@ -12,18 +12,26 @@
 
 #include "minishell.h"
 
-void	echo_cmd(t_shell_data *shell_data, t_cinfo *cinfo, int *ret)
+void	echo_cmd(t_cinfo *cinfo, int *ret)
 {
 	int	i;
+	int final_nl;
 
-	i = 1;
 	*ret = 1;
-	while (shell_data->tokens[i])
+	i = 1;
+	final_nl = 1;
+	if (!ft_strncmp(cinfo->cmd_and_args[i], "-n", ft_max_len_str(cinfo->cmd_and_args[i], "-n")))
 	{
-		write(1, shell_data->tokens[i]->string,
-			ft_strlen(shell_data->tokens[i]->string));
-		if (shell_data->tokens[i + 1])
+		final_nl = 0;
+		i++;
+	}
+	while (cinfo->cmd_and_args[i])
+	{
+		write(1, cinfo->cmd_and_args[i], ft_strlen(cinfo->cmd_and_args[i]));
+		if (cinfo->cmd_and_args[i + 1])
 			write(1, " ", 1);
 		i++;
 	}
+	if (final_nl)
+		write(1, "\n", 1);
 }
