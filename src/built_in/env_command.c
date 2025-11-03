@@ -12,8 +12,11 @@
 
 #include "minishell.h"
 
-void	env_cmd(t_envp *enviroment, int *ret)
+void	env_cmd(t_cinfo *cinfo, t_envp *enviroment, int *ret)
 {
 	*ret = 1;
+	//TODO: check correct num of cmd_args
+	if (ft_matrix_len((void **) cinfo->cmd_and_args) > 1)
+		return(errno = EINVAL, perror("Too many arguments\n"));
 	print_envi_list(enviroment->envp, 1);
 }

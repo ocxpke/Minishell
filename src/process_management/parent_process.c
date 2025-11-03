@@ -12,6 +12,22 @@
 
 #include "minishell.h"
 
+static void close_fds(t_shell_data *shell_data, int pipes[2], int *pipe_aux,
+		int index)
+{
+	if(!shell_data->einfo->n_pipes)
+		return;
+	if (index != shell_data->einfo->n_pipes)
+	{
+		close(pipes[1]);
+		if (*pipe_aux != -1)
+			close(*pipe_aux);
+		*pipe_aux = dup(pipes[0]);
+		close(pipes[0]);
+	}else if (index == shell_data->einfo->n_pipes)
+		close(*pipe_aux);
+}
+
 //TODO partir en cachitos, si el comando no existe exit_code=127,
 // preguntar a pablo que hace con el manejo de los comandos q no existen
 void	parent_process(t_shell_data *shell_data, int pipes[2], int *pipe_aux,
@@ -19,17 +35,8 @@ void	parent_process(t_shell_data *shell_data, int pipes[2], int *pipe_aux,
 {
 	t_piped_info	*wait_node;
 	int				ret_status;
-	char			*exit_code;
 
-	if (shell_data->einfo->n_pipes && (shell_data->einfo->n_pipes != index))
-	{
-		close(pipes[1]);
-		if (*pipe_aux != -1)
-			close(*pipe_aux);
-		*pipe_aux = dup(pipes[0]);
-		close(pipes[0]);
-	}else if(shell_data->einfo->n_pipes && (shell_data->einfo->n_pipes == index))
-		close(*pipe_aux);
+	close_fds(shell_data, pipes, pipe_aux, index);
 	if (shell_data->einfo->n_pipes)
 	{
 		if (shell_data->einfo->n_pipes != index)
@@ -43,10 +50,7 @@ void	parent_process(t_shell_data *shell_data, int pipes[2], int *pipe_aux,
 	}
 	else
 		waitpid(shell_data->pid_fork, &ret_status, 0);
+	//Actualizamos el valor de la variable de entorno de exit
 	if (index == shell_data->einfo->n_pipes)
-	{
-		exit_code = ft_itoa(WEXITSTATUS(ret_status));
-		modify_value_env_node(&(shell_data->shell_envi), "FT_EXIT_ENV", exit_code);
-		free(exit_code);
-	}
+		modify_exit_status_value(&shell_data->shell_envi, WEXITSTATUS(ret_status));
 }

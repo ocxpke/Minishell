@@ -31,16 +31,16 @@ void	execution_cycle(t_shell_data *shell_data)
 	while (i < (shell_data->einfo->n_pipes + 1))
 	{
 		manage_pipes(pipes, shell_data->einfo->n_pipes, i);
-		if (!check_if_is_built_in(shell_data, i))
+		if (!check_if_is_built_in(shell_data, shell_data->einfo->cinfos[i]))
 		{
 			shell_data->pid_fork = fork();
 			if (shell_data->pid_fork == -1)
-				exit(EXIT_FAILURE);
+				exit(EXIT_FAILURE);//TODO: Que hacemos aqui?
 			if (shell_data->einfo->n_pipes)
 				add_piped_info_node(shell_data, shell_data->pid_fork);
 			if (shell_data->pid_fork == 0)
 			{
-				if (check_built_in_name(shell_data))
+				if (check_built_in_name(shell_data->einfo->cinfos[i]))
 					exec_subshell(shell_data, pipes, &pipe_aux, i);
 				else
 					child_process(shell_data, pipes, &pipe_aux, i);

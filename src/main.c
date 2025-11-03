@@ -6,7 +6,7 @@
 /*   By: pablo <pablo@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/07/24 20:38:12 by pablo             #+#    #+#             */
-/*   Updated: 2025/10/30 10:30:52 by pablo            ###   ########.fr       */
+/*   Updated: 2025/10/27 10:47:33 by pablo            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -56,11 +56,26 @@ void	clean_input(char *input)
 	}
 }
 
+static int ctrl_d_exit(t_shell_data *shell_data, char **prompt)
+{
+	int ret_num;
+	char *exit_env_value;
+
+	exit_env_value = get_enviroment_value("FT_EXIT_VALUE", shell_data->shell_envi.envp);
+	if (!exit_env_value)
+		ret_num = 1;//TODO? Valor arbitrario?
+	else
+		ret_num = ft_atoi(exit_env_value);
+	rl_clear_history();
+	ft_free((void **)prompt);
+	free_shell_data(shell_data);
+	return (ret_num);
+}
+
 // TODO Eliminar el tmp del heredoc
 int	main(int argc, char **argv, char **envp)
 {
 	char			*input;
-	//char			**get_full_cmd;
 	(void)argc;
 	(void)argv;
 	(void)envp;
@@ -69,7 +84,7 @@ int	main(int argc, char **argv, char **envp)
 
 	init_shell_data(&shell_data);
 	block_terminal_signals();
-	prompt = NULL;
+	prompt = NULL;// TDDO: Necesario?
 	while (1)
 	{
 		if (isatty(STDIN_FILENO))
@@ -87,8 +102,7 @@ int	main(int argc, char **argv, char **envp)
 				clean_input(input);
 		}
 		if (input == NULL)
-			return (rl_clear_history(), ft_free((void **)&prompt), free_shell_data(&shell_data),
-				EXIT_SUCCESS);
+			return (ctrl_d_exit(&shell_data, &prompt));
 		shell_data.tokens = parse(input, shell_data.shell_envi.ordered_envp);
 		if (shell_data.tokens)
 		{
@@ -101,7 +115,7 @@ int	main(int argc, char **argv, char **envp)
 					shell_data.tokens[i]->token_type);
 			}
 			printf("/////////////////////////////////////\n"); */
-			//debug_shell_info(&shell_data);
+			debug_shell_info(&shell_data);
 			execution_cycle(&shell_data);
 		}
 		free(input);

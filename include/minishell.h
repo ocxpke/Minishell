@@ -6,12 +6,12 @@
 /*   By: pablo <pablo@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/07/24 12:02:38 by pablo             #+#    #+#             */
-/*   Updated: 2025/10/30 10:15:58 by pablo            ###   ########.fr       */
+/*   Updated: 2025/10/27 17:15:51 by pablo            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #ifndef MINISHELL_H
-# define MINISHELL_H
+#define MINISHELL_H
 
 // Cuidado con esto hay que verlo bien
 # define _GNU_SOURCE
@@ -111,7 +111,7 @@ char	*get_shell_prompt(t_linked_env *envs);
  *
  * @param einfo Double pointer to the t_einfo structure to be freed.
  */
-void	clean_entry_info(t_einfo **einfo);
+void clean_entry_info(t_einfo **einfo);
 
 /**
  * @brief Extracts the first token of a specified type from a token list.

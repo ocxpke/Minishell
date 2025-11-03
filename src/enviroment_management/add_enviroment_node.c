@@ -12,7 +12,8 @@
 
 #include "minishell.h"
 
-int	edit_env_lists(t_envp *shell_env, char **key_value)
+//return -> 0 modified, return 1 -> added
+int edit_env_lists(t_envp *shell_env, char **key_value)
 {
 	t_linked_env	*aux_node;
 
@@ -26,6 +27,7 @@ int	edit_env_lists(t_envp *shell_env, char **key_value)
 	}
 	add_normal_node(&(shell_env->envp), key_value);
 	add_ordered_node(&(shell_env->ordered_envp), key_value);
+	shell_env->len_env++;
 	return (1);
 }
 
