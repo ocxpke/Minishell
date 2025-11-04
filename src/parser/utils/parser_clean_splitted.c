@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   parser_clean_splitted.c                            :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: pabmart2 <pabmart2@student.42malaga.com    +#+  +:+       +#+        */
+/*   By: pablo <pablo@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/07/30 15:48:25 by pablo             #+#    #+#             */
-/*   Updated: 2025/10/26 15:16:16 by pabmart2         ###   ########.fr       */
+/*   Updated: 2025/11/04 18:14:19 by pablo            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -45,14 +45,25 @@ static char	**process_and_add_trimmed(char **splitted, char **tmp, char *str,
 	return (new_tmp);
 }
 
-char	**clean_splitted(char **splitted)
+/**
+ * @brief Builds a cleaned temporary array from the input split array.
+ *
+ * This function processes each element in the provided `splitted` array,
+ * trims and potentially filters them (e.g., excluding empty strings), and
+ * constructs a new dynamically allocated array containing the cleaned
+ * elements. The new array is null-terminated.
+ *
+ * @param splitted A null-terminated array of strings to be processed.
+ * @return A pointer to the newly allocated cleaned array, or NULL if
+ *         memory allocation fails or an error occurs during processing.
+ *         The caller is responsible for freeing the returned array.
+ */
+static char	**build_clean_tmp(char **splitted)
 {
+	size_t	ij[2];
 	char	**tmp;
 	char	**new_tmp;
-	size_t	ij[2];
 
-	if (!splitted)
-		return (NULL);
 	ij[0] = 0;
 	ij[1] = 0;
 	tmp = NULL;
@@ -67,9 +78,22 @@ char	**clean_splitted(char **splitted)
 		new_tmp = (char **)ft_realloc(tmp, sizeof(char *) * ij[1],
 				sizeof(char *) * (ij[1] + 1));
 		if (!new_tmp)
-			return (ft_matrix_free((void ***)&tmp, 0),
-				ft_matrix_free((void ***)&splitted, 0), NULL);
+			return (ft_matrix_free((void ***)&tmp, 0), NULL);
 		tmp = new_tmp;
 	}
-	return (tmp[ij[1]] = NULL, ft_matrix_free((void ***)&splitted, 0), tmp);
+	tmp[ij[1]] = NULL;
+	return (tmp);
+}
+
+char	**clean_splitted(char **splitted)
+{
+	char	**tmp;
+
+	if (!splitted)
+		return (NULL);
+	tmp = build_clean_tmp(splitted);
+	if (!tmp)
+		return (NULL);
+	ft_matrix_free((void ***)&splitted, 0);
+	return (tmp);
 }

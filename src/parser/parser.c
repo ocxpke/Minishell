@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   parser.c                                           :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: pabmart2 <pabmart2@student.42malaga.com    +#+  +:+       +#+        */
+/*   By: pablo <pablo@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/07/24 11:57:25 by pablo             #+#    #+#             */
-/*   Updated: 2025/10/26 14:48:37 by pabmart2         ###   ########.fr       */
+/*   Updated: 2025/11/04 18:46:07 by pablo            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -49,6 +49,6 @@ t_token	**parse(char *command_line, t_linked_env *linked_env)
 	if (has_null_in_array(splitted))
 		return (ft_free((void **)&splitted), NULL);
 	tokens = tokenize(splitted);
-	ft_free((void **)&splitted);
+	ft_matrix_free((void ***)&splitted, 0);
 	return (tokens);
 }

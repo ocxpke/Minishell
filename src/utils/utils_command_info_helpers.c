@@ -3,23 +3,23 @@
 /*                                                        :::      ::::::::   */
 /*   utils_command_info_helpers.c                       :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: pabmart2 <pabmart2@student.42malaga.com    +#+  +:+       +#+        */
+/*   By: pablo <pablo@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/10/20 18:09:55 by pablo             #+#    #+#             */
-/*   Updated: 2025/10/26 15:00:38 by pabmart2         ###   ########.fr       */
+/*   Updated: 2025/11/03 21:52:51 by pablo            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
 
-int	set_command_output_file(t_token **tokens, t_cinfo *cinfo)
+int	set_command_output_file(t_token **tokens, t_cinfo *cinfo, t_token *pipe)
 {
 	t_token	*extracted;
 
 	if (extract_first_type_token(tokens, REDIRECT_OUT_CHAR))
 	{
 		extracted = extract_first_type_token(tokens, REDIRECT_OUT_ROUTE);
-		if (extracted)
+		if (extracted && (!pipe || pipe > extracted))
 		{
 			cinfo->output_file = ft_strdup(extracted->string);
 			if (!cinfo->output_file)
@@ -30,7 +30,7 @@ int	set_command_output_file(t_token **tokens, t_cinfo *cinfo)
 	else if (extract_first_type_token(tokens, REDIRECT_OUT_CHAR_APPEND))
 	{
 		extracted = extract_first_type_token(tokens, REDIRECT_OUT_ROUTE);
-		if (extracted)
+		if (extracted && (!pipe || pipe > extracted))
 		{
 			cinfo->output_file = ft_strdup(extracted->string);
 			if (!cinfo->output_file)
@@ -64,7 +64,7 @@ static int	set_heredoc_input_file(t_token **tokens, t_cinfo *cinfo)
 
 	if (extract_first_type_token(tokens, REDIRECT_IN_CHAR_HEREDOC))
 	{
-		extracted = extract_first_type_token(tokens, HEREDOC_EOF);
+		extracted = extract_first_type_token(tokens + 1, HEREDOC_EOF);
 		if (extracted)
 		{
 			ft_get_next_line(-1);
@@ -81,12 +81,12 @@ static int	set_heredoc_input_file(t_token **tokens, t_cinfo *cinfo)
 	return (0);
 }
 
-int	set_command_input_file(t_token **tokens, t_cinfo *cinfo)
+int	set_command_input_file(t_token **tokens, t_cinfo *cinfo, t_token *pipe)
 {
 	t_token	*extracted;
 
 	extracted = extract_first_type_token(tokens, REDIRECT_IN_ROUTE);
-	if (extracted)
+	if (extracted && (!pipe || pipe > extracted))
 	{
 		cinfo->input_file = ft_strdup(extracted->string);
 		if (!cinfo->input_file)

@@ -70,11 +70,11 @@ static t_token	**first_token_parse(char **array, size_t size)
 	{
 		tokens[i] = ft_calloc(1, sizeof(t_token));
 		if (!tokens[i])
-			return (free_tokens(tokens), ft_matrix_free((void ***)&array, 0),
+			return (free_tokens(&tokens), ft_matrix_free((void ***)&array, 0),
 				NULL);
 		tokens[i]->string = ft_strdup(array[i]);
 		if (!tokens[i]->string)
-			return (free_tokens(tokens), ft_matrix_free((void ***)&array, 0),
+			return (free_tokens(&tokens), ft_matrix_free((void ***)&array, 0),
 				NULL);
 		first_token_assign(array, tokens, i);
 		i++;

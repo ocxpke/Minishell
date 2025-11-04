@@ -6,7 +6,7 @@
 /*   By: pablo <pablo@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/10/28 18:08:35 by pablo             #+#    #+#             */
-/*   Updated: 2025/10/30 10:38:02 by pablo            ###   ########.fr       */
+/*   Updated: 2025/11/03 22:07:18 by pablo            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -61,13 +61,16 @@ char	**collapse_extracted(char ***extracted);
 /**
  * @brief Frees memory allocated for an array of t_token pointers.
  *
- * This function iterates through the array of t_token pointers, freeing the
- * memory allocated for each token's string and the token itself. Finally,
- * it frees the array of pointers.
+ * This function safely iterates through the array of t_token pointers,
+ * performing NULL checks before freeing the memory allocated for each
+ * token's string and the token itself. Each token pointer is set to NULL
+ * after freeing to prevent dangling pointers. Finally, it frees the array of
+ * pointers and sets the original pointer to NULL to prevent dangling pointers.
  *
- * @param tokens Pointer to an array of t_token pointers to be freed.
+ * @param tokens Pointer to a pointer to an array of t_token pointers to be freed.
+ *               After freeing, the pointer is set to NULL.
  */
-void	free_tokens(t_token **tokens);
+void	free_tokens(t_token ***tokens);
 
 /**
  * @brief Parses the given command line string into an array of tokens.

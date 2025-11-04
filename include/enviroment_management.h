@@ -93,7 +93,92 @@ int				edit_env_lists(t_envp *shell_env, char **key_value);
  */
 void			free_env_linked_list(t_linked_env **linked_env);
 
-int modify_value_env_node(t_envp *shell_env, const char *key, char *new_key);
-int modify_exit_status_value(t_envp *shell_envp, int new_exit_status);
+/**
+ * @brief Gets the value of an environment variable by its key.
+ *
+ * This function searches through the linked list of environment variables
+ * to find a matching key and returns its associated value.
+ *
+ * @param key The name of the environment variable to search for.
+ * @param linked_env A pointer to the head of the environment linked list.
+ * @return The value associated with the key if found, NULL otherwise.
+ */
+char			*get_enviroment_value(const char *key, t_linked_env *linked_env);
+
+/**
+ * @brief Gets the environment node by its key.
+ *
+ * This function searches through the linked list of environment variables
+ * to find a matching key and returns the entire node.
+ *
+ * @param key The name of the environment variable to search for.
+ * @param linked_env A pointer to the head of the environment linked list.
+ * @return A pointer to the node if found, NULL otherwise.
+ */
+t_linked_env	*get_enviroment_node(const char *key, t_linked_env *linked_env);
+
+/**
+ * @brief Retrieves the process ID (PID) from the /proc/self/status file.
+ *
+ * This function opens the /proc/self/status file, reads it line by line using
+ * ft_get_next_line, and searches for the line starting with "Pid:". Once found,
+ * it returns a dynamically allocated string containing that line. If the file
+ * cannot be opened or the "Pid:" line is not found, it returns NULL.
+ *
+ * @return A pointer to a null-terminated string containing the "Pid:" line,
+ *         or NULL if an error occurs or the line is not found. The caller is
+ *         responsible for freeing the returned string.
+ */
+char			*get_pid_from_file(void);
+
+/**
+ * @brief Gets the PID environment variable string.
+ *
+ * This function reads the PID from the provided string and formats it
+ * as an environment variable in the format "PID=value". It extracts
+ * digits from the input string, potentially with leading non-digit
+ * characters (e.g., "pid123" -> "PID=123").
+ *
+ * @param pid A string containing the PID information.
+ * @return A dynamically allocated string in the format "PID=<digits>",
+ *         or NULL if memory allocation fails or if the substring
+ *         extraction fails.
+ */
+char			*get_pid_env(char *pid);
+
+/**
+ * @brief Modifies the value of an environment variable in both the normal
+ * and ordered environment lists.
+ *
+ * This function searches for the environment variable specified by the key
+ * in both the normal environment list (shell_env->envp) and the ordered
+ * environment list (shell_env->ordered_envp). If found, it frees the
+ * existing values and assigns a duplicate of the new value to both nodes.
+ *
+ * @param shell_env A pointer to the t_envp structure containing the
+ *                  environment lists.
+ * @param key The key of the environment variable to modify (const char *).
+ * @param new_key The new value to assign to the environment variable
+ *                (char *).
+ * @return 1 if the modification was successful, 0 otherwise (e.g., if key
+ *         not found or invalid inputs).
+ *
+ * @note The function assumes that the key exists in both lists; if not, it
+ * returns 0 without modification.
+ * @note Memory is managed internally: old values are freed, and new_key is
+ * duplicated using ft_strdup.
+ */
+int				modify_value_env_node(t_envp *shell_env, const char *key,
+					char *new_key);
+
+/**
+ * @brief Modifies the exit status value in the environment.
+ *
+ * @param shell_envp A pointer to the shell environment structure.
+ * @param new_exit_status The new exit status value to set.
+ * @return 1 on success, 0 on failure.
+ */
+int				modify_exit_status_value(t_envp *shell_envp,
+					int new_exit_status);
 
 #endif

@@ -6,7 +6,7 @@
 /*   By: pablo <pablo@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/08/18 12:52:02 by pablo             #+#    #+#             */
-/*   Updated: 2025/10/28 18:11:10 by pablo            ###   ########.fr       */
+/*   Updated: 2025/11/03 22:05:06 by pablo            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -49,6 +49,7 @@ t_einfo	*get_entry_info(t_token **tokens)
 		return (clean_entry_info(&einfo), NULL);
 	einfo->n_pipes = count_tokens(tokens, PIPE);
 	einfo->piped_info = NULL;
+	free_tokens(&tokens);
 	return (einfo);
 }
 

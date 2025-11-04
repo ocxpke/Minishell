@@ -6,7 +6,7 @@
 /*   By: pablo <pablo@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/09/27 19:01:07 by jose-ara          #+#    #+#             */
-/*   Updated: 2025/10/27 19:12:50 by pablo            ###   ########.fr       */
+/*   Updated: 2025/11/03 21:00:38 by pablo            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -70,7 +70,6 @@ inline int	exec_built_in(t_shell_data *shell_data, t_cinfo *cinfo)
 	int		ret;
 	size_t	cmd_len;
 
-	cinfo = shell_data->einfo->cinfos[index];
 	ret = 0;
 	if (!cinfo || !cinfo->cmd_and_args ||!cinfo->cmd_and_args[0])
 		return (0);
