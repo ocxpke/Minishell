@@ -6,7 +6,7 @@
 /*   By: pablo <pablo@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/07/24 20:38:12 by pablo             #+#    #+#             */
-/*   Updated: 2025/11/04 18:48:35 by pablo            ###   ########.fr       */
+/*   Updated: 2025/11/05 18:37:07 by pablo            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -56,14 +56,15 @@ void	clean_input(char *input)
 	}
 }
 
-static int ctrl_d_exit(t_shell_data *shell_data)
+static int	ctrl_d_exit(t_shell_data *shell_data)
 {
-	int ret_num;
-	char *exit_env_value;
+	int		ret_num;
+	char	*exit_env_value;
 
-	exit_env_value = get_enviroment_value("FT_EXIT_VALUE", shell_data->shell_envi.envp);
+	exit_env_value = get_enviroment_value("FT_EXIT_VALUE",
+			shell_data->shell_envi.envp);
 	if (!exit_env_value)
-		ret_num = 1;//TODO? Valor arbitrario?
+		ret_num = 1; // TODO? Valor arbitrario?
 	else
 		ret_num = ft_atoi(exit_env_value);
 	rl_clear_history();
@@ -72,12 +73,9 @@ static int ctrl_d_exit(t_shell_data *shell_data)
 }
 
 // TODO Eliminar el tmp del heredoc
-int	main(int argc, char **argv, char **envp)
+int	main()
 {
 	char			*input;
-	(void)argc;
-	(void)argv;
-	(void)envp;
 	t_shell_data	shell_data;
 	char			*prompt;
 

@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   echo_command.c                                     :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: jose-ara < jose-ara@student.42malaga.co    +#+  +:+       +#+        */
+/*   By: pablo <pablo@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/09/27 19:00:40 by jose-ara          #+#    #+#             */
-/*   Updated: 2025/09/27 19:00:42 by jose-ara         ###   ########.fr       */
+/*   Updated: 2025/11/05 16:54:42 by pablo            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -15,12 +15,13 @@
 void	echo_cmd(t_cinfo *cinfo, int *ret)
 {
 	int	i;
-	int final_nl;
+	int	final_nl;
 
 	*ret = 1;
 	i = 1;
 	final_nl = 1;
-	if (!ft_strncmp(cinfo->cmd_and_args[i], "-n", ft_max_len_str(cinfo->cmd_and_args[i], "-n")))
+	if (cinfo->cmd_and_args[i] && !ft_strncmp(cinfo->cmd_and_args[i], "-n",
+			ft_max_len_str(cinfo->cmd_and_args[i], "-n")))
 	{
 		final_nl = 0;
 		i++;

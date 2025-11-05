@@ -6,7 +6,7 @@
 /*   By: pablo <pablo@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/08/18 12:52:02 by pablo             #+#    #+#             */
-/*   Updated: 2025/11/03 22:05:06 by pablo            ###   ########.fr       */
+/*   Updated: 2025/11/05 16:51:24 by pablo            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -59,5 +59,7 @@ void	clean_entry_info(t_einfo **einfo)
 		return ;
 	if ((*einfo)->cinfos)
 		clean_cinfos((*einfo)->cinfos);
+	if ((*einfo)->piped_info)
+		free_piped_info_list(*einfo);
 	ft_free((void **)einfo);
 }

@@ -6,20 +6,20 @@
 /*   By: pablo <pablo@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/10/20 18:09:55 by pablo             #+#    #+#             */
-/*   Updated: 2025/11/03 21:52:51 by pablo            ###   ########.fr       */
+/*   Updated: 2025/11/05 18:50:27 by pablo            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
 
-int	set_command_output_file(t_token **tokens, t_cinfo *cinfo, t_token *pipe)
+int	set_command_output_file(t_token **tokens, t_cinfo *cinfo, t_token **pipe)
 {
 	t_token	*extracted;
 
 	if (extract_first_type_token(tokens, REDIRECT_OUT_CHAR))
 	{
 		extracted = extract_first_type_token(tokens, REDIRECT_OUT_ROUTE);
-		if (extracted && (!pipe || pipe > extracted))
+		if (extracted && (!pipe || (t_token **)extracted < pipe))
 		{
 			cinfo->output_file = ft_strdup(extracted->string);
 			if (!cinfo->output_file)
@@ -30,7 +30,7 @@ int	set_command_output_file(t_token **tokens, t_cinfo *cinfo, t_token *pipe)
 	else if (extract_first_type_token(tokens, REDIRECT_OUT_CHAR_APPEND))
 	{
 		extracted = extract_first_type_token(tokens, REDIRECT_OUT_ROUTE);
-		if (extracted && (!pipe || pipe > extracted))
+		if (extracted && (!pipe || (t_token **)extracted < pipe))
 		{
 			cinfo->output_file = ft_strdup(extracted->string);
 			if (!cinfo->output_file)
@@ -81,12 +81,12 @@ static int	set_heredoc_input_file(t_token **tokens, t_cinfo *cinfo)
 	return (0);
 }
 
-int	set_command_input_file(t_token **tokens, t_cinfo *cinfo, t_token *pipe)
+int	set_command_input_file(t_token **tokens, t_cinfo *cinfo, t_token **pipe)
 {
 	t_token	*extracted;
 
 	extracted = extract_first_type_token(tokens, REDIRECT_IN_ROUTE);
-	if (extracted && (!pipe || pipe > extracted))
+	if (extracted && (!pipe || (t_token **)extracted < pipe))
 	{
 		cinfo->input_file = ft_strdup(extracted->string);
 		if (!cinfo->input_file)

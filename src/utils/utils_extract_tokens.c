@@ -6,7 +6,7 @@
 /*   By: pablo <pablo@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/08/04 12:30:00 by pablo             #+#    #+#             */
-/*   Updated: 2025/11/03 21:53:20 by pablo            ###   ########.fr       */
+/*   Updated: 2025/11/05 18:50:45 by pablo            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -23,7 +23,7 @@ t_token	*extract_first_type_token(t_token **tokens, t_ttype type)
 	return (NULL);
 }
 
-t_token	*find_next_pipe_after_command(t_token **tokens)
+t_token	**find_next_pipe_pos_after_command(t_token **tokens)
 {
 	t_token **temp;
 
@@ -33,7 +33,7 @@ t_token	*find_next_pipe_after_command(t_token **tokens)
 	while (*temp)
 	{
 		if ((*temp)->token_type == PIPE && *temp != *tokens)
-			return (*temp);
+			return (temp);
 		temp++;
 	}
 	return (NULL);
