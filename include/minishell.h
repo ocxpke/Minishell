@@ -6,7 +6,7 @@
 /*   By: pablo <pablo@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/07/24 12:02:38 by pablo             #+#    #+#             */
-/*   Updated: 2025/10/27 17:15:51 by pablo            ###   ########.fr       */
+/*   Updated: 2025/11/05 18:50:45 by pablo            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -127,6 +127,20 @@ void clean_entry_info(t_einfo **einfo);
 t_token *extract_first_type_token(t_token **tokens, t_ttype type);
 
 /**
+ * @brief Finds the first pipe token that is not at the beginning of the
+ * token array.
+ *
+ * This function skips pipe tokens that appear at the start of the array
+ * (which are typically separators from previous commands in a pipeline)
+ * and returns the first pipe token that appears after the initial tokens.
+ *
+ * @param tokens Pointer to the token array to search in.
+ * @return Pointer to the position in the array of the first pipe token
+ * that is not at the beginning, or NULL if none found.
+ */
+t_token	**find_next_pipe_pos_after_command(t_token **tokens);
+
+/**
  * @brief Retrieves and initializes entry information from a list of tokens.
  *
  * This function allocates and initializes a t_einfo structure, then sets its
@@ -228,33 +242,32 @@ int set_cinfos(t_token **tokens, t_einfo *einfo);
  * For '<<', resets GNL state, calls heredoc_behaviour(), sets input_file to
  * the returned path, and is_heredoc to 1.
  * If no redirection, leaves cinfo unchanged.
+ * Redirections are only considered if they appear before the specified pipe
+ * token.
  *
  * @param tokens Pointer to token list head.
  * @param cinfo Command info structure to update.
+ * @param pipe A pointer to the pipe token that limits the scope of the
+ *             redirection search. Redirections after this pipe are ignored.
+ *             Pass NULL to search the entire token list.
  *
  * @note Ownership: input_file points to token's string or heap-allocated path
  *       from heredoc_behaviour(); caller must free if from heredoc.
  */
-int set_command_input_file(t_token **tokens, t_cinfo *cinfo);
+int		set_command_input_file(t_token **tokens, t_cinfo *cinfo, t_token **pipe);
 
 /**
- * @brief Sets the output file for a command based on redirection tokens.
+ * Sets the output file for a command by processing redirection tokens.
+ * First attempts to process append redirection (>>), and if no output file
+ * is set, then attempts to process standard output redirection (>).
  *
- * This function processes redirection tokens from the token list to determine
- * the output file for the command. It handles both standard output redirection
- * ('>') and append redirection ('>>'). If a redirection token is found, it
- * extracts the subsequent file name token and stores it in the command info
- * structure. The function also sets a flag indicating whether the output
- * should be appended or overwritten.
- *
- * @param tokens A pointer to the pointer of the token list. The list may be
- *               modified as tokens are extracted.
- * @param cinfo  A pointer to the command info structure where the output file
- *               and append flag will be set.
- * @return       0 on success, or 1 if memory allocation fails during string
- *               duplication.
+ * @param tokens Pointer to the current token in the token list.
+ * @param cinfo Pointer to the command info structure to update with output
+ * file details.
+ * @param pipe Pointer to the pipe token, used as a boundary for processing.
+ * @return 0 on success, 1 on failure (e.g., invalid redirection).
  */
-int set_command_output_file(t_token **tokens, t_cinfo *cinfo);
+int		set_command_output_file(t_token **tokens, t_cinfo *cinfo, t_token **pipe);
 
 // DEBUG
 void debug_shell_info(t_shell_data *shell_data);

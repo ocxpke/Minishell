@@ -3,15 +3,39 @@
 /*                                                        :::      ::::::::   */
 /*   parser_collapse.c                                  :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: pabmart2 <pabmart2@student.42malaga.com    +#+  +:+       +#+        */
+/*   By: pablo <pablo@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/07/30 15:01:32 by pablo             #+#    #+#             */
-/*   Updated: 2025/10/26 15:16:30 by pabmart2         ###   ########.fr       */
+/*   Updated: 2025/11/04 18:35:38 by pablo            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "libft.h"
 #include "minishell.h"
+
+/**
+ * Frees a dynamically allocated array of string matrices.
+ *
+ * This function iterates through an array of string matrices (extracted) and
+ * frees each individual matrix using ft_matrix_free. After freeing all
+ * matrices, it frees the top-level array itself.
+ *
+ * @param extracted A pointer to an array of string matrices to be freed.
+ * @param extracted_size The number of matrices in the extracted array.
+ */
+static void	free_extracted(char ***extracted, size_t extracted_size)
+{
+	size_t	k;
+
+	k = 0;
+	while (k < extracted_size)
+	{
+		if (extracted[k])
+			ft_matrix_free((void ***)&extracted[k], 0);
+		k++;
+	}
+	ft_matrix_free((void ***)&extracted, extracted_size);
+}
 
 /**
  * @brief Flattens a 2D array of strings into a single array.
@@ -37,7 +61,7 @@ static char	**collapse_loop(char ***extracted, size_t extracted_size,
 
 	collapsed = ft_calloc(final_size + 1, sizeof(char *));
 	if (!collapsed)
-		return (ft_matrix_free((void ***)extracted, 0), NULL);
+		return (free_extracted(extracted, extracted_size), NULL);
 	i = 0;
 	k = 0;
 	while (k < extracted_size)
@@ -47,13 +71,13 @@ static char	**collapse_loop(char ***extracted, size_t extracted_size,
 		{
 			collapsed[i++] = ft_strdup(extracted[k][j++]);
 			if (!collapsed[i - 1])
-				return (ft_matrix_free((void ***)extracted, 0),
+				return (free_extracted(extracted, extracted_size),
 					ft_matrix_free((void ***)collapsed, 0), NULL);
 		}
 		++k;
 	}
 	collapsed[i] = NULL;
-	ft_matrix_free((void ***)extracted, 0);
+	free_extracted(extracted, extracted_size);
 	return (collapsed);
 }
 

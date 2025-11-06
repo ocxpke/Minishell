@@ -6,7 +6,7 @@
 /*   By: pablo <pablo@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/05 18:31:11 by pablo             #+#    #+#             */
-/*   Updated: 2025/08/25 19:33:21 by pablo            ###   ########.fr       */
+/*   Updated: 2025/11/05 18:58:49 by pablo            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -51,17 +51,16 @@ static int	check_zero_eof(char eof, char line)
 static char	*process_heredoc_line(char *buffer, char *line)
 {
 	char	*tmp;
+	char	*new_buffer;
 
 	tmp = buffer;
-	buffer = ft_strjoin(buffer, line);
-	if (buffer)
-	{
-		tmp = buffer;
-		buffer = ft_strjoin(tmp, "\n");
-		ft_free((void **)&tmp);
-	}
-	if (tmp)
-		ft_free((void **)&tmp);
+	new_buffer = ft_strjoin(buffer, line);
+	if (!new_buffer)
+		return (ft_free((void **)&tmp), NULL);
+	ft_free((void **)&tmp);
+	tmp = new_buffer;
+	buffer = ft_strjoin(tmp, "\n");
+	ft_free((void **)&tmp);
 	return (buffer);
 }
 

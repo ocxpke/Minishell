@@ -6,7 +6,7 @@
 /*   By: pablo <pablo@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/08/25 18:24:40 by pablo             #+#    #+#             */
-/*   Updated: 2025/10/30 16:52:53 by pablo            ###   ########.fr       */
+/*   Updated: 2025/11/05 18:52:18 by pablo            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -97,26 +97,26 @@ static t_cinfo	*initialize_cinfo(void)
 static int	set_cinfos_loop(t_token **tokens, t_cinfo **cinfos,
 		size_t n_commands)
 {
-	size_t	i;
-	int		token_pos;
-	t_token	*cmd_token;
+	size_t		i;
+	int			token_pos;
+	t_token		**pipe;
+	t_token		**search_start;
 
 	i = 0;
+	search_start = tokens;
 	while (i < n_commands)
 	{
 		cinfos[i] = initialize_cinfo();
-		if (!cinfos[i])
-			return (1);
-		cmd_token = get_next_command(tokens, i, &token_pos);
-		if (!cmd_token)
+		if (!cinfos[i] || !get_next_command(tokens, i, &token_pos))
 			return (1);
 		if (set_cinfo_args(tokens, cinfos[i], token_pos))
 			return (1);
-		if (token_pos > 0)
-			--token_pos;
-		if (set_command_input_file(tokens + token_pos, cinfos[i])
-			|| set_command_output_file(tokens + token_pos, cinfos[i]))
+		pipe = find_next_pipe_pos_after_command(tokens + token_pos);
+		if (set_command_input_file(search_start, cinfos[i], pipe)
+			|| set_command_output_file(search_start, cinfos[i], pipe))
 			return (1);
+		if (pipe)
+			search_start = pipe + 1;
 		++i;
 	}
 	return (0);
@@ -129,6 +129,8 @@ void	clean_cinfos(t_cinfo **cinfos)
 	i = 0;
 	while (cinfos[i])
 	{
+		if (cinfos[i]->is_heredoc && cinfos[i]->input_file)
+			unlink(cinfos[i]->input_file);
 		if (cinfos[i]->cmd_and_args)
 			ft_matrix_free((void ***)&cinfos[i]->cmd_and_args, 0);
 		ft_free((void **)&(cinfos[i]->input_file));

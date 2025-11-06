@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   parser_split_args.c                                :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: pabmart2 <pabmart2@student.42malaga.com    +#+  +:+       +#+        */
+/*   By: pablo <pablo@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/07/30 15:51:04 by pablo             #+#    #+#             */
-/*   Updated: 2025/10/28 18:10:40 by pablo            ###   ########.fr       */
+/*   Updated: 2025/11/04 17:19:15 by pablo            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -52,7 +52,7 @@ static char	***allocate_tmp(size_t size)
 {
 	char	***tmp;
 
-	tmp = malloc(sizeof(char **) * (size + 1));
+	tmp = ft_calloc(size + 1, sizeof(char **));
 	if (!tmp)
 		return (NULL);
 	return (tmp);
