@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   utils_get_shell_prompt.c                           :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: pablo <pablo@student.42.fr>                +#+  +:+       +#+        */
+/*   By: pabmart2 <pabmart2@student.42malaga.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/10/28 16:55:13 by pablo             #+#    #+#             */
-/*   Updated: 2025/10/28 18:11:45 by pablo            ###   ########.fr       */
+/*   Updated: 2025/11/06 21:32:49 by pabmart2         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -44,12 +44,6 @@ static char	*create_colored_base_prompt(t_linked_env *envs)
 	return (colored_prompt);
 }
 
-static char	*get_current_directory(void)
-{
-	// TODO: Esto debería leer una variable de entorno, presumiblemente PWD
-	// pero tengo que asegurar que jose la setea en CD
-	return (getcwd(NULL, 0));
-}
 
 /**
  * @brief Creates a shell prompt string by concatenating a colored prompt
@@ -109,7 +103,7 @@ char	*get_shell_prompt(t_linked_env *envs)
 	colored_prompt = create_colored_base_prompt(envs);
 	if (!colored_prompt)
 		return (NULL);
-	current_dir = get_current_directory();
+	current_dir = ft_strdup(get_enviroment_value("PWD", envs));
 	if (!current_dir)
 		return (ft_free((void **)&colored_prompt), NULL);
 	prompt_with_cwd = create_prompt_with_cwd(colored_prompt, current_dir);
