@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   tools_heredoc.c                                    :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: pablo <pablo@student.42.fr>                +#+  +:+       +#+        */
+/*   By: pabmart2 <pabmart2@student.42malaga.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/05 18:31:11 by pablo             #+#    #+#             */
-/*   Updated: 2025/11/05 18:58:49 by pablo            ###   ########.fr       */
+/*   Updated: 2025/11/06 20:18:38 by pabmart2         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -100,7 +100,8 @@ static char	*heredoc(char *eof, size_t eof_size)
 					perror("Error joining heredoc"), NULL);
 		}
 		else
-			return (ft_free((void **)&buffer), perror("Heredoc error"), NULL);
+			return (ft_free((void **)&buffer), ft_perror("Heredoc error", EINTR,
+					0), NULL);
 	}
 }
 
