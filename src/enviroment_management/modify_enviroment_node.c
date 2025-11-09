@@ -32,13 +32,13 @@ int	modify_value_env_node(t_envp *shell_env, const char *key, char *new_key)
 
 int modify_exit_status_value(t_envp *shell_envp, int new_exit_status)
 {
-	char *new_val;
+	char	*new_val;
 
 	new_exit_status %= 256;
 	new_val = ft_itoa(new_exit_status);
 	if (!new_val)
 		return(perror("Malloc error\n"), 0);
-	modify_value_env_node(shell_envp, "FT_EXIT_STATUS", new_val);
+	modify_value_env_node(shell_envp, "FT_EXIT_ENV", new_val);
 	free(new_val);
 	return (1);
 }

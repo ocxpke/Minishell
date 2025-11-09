@@ -74,24 +74,20 @@ void	child_process(t_shell_data *shell_data, int pipes[2], int *pipe_aux,
 	char	**envp_exec;
 
 	cinfo = shell_data->einfo->cinfos[index];
+	rl_clear_history();
 	if (redirect_input(cinfo, pipe_aux) || redirect_output(shell_data, cinfo, pipes, index))
-	{
-		rl_clear_history();
-		free_shell_data(shell_data);
-		exit(1);
-	}
+		return(perror("File not found"), free_shell_data(shell_data), exit(EXIT_FAILURE));
 	free_splitted_string(shell_data->shell_envi.envp_exec);
 	generate_exec_envp(&(shell_data->shell_envi));
 	restore_terminal_signals();
 	cmd_path = cinfo->cmd_and_args[0];
 	cmd_and_args = cinfo->cmd_and_args;
 	envp_exec = shell_data->shell_envi.envp_exec;
-	rl_clear_history();
 	if (cmd_path && cmd_path[0])
 		execve(cmd_path, cmd_and_args, envp_exec);
-	perror("execve");
+	perror("Command not found");
 	free_shell_data(shell_data);
-	exit(EXIT_FAILURE);
+	exit(127);
 }
 
 void	exec_subshell(t_shell_data *shell_data, int pipes[2], int *pipe_aux,
@@ -101,15 +97,11 @@ void	exec_subshell(t_shell_data *shell_data, int pipes[2], int *pipe_aux,
 	int		exit_status;
 
 	cinfo = shell_data->einfo->cinfos[index];
+	rl_clear_history();
 	if (redirect_input(cinfo, pipe_aux) || redirect_output(shell_data, cinfo, pipes, index))
-	{
-		rl_clear_history();
-		free_shell_data(shell_data);
-		exit(1);
-	}
+		return(perror("File not found"), free_shell_data(shell_data), exit(EXIT_FAILURE));
 	restore_terminal_signals();
 	exit_status = exec_built_in(shell_data, cinfo);
-	rl_clear_history();
 	free_shell_data(shell_data);
 	exit(exit_status);
 }

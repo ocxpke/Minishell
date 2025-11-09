@@ -35,7 +35,7 @@ void	execution_cycle(t_shell_data *shell_data)
 		{
 			shell_data->pid_fork = fork();
 			if (shell_data->pid_fork == -1)
-				exit(EXIT_FAILURE);//TODO: Que hacemos aqui?
+				exit(EXIT_FAILURE);
 			if (shell_data->einfo->n_pipes)
 				add_piped_info_node(shell_data, shell_data->pid_fork);
 			if (shell_data->pid_fork == 0)

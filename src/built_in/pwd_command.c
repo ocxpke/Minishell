@@ -19,7 +19,7 @@ void	pwd_cmd(int *ret)
 	*ret = 1;
 	cwd = getcwd(NULL, 0);
 	if (!cwd)
-		return (perror("Cannot access parent directories\n"));
+		return (*ret = -1, perror("Cannot access parent directories"));
 	printf("%s\n", cwd);
 	free(cwd);
 }

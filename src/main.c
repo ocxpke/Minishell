@@ -61,10 +61,10 @@ static int	ctrl_d_exit(t_shell_data *shell_data)
 	int		ret_num;
 	char	*exit_env_value;
 
-	exit_env_value = get_enviroment_value("FT_EXIT_VALUE",
+	exit_env_value = get_enviroment_value("FT_EXIT_ENV",
 			shell_data->shell_envi.envp);
 	if (!exit_env_value)
-		ret_num = 1; // TODO? Valor arbitrario?
+		ret_num = 1;
 	else
 		ret_num = ft_atoi(exit_env_value);
 	rl_clear_history();
@@ -72,7 +72,6 @@ static int	ctrl_d_exit(t_shell_data *shell_data)
 	return (ret_num);
 }
 
-// TODO Eliminar el tmp del heredoc
 int	main()
 {
 	char			*input;

@@ -19,7 +19,7 @@ void	export_cmd(t_shell_data *shell_data, t_cinfo *cinfo, int *ret)
 
 	i = 1;
 	*ret = 1;
-	if (!cinfo->cmd_and_args[1])
+	if (cinfo->array_size == 1)
 		return (print_envi_list(shell_data->shell_envi.ordered_envp, 0));
 	while (cinfo->cmd_and_args[i])
 	{

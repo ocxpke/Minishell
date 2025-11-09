@@ -12,7 +12,7 @@
 
 CC = cc
 # TODO: Incluir -Werror cuando acabemos de depurar
-CFLAGS = -Wall -Wextra
+CFLAGS = -Wall -Wextra -Werror
 DEBUG_FLAGS = -g -fno-inline -gdwarf-4
 ASAN_FLAGS = $(DEBUG_FLAGS) -fsanitize=address -O1
 LDFLAGS = -lreadline

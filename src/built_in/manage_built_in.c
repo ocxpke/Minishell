@@ -75,7 +75,7 @@ inline int	exec_built_in(t_shell_data *shell_data, t_cinfo *cinfo)
 		return (0);
 	cmd_len = ft_strlen(cinfo->cmd_and_args[0]);
 	if (!ft_strncmp(cinfo->cmd_and_args[0], "exit", cmd_len))
-		exit_cmd(shell_data, cinfo);
+		exit_cmd(shell_data, cinfo, &ret);
 	else if (!ft_strncmp(cinfo->cmd_and_args[0], "pwd", cmd_len))
 		pwd_cmd(&ret);
 	else if (!ft_strncmp(cinfo->cmd_and_args[0], "cd", cmd_len))
@@ -96,6 +96,7 @@ int	check_if_is_built_in(t_shell_data *shell_data, t_cinfo *cinfo)
 {
 	int save_stdin;
 	int save_stdout;
+	int exit_val;
 
 	save_stdin = -1;
 	save_stdout = -1;
@@ -103,7 +104,7 @@ int	check_if_is_built_in(t_shell_data *shell_data, t_cinfo *cinfo)
 		return (0);
 	if ((redirect_input_built_in(cinfo, &save_stdin) == -1) || (redirect_output_built_in(cinfo, &save_stdout) == -1))
 		return(modify_exit_status_value(&(shell_data->shell_envi), 1), printf("HOLA\n"), 1);
-	exec_built_in(shell_data, cinfo);
+	exit_val = exec_built_in(shell_data, cinfo);
 	if (save_stdin != -1)
 	{
 		dup2(save_stdin, STDIN_FILENO);
@@ -114,5 +115,9 @@ int	check_if_is_built_in(t_shell_data *shell_data, t_cinfo *cinfo)
 		dup2(save_stdout, STDOUT_FILENO);
 		close(save_stdout);
 	}
-	return (modify_exit_status_value(&(shell_data->shell_envi), 0), 1);
+	if (exit_val == -1)
+		modify_exit_status_value(&(shell_data->shell_envi), 2);
+	else
+		modify_exit_status_value(&(shell_data->shell_envi), 0);
+	return (1);
 }

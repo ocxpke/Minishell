@@ -50,7 +50,6 @@ void	parent_process(t_shell_data *shell_data, int pipes[2], int *pipe_aux,
 	}
 	else
 		waitpid(shell_data->pid_fork, &ret_status, 0);
-	//Actualizamos el valor de la variable de entorno de exit
 	if (index == shell_data->einfo->n_pipes)
 		modify_exit_status_value(&shell_data->shell_envi, WEXITSTATUS(ret_status));
 }

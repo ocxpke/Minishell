@@ -31,19 +31,19 @@ void	cd_cmd(t_shell_data *shell_data, t_cinfo *cinfo, int *ret)
 	char	*new_wd;
 
 	*ret = 1;
-	//TODO: Pablo la len de cmmd_args
-	if (ft_matrix_len((void **) cinfo->cmd_and_args) > 2)
-		return (errno = EINVAL ,perror("Too many arguments\n"));
-	else if (!cinfo->cmd_and_args[1])
+	if (cinfo->array_size > 2)
+		return (*ret = -1, errno = EINVAL ,perror("bash: cd"));
+	else if (cinfo->array_size == 1)
 	{
 		new_wd = get_enviroment_value("HOME", shell_data->shell_envi.envp);
 		if (!new_wd)
-			return (errno = ENOENT , perror("HOME not set\n"));
+			return (*ret = -1, errno = ENOENT , perror("HOME not set"));
 		chdir(new_wd);
 		act_pwd_and_oldpwd_env(shell_data, new_wd);
 		return;
 	}
-	chdir(cinfo->cmd_and_args[1]);
+	if(chdir(cinfo->cmd_and_args[1]))
+		return(*ret = -1, perror("bash: cd"));
 	new_wd = getcwd(NULL, 0);
 	if (new_wd)
 		act_pwd_and_oldpwd_env(shell_data, new_wd);
