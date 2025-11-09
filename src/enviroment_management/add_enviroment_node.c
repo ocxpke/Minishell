@@ -3,17 +3,17 @@
 /*                                                        :::      ::::::::   */
 /*   add_enviroment_node.c                              :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: pablo <pablo@student.42.fr>                +#+  +:+       +#+        */
+/*   By: jose-ara < jose-ara@student.42malaga.co    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/10/29 10:39:22 by pablo             #+#    #+#             */
-/*   Updated: 2025/10/30 16:36:20 by pablo            ###   ########.fr       */
+/*   Updated: 2025/11/09 16:02:36 by jose-ara         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
 
-//return -> 0 modified, return 1 -> added
-int edit_env_lists(t_envp *shell_env, char **key_value)
+// return -> 0 modified, return 1 -> added
+int	edit_env_lists(t_envp *shell_env, char **key_value)
 {
 	t_linked_env	*aux_node;
 

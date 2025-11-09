@@ -3,18 +3,18 @@
 /*                                                        :::      ::::::::   */
 /*   manage_built_in.c                                  :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: pablo <pablo@student.42.fr>                +#+  +:+       +#+        */
+/*   By: jose-ara < jose-ara@student.42malaga.co    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/09/27 19:01:07 by jose-ara          #+#    #+#             */
-/*   Updated: 2025/11/03 21:00:38 by pablo            ###   ########.fr       */
+/*   Updated: 2025/11/09 16:02:23 by jose-ara         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
 
-static int redirect_input_built_in(t_cinfo *cinfo, int *save_stdin)
+static int	redirect_input_built_in(t_cinfo *cinfo, int *save_stdin)
 {
-	int new_fd;
+	int	new_fd;
 
 	if (!cinfo->input_file)
 		return (0);
@@ -27,14 +27,14 @@ static int redirect_input_built_in(t_cinfo *cinfo, int *save_stdin)
 	return (1);
 }
 
-static int redirect_output_built_in(t_cinfo *cinfo, int *save_stdout)
+static int	redirect_output_built_in(t_cinfo *cinfo, int *save_stdout)
 {
-	int new_fd;
+	int	new_fd;
 
 	if (!cinfo->output_file)
 		return (0);
 	if (cinfo->is_append)
-		new_fd = open(cinfo->output_file, O_WRONLY | O_CREAT | O_APPEND , 0644);
+		new_fd = open(cinfo->output_file, O_WRONLY | O_CREAT | O_APPEND, 0644);
 	else
 		new_fd = open(cinfo->output_file, O_WRONLY | O_CREAT | O_TRUNC, 0644);
 	if (new_fd == -1)
@@ -71,7 +71,7 @@ inline int	exec_built_in(t_shell_data *shell_data, t_cinfo *cinfo)
 	size_t	cmd_len;
 
 	ret = 0;
-	if (!cinfo || !cinfo->cmd_and_args ||!cinfo->cmd_and_args[0])
+	if (!cinfo || !cinfo->cmd_and_args || !cinfo->cmd_and_args[0])
 		return (0);
 	cmd_len = ft_strlen(cinfo->cmd_and_args[0]);
 	if (!ft_strncmp(cinfo->cmd_and_args[0], "exit", cmd_len))
@@ -91,19 +91,20 @@ inline int	exec_built_in(t_shell_data *shell_data, t_cinfo *cinfo)
 	return (ret);
 }
 
-//TODO funcion que guarde el exit code en la env correspondiente
+// TODO funcion que guarde el exit code en la env correspondiente
 int	check_if_is_built_in(t_shell_data *shell_data, t_cinfo *cinfo)
 {
-	int save_stdin;
-	int save_stdout;
-	int exit_val;
+	int	save_stdin;
+	int	save_stdout;
+	int	exit_val;
 
 	save_stdin = -1;
 	save_stdout = -1;
 	if (shell_data->einfo->n_pipes || !cinfo || !check_built_in_name(cinfo))
 		return (0);
-	if ((redirect_input_built_in(cinfo, &save_stdin) == -1) || (redirect_output_built_in(cinfo, &save_stdout) == -1))
-		return(modify_exit_status_value(&(shell_data->shell_envi), 1), printf("HOLA\n"), 1);
+	if ((redirect_input_built_in(cinfo, &save_stdin) == -1)
+		|| (redirect_output_built_in(cinfo, &save_stdout) == -1))
+		return (modify_exit_status_value(&(shell_data->shell_envi), 1), 1);
 	exit_val = exec_built_in(shell_data, cinfo);
 	if (save_stdin != -1)
 	{
@@ -116,8 +117,6 @@ int	check_if_is_built_in(t_shell_data *shell_data, t_cinfo *cinfo)
 		close(save_stdout);
 	}
 	if (exit_val == -1)
-		modify_exit_status_value(&(shell_data->shell_envi), 2);
-	else
-		modify_exit_status_value(&(shell_data->shell_envi), 0);
-	return (1);
+		return (modify_exit_status_value(&(shell_data->shell_envi), 2), 1);
+	return (modify_exit_status_value(&(shell_data->shell_envi), 0), 1);
 }
