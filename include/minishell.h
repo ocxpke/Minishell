@@ -6,7 +6,7 @@
 /*   By: pablo <pablo@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/07/24 12:02:38 by pablo             #+#    #+#             */
-/*   Updated: 2025/11/05 18:50:45 by pablo            ###   ########.fr       */
+/*   Updated: 2025/11/09 15:28:55 by pablo            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -113,18 +113,18 @@ char *get_shell_prompt(t_linked_env *envs);
 void clean_entry_info(t_einfo **einfo);
 
 /**
- * @brief Extracts the first token of a specified type from a token list.
+ * @brief Extracts the position of the first token of a specified type.
  *
- * Iterates through the linked list of tokens and returns a pointer to the
- * first token whose type matches the specified type. If no such token is
- * found, returns NULL.
+ * Scans the NULL-terminated array of tokens and returns the pointer to the
+ * array slot that stores the first token whose type matches @p type. The
+ * original array is not modified.
  *
  * @param tokens Double pointer to the head of the token list.
- * @param type The token type to search for.
- * @return Pointer to the first token of the specified type, or NULL if not
- *         found.
+ * @param type Token type to search for.
+ * @return Pointer to the array entry pointing at the matching token, or NULL
+ *         if no match exists.
  */
-t_token *extract_first_type_token(t_token **tokens, t_ttype type);
+t_token **extract_first_type_token(t_token **tokens, t_ttype type);
 
 /**
  * @brief Finds the first pipe token that is not at the beginning of the
