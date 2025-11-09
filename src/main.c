@@ -86,9 +86,9 @@ int	main()
 		{
 			prompt = get_shell_prompt(shell_data.shell_envi.ordered_envp);
 			if (!prompt)
-				return (free_shell_data(&shell_data), 1);
+				prompt = ft_strdup("Minishell --> ");// TODO: Si no hay env se tiene que ejecutar la minishell, no cerrar
 			input = readline(prompt);
-			ft_free((void **)&shell_data.prompt);
+			ft_free((void **)&shell_data.prompt);// TODO: por que esta promt en shell en v y como una variable simple??
 			shell_data.prompt = prompt;
 		}
 		else
