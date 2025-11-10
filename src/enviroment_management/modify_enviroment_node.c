@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   modify_enviroment_node.c                           :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: pablo <pablo@student.42.fr>                +#+  +:+       +#+        */
+/*   By: jose-ara < jose-ara@student.42malaga.co    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/10/28 18:24:44 by pablo             #+#    #+#             */
-/*   Updated: 2025/10/28 18:50:51 by pablo            ###   ########.fr       */
+/*   Updated: 2025/11/09 16:02:55 by jose-ara         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -30,15 +30,15 @@ int	modify_value_env_node(t_envp *shell_env, const char *key, char *new_key)
 	return (1);
 }
 
-int modify_exit_status_value(t_envp *shell_envp, int new_exit_status)
+int	modify_exit_status_value(t_envp *shell_envp, int new_exit_status)
 {
-	char *new_val;
+	char	*new_val;
 
 	new_exit_status %= 256;
 	new_val = ft_itoa(new_exit_status);
 	if (!new_val)
-		return(perror("Malloc error\n"), 0);
-	modify_value_env_node(shell_envp, "FT_EXIT_STATUS", new_val);
+		return (perror("Malloc error\n"), 0);
+	modify_value_env_node(shell_envp, "FT_EXIT_ENV", new_val);
 	free(new_val);
 	return (1);
 }

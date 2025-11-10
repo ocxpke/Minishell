@@ -6,7 +6,7 @@
 /*   By: jose-ara < jose-ara@student.42malaga.co    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/09/27 19:00:57 by jose-ara          #+#    #+#             */
-/*   Updated: 2025/09/27 19:00:58 by jose-ara         ###   ########.fr       */
+/*   Updated: 2025/11/09 15:58:58 by jose-ara         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -19,7 +19,7 @@ void	export_cmd(t_shell_data *shell_data, t_cinfo *cinfo, int *ret)
 
 	i = 1;
 	*ret = 1;
-	if (!cinfo->cmd_and_args[1])
+	if (cinfo->array_size == 1)
 		return (print_envi_list(shell_data->shell_envi.ordered_envp, 0));
 	while (cinfo->cmd_and_args[i])
 	{

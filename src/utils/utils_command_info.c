@@ -6,7 +6,7 @@
 /*   By: pablo <pablo@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/08/25 18:24:40 by pablo             #+#    #+#             */
-/*   Updated: 2025/11/05 18:52:18 by pablo            ###   ########.fr       */
+/*   Updated: 2025/11/09 15:15:57 by pablo            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -100,10 +100,8 @@ static int	set_cinfos_loop(t_token **tokens, t_cinfo **cinfos,
 	size_t		i;
 	int			token_pos;
 	t_token		**pipe;
-	t_token		**search_start;
 
 	i = 0;
-	search_start = tokens;
 	while (i < n_commands)
 	{
 		cinfos[i] = initialize_cinfo();
@@ -112,11 +110,9 @@ static int	set_cinfos_loop(t_token **tokens, t_cinfo **cinfos,
 		if (set_cinfo_args(tokens, cinfos[i], token_pos))
 			return (1);
 		pipe = find_next_pipe_pos_after_command(tokens + token_pos);
-		if (set_command_input_file(search_start, cinfos[i], pipe)
-			|| set_command_output_file(search_start, cinfos[i], pipe))
+		if (set_command_input_file(tokens + token_pos, cinfos[i], pipe)
+			|| set_command_output_file(tokens + token_pos, cinfos[i], pipe))
 			return (1);
-		if (pipe)
-			search_start = pipe + 1;
 		++i;
 	}
 	return (0);

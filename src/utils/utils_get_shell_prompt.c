@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   utils_get_shell_prompt.c                           :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: pabmart2 <pabmart2@student.42malaga.com    +#+  +:+       +#+        */
+/*   By: jose-ara < jose-ara@student.42malaga.co    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/10/28 16:55:13 by pablo             #+#    #+#             */
-/*   Updated: 2025/11/06 21:32:49 by pabmart2         ###   ########.fr       */
+/*   Updated: 2025/11/09 16:08:29 by jose-ara         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -43,7 +43,6 @@ static char	*create_colored_base_prompt(t_linked_env *envs)
 	ft_free((void **)&base_prompt);
 	return (colored_prompt);
 }
-
 
 /**
  * @brief Creates a shell prompt string by concatenating a colored prompt
