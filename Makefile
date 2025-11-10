@@ -6,7 +6,7 @@
 #    By: pablo <pablo@student.42.fr>                +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2024/09/20 14:34:30 by pabmart2          #+#    #+#              #
-#    Updated: 2025/11/05 18:17:54 by pablo            ###   ########.fr        #
+#    Updated: 2025/11/09 22:34:00 by pablo            ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -67,6 +67,7 @@ TOOLS_SRC = src/tools/tools_count_tokens.c \
 
 UTILS_SRC =	src/utils/utils_command_info_helpers.c \
 			src/utils/utils_command_info.c \
+			src/utils/utils_command_redirections.c \
 			src/utils/utils_entry_info.c \
 			src/utils/utils_extract_tokens.c \
 			src/utils/utils_get_shell_prompt.c \

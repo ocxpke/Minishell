@@ -6,7 +6,7 @@
 /*   By: pablo <pablo@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/07/24 20:38:12 by pablo             #+#    #+#             */
-/*   Updated: 2025/11/05 18:37:07 by pablo            ###   ########.fr       */
+/*   Updated: 2025/11/09 14:39:34 by pablo            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -105,7 +105,7 @@ int	main()
 			shell_data.einfo = get_entry_info(shell_data.tokens);
 			shell_data.tokens = NULL;
 			add_history(input);
-			//debug_shell_info(&shell_data);
+			debug_shell_info(&shell_data);
 			execution_cycle(&shell_data);
 		}
 		free(input);

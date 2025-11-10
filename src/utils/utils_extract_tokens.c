@@ -12,12 +12,12 @@
 
 #include "minishell.h"
 
-t_token	*extract_first_type_token(t_token **tokens, t_ttype type)
+t_token	**extract_first_type_token(t_token **tokens, t_ttype type)
 {
 	while (*tokens)
 	{
 		if ((*tokens)->token_type == type)
-			return (*tokens);
+			return (tokens);
 		++tokens;
 	}
 	return (NULL);
@@ -32,7 +32,7 @@ t_token	**find_next_pipe_pos_after_command(t_token **tokens)
 	temp = tokens;
 	while (*temp)
 	{
-		if ((*temp)->token_type == PIPE && *temp != *tokens)
+		if ((*temp)->token_type == PIPE && temp != tokens)
 			return (temp);
 		temp++;
 	}
