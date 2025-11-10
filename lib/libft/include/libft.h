@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   libft.h                                            :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: pabmart2 <pabmart2@student.42malaga.com    +#+  +:+       +#+        */
+/*   By: pablo <pablo@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/09/10 18:17:00 by pabmart2          #+#    #+#             */
-/*   Updated: 2025/10/26 15:14:00 by pabmart2         ###   ########.fr       */
+/*   Updated: 2025/11/10 20:43:25 by pablo            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -379,7 +379,7 @@ int					ft_lstsize(t_list *lst);
  *
  * This function frees each element of the array using ft_free, then frees the
  * array itself, and finally sets the provided pointer to NULL to prevent
- * dangling pointers.
+ * dangling pointers. If the array is NULL, it doesn't do anything.
  *
  * @param array A pointer to the array pointer to be freed and set to NULL.
  * @param size The size of the array. If 0, assumes null-terminated array.

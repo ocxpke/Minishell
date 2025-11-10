@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   manage_shell_data.c                                :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: jose-ara < jose-ara@student.42malaga.co    +#+  +:+       +#+        */
+/*   By: pablo <pablo@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/09/27 19:02:51 by jose-ara          #+#    #+#             */
-/*   Updated: 2025/11/09 16:03:53 by jose-ara         ###   ########.fr       */
+/*   Updated: 2025/11/10 20:51:54 by pablo            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -17,7 +17,7 @@ extern char	**environ;
 void	free_shell_data(t_shell_data *shell_data)
 {
 	clean_entry_info(&shell_data->einfo);
-	free_splitted_string(shell_data->shell_envi.envp_exec);
+	ft_matrix_free((void ***)&shell_data->shell_envi.envp_exec, 0);
 	free_env_linked_list(&(shell_data->shell_envi.envp));
 	free_env_linked_list(&(shell_data->shell_envi.ordered_envp));
 	ft_free((void **)&shell_data->prompt);

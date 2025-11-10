@@ -6,14 +6,11 @@
 /*   By: pablo <pablo@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/08/25 18:24:40 by pablo             #+#    #+#             */
-/*   Updated: 2025/11/09 15:15:57 by pablo            ###   ########.fr       */
+/*   Updated: 2025/11/10 20:54:32 by pablo            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
-
-// TODO: Hay codigo de jose que usa tokens. cinfo deberia tener duplicados
-// No el token original para liberarlo al temrinar de parsear todo.
 
 /**
  * @brief Sets the arguments for a command info structure from tokens.
@@ -97,9 +94,9 @@ static t_cinfo	*initialize_cinfo(void)
 static int	set_cinfos_loop(t_token **tokens, t_cinfo **cinfos,
 		size_t n_commands)
 {
-	size_t		i;
-	int			token_pos;
-	t_token		**pipe;
+	size_t	i;
+	int		token_pos;
+	t_token	**pipe;
 
 	i = 0;
 	while (i < n_commands)

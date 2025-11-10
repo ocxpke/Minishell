@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   child_process.c                                    :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: jose-ara < jose-ara@student.42malaga.co    +#+  +:+       +#+        */
+/*   By: pablo <pablo@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/08/01 12:04:16 by jose-ara          #+#    #+#             */
-/*   Updated: 2025/11/09 16:03:42 by jose-ara         ###   ########.fr       */
+/*   Updated: 2025/11/10 20:51:54 by pablo            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -80,7 +80,7 @@ void	child_process(t_shell_data *shell_data, int pipes[2], int *pipe_aux,
 			pipes, index))
 		return (perror("File not found"), free_shell_data(shell_data),
 			exit(EXIT_FAILURE));
-	free_splitted_string(shell_data->shell_envi.envp_exec);
+	ft_matrix_free((void ***)&shell_data->shell_envi.envp_exec, 0);
 	generate_exec_envp(&(shell_data->shell_envi));
 	restore_terminal_signals();
 	cmd_path = cinfo->cmd_and_args[0];

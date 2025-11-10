@@ -6,14 +6,15 @@
 /*   By: pablo <pablo@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/10/28 18:08:35 by pablo             #+#    #+#             */
-/*   Updated: 2025/11/03 22:07:18 by pablo            ###   ########.fr       */
+/*   Updated: 2025/11/10 20:51:55 by pablo            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #ifndef PARSER_H
 # define PARSER_H
 
-# include "minishell.h"
+# include "structs.h"
+# include "libft.h"
 
 /**
  * @brief Cleans a splitted string array by trimming spaces and removing empty
@@ -67,8 +68,8 @@ char	**collapse_extracted(char ***extracted);
  * after freeing to prevent dangling pointers. Finally, it frees the array of
  * pointers and sets the original pointer to NULL to prevent dangling pointers.
  *
- * @param tokens Pointer to a pointer to an array of t_token pointers to be freed.
- *               After freeing, the pointer is set to NULL.
+ * @param tokens Pointer to a pointer to an array of t_token pointers to be
+ *               freed. After freeing, the pointer is set to NULL.
  */
 void	free_tokens(t_token ***tokens);
 

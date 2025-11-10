@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   unset_command.c                                    :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: jose-ara < jose-ara@student.42malaga.co    +#+  +:+       +#+        */
+/*   By: pablo <pablo@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/09/27 19:01:36 by jose-ara          #+#    #+#             */
-/*   Updated: 2025/11/09 15:59:06 by jose-ara         ###   ########.fr       */
+/*   Updated: 2025/11/10 18:55:50 by pablo            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -39,10 +39,6 @@ static int	search_in_env_list(t_linked_env **env_list, char *key)
 	return (free(aux->key), free(aux->value), free(aux), 1);
 }
 
-/**
- * @note en el 'if' se usa el && por eficiencia solo se busca en una lista
- * si no existe el objetivo
- */
 void	unset_cmd(t_shell_data *shell_data, t_cinfo *cinfo, int *ret)
 {
 	int	i;

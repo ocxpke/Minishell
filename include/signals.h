@@ -1,7 +1,18 @@
-#include "minishell.h"
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   signals.h                                          :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: pablo <pablo@student.42.fr>                +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2025/11/10 18:36:00 by pablo             #+#    #+#             */
+/*   Updated: 2025/11/10 20:51:55 by pablo            ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
 
 #ifndef SIGNALS_H
 # define SIGNALS_H
+# include <signal.h>
 
 /**
  * @brief Blocks or handles terminal-related signals to prevent interruption.
@@ -40,7 +51,5 @@ void	restore_terminal_signals(void);
  * @param sig The signal number (unused in this implementation).
  */
 void	sigint_handler(int sig);
-
-
 
 #endif

@@ -3,26 +3,16 @@
 /*                                                        :::      ::::::::   */
 /*   shell_data.h                                       :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: pabmart2 <pabmart2@student.42malaga.com    +#+  +:+       +#+        */
+/*   By: pablo <pablo@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/09/27 20:39:04 by pabmart2          #+#    #+#             */
-/*   Updated: 2025/09/27 20:39:13 by pabmart2         ###   ########.fr       */
+/*   Updated: 2025/11/10 20:51:55 by pablo            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-/**
- * @file shell_data.h
- * @brief Declarations for managing the shell's core data structure.
- *
- * This header provides function prototypes for initializing and freeing
- * the main shell data structure, which holds environment variables and
- * other runtime information for the shell. These utilities help manage
- * dynamic memory and ensure proper setup and cleanup of shell state.
- */
-#include "minishell.h"
-
 #ifndef SHELL_DATA_H
 # define SHELL_DATA_H
+# include "structs.h"
 
 /**
  * @brief Frees all dynamically allocated memory associated with the

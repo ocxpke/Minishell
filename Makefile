@@ -6,12 +6,11 @@
 #    By: pablo <pablo@student.42.fr>                +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2024/09/20 14:34:30 by pabmart2          #+#    #+#              #
-#    Updated: 2025/11/09 22:34:00 by pablo            ###   ########.fr        #
+#    Updated: 2025/11/10 22:14:56 by pablo            ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
 CC = cc
-# TODO: Incluir -Werror cuando acabemos de depurar
 CFLAGS = -Wall -Wextra -Werror
 DEBUG_FLAGS = -g -fno-inline -gdwarf-4
 ASAN_FLAGS = $(DEBUG_FLAGS) -fsanitize=address -O1

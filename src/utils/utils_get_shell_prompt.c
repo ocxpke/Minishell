@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   utils_get_shell_prompt.c                           :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: jose-ara < jose-ara@student.42malaga.co    +#+  +:+       +#+        */
+/*   By: pablo <pablo@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/10/28 16:55:13 by pablo             #+#    #+#             */
-/*   Updated: 2025/11/09 16:08:29 by jose-ara         ###   ########.fr       */
+/*   Updated: 2025/11/10 21:27:36 by pablo            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -92,7 +92,7 @@ static char	*finalize_prompt(char *prompt_with_cwd)
 	return (final_prompt);
 }
 
-char	*get_shell_prompt(t_linked_env *envs)
+char	*get_prompt(t_linked_env *envs)
 {
 	char	*colored_prompt;
 	char	*current_dir;

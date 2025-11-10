@@ -6,37 +6,35 @@
 /*   By: pablo <pablo@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/07/24 12:02:38 by pablo             #+#    #+#             */
-/*   Updated: 2025/11/09 15:28:55 by pablo            ###   ########.fr       */
+/*   Updated: 2025/11/10 21:27:34 by pablo            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #ifndef MINISHELL_H
-#define MINISHELL_H
+# define MINISHELL_H
 
-// Cuidado con esto hay que verlo bien
-#define _GNU_SOURCE
+# define _GNU_SOURCE
 
-#include "../lib/libft/include/libft.h"
-#include "./structs.h"
-#include "./built_in.h"
-#include "./enviroment_management.h"
-#include "./process_management.h"
-#include "./shell_data.h"
-#include "./signals.h"
-#include "./tools.h"
-#include "parser.h"
-#include <aio.h>
-#include <fcntl.h>
-
-#include <readline/history.h>
-#include <readline/readline.h>
-#include <signal.h>
-#include <stdio.h>
-#include <stdlib.h>
-#include <string.h>
-#include <sys/wait.h>
-#include <termios.h>
-#include <unistd.h>
+# include "structs.h"
+# include "libft.h"
+# include "built_in.h"
+# include "enviroment_management.h"
+# include "parser.h"
+# include "process_management.h"
+# include "shell_data.h"
+# include "signals.h"
+# include "tools.h"
+# include <aio.h>
+# include <fcntl.h>
+# include <readline/history.h>
+# include <readline/readline.h>
+# include <signal.h>
+# include <stdio.h>
+# include <stdlib.h>
+# include <string.h>
+# include <sys/wait.h>
+# include <termios.h>
+# include <unistd.h>
 
 //////////////////////////////////// TOOLS /////////////////////////////////////
 
@@ -53,7 +51,7 @@
  * @return On success, returns the name of the temporary file (char *).
  *         On failure, returns NULL.
  */
-char *heredoc_behaviour(char *eof);
+char	*heredoc_behaviour(char *eof);
 
 /**
  * @brief Counts the number of tokens of a specific type in a token array.
@@ -65,7 +63,7 @@ char *heredoc_behaviour(char *eof);
  * @param type The token type to count (of type t_ttype).
  * @return The number of tokens in the array that match the specified type.
  */
-int count_tokens(t_token **tokens, t_ttype type);
+int		count_tokens(t_token **tokens, t_ttype type);
 
 /**
  * @brief Parses a list of tokens and constructs a 3D array of
@@ -81,7 +79,7 @@ int count_tokens(t_token **tokens, t_ttype type);
  * @return: Pointer to the 3D array of command arguments, or NULL on
  * allocation failure.
  */
-char ***get_commands(t_token **tokens);
+char	***get_commands(t_token **tokens);
 
 ///////////////////////////////////// UTILS ////////////////////////////////////
 
@@ -99,7 +97,7 @@ char ***get_commands(t_token **tokens);
  * @return A dynamically allocated string representing the final shell
  * prompt, or NULL if any step fails.
  */
-char *get_shell_prompt(t_linked_env *envs);
+char	*get_prompt(t_linked_env *envs);
 
 /**
  * @brief Frees all memory associated with a t_einfo structure.
@@ -110,7 +108,7 @@ char *get_shell_prompt(t_linked_env *envs);
  *
  * @param einfo Double pointer to the t_einfo structure to be freed.
  */
-void clean_entry_info(t_einfo **einfo);
+void	clean_entry_info(t_einfo **einfo);
 
 /**
  * @brief Extracts the position of the first token of a specified type.
@@ -124,7 +122,7 @@ void clean_entry_info(t_einfo **einfo);
  * @return Pointer to the array entry pointing at the matching token, or NULL
  *         if no match exists.
  */
-t_token **extract_first_type_token(t_token **tokens, t_ttype type);
+t_token	**extract_first_type_token(t_token **tokens, t_ttype type);
 
 /**
  * @brief Finds the first pipe token that is not at the beginning of the
@@ -151,7 +149,7 @@ t_token	**find_next_pipe_pos_after_command(t_token **tokens);
  * @param tokens Double pointer to the list of tokens to be analyzed.
  * @return Pointer to the initialized t_einfo structure, or NULL on failure.
  */
-t_einfo *get_entry_info(t_token **tokens);
+t_einfo	*get_entry_info(t_token **tokens);
 
 /**
  * Retrieves the value for a key from a linked environment list.
@@ -163,7 +161,7 @@ t_einfo *get_entry_info(t_token **tokens);
  * Iterates through the list and compares each node's key with the given key.
  * If both length and content match, returns the value. Else, returns NULL.
  */
-char *get_linked_env(const char *key, t_linked_env *linked_env);
+char	*get_linked_env(const char *key, t_linked_env *linked_env);
 
 //////////////////////////////// UTILS - CINFO /////////////////////////////////
 /**
@@ -173,7 +171,7 @@ char *get_linked_env(const char *key, t_linked_env *linked_env);
  * @param cmd_pos  Index of the command token in the array.
  * @return         Number of consecutive argument tokens after the command.
  */
-int count_command_args(t_token **tokens, int cmd_pos);
+int		count_command_args(t_token **tokens, int cmd_pos);
 
 /**
  * @brief Retrieve the n-th command token from a NULL-terminated token array.
@@ -200,7 +198,7 @@ int count_command_args(t_token **tokens, int cmd_pos);
  *         than n+1 matching command tokens exist. If NULL is returned and
  *         token_pos is non-NULL, *token_pos is set to -1.
  */
-t_token *get_next_command(t_token **tokens, int n, int *token_pos);
+t_token	*get_next_command(t_token **tokens, int n, int *token_pos);
 
 /**
  * @brief Cleans up an array of command info structures by freeing
@@ -214,7 +212,7 @@ t_token *get_next_command(t_token **tokens, int n, int *token_pos);
  * @param cinfos A pointer to an array of t_cinfo pointers, terminated by
  * a NULL pointer. The array and its contents will be deallocated.
  */
-void clean_cinfos(t_cinfo **cinfos);
+void	clean_cinfos(t_cinfo **cinfos);
 
 /**
  * @brief Sets up command information structures in the execution info.
@@ -229,9 +227,8 @@ void clean_cinfos(t_cinfo **cinfos);
  *              will be stored.
  * @return 0 on success, 1 on memory allocation failure.
  *
- * @note TODO: Consider making count_tokens variadic for better flexibility.
  */
-int set_cinfos(t_token **tokens, t_einfo *einfo);
+int		set_cinfos(t_token **tokens, t_einfo *einfo);
 
 /**
  * @brief Set command input file from tokens.
@@ -254,7 +251,8 @@ int set_cinfos(t_token **tokens, t_einfo *einfo);
  * @note Ownership: input_file points to token's string or heap-allocated path
  *       from heredoc_behaviour(); caller must free if from heredoc.
  */
-int		set_command_input_file(t_token **tokens, t_cinfo *cinfo, t_token **pipe);
+int		set_command_input_file(t_token **tokens, t_cinfo *cinfo,
+			t_token **pipe);
 
 /**
  * Sets the output file for a command by processing redirection tokens.
@@ -267,19 +265,20 @@ int		set_command_input_file(t_token **tokens, t_cinfo *cinfo, t_token **pipe);
  * @param pipe Pointer to the pipe token, used as a boundary for processing.
  * @return 0 on success, 1 on failure (e.g., invalid redirection).
  */
-int		set_command_output_file(t_token **tokens, t_cinfo *cinfo, t_token **pipe);
+int		set_command_output_file(t_token **tokens, t_cinfo *cinfo,
+			t_token **pipe);
 
 // DEBUG
-void debug_shell_info(t_shell_data *shell_data);
-void print_char_matrix(char **matrix);
-void print_token_matrix(t_token **tokens);
-void print_single_token(t_token *token, int index);
+void	debug_shell_info(t_shell_data *shell_data);
+void	print_char_matrix(char **matrix);
+void	print_token_matrix(t_token **tokens);
+void	print_single_token(t_token *token, int index);
 
-char **get_full_command(t_token **token);
+char	**get_full_command(t_token **token);
 
 // char *set_heredoc_tmp_file(char *eof);???
 
-char *generate_cmmd_file_name(int index);
-int generate_cmmd_file(char *file_name, char *cmmd_to_write);
+char	*generate_cmmd_file_name(int index);
+int		generate_cmmd_file(char *file_name, char *cmmd_to_write);
 
 #endif

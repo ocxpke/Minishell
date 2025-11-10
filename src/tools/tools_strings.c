@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   tools_strings.c                                    :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: jose-ara < jose-ara@student.42malaga.co    +#+  +:+       +#+        */
+/*   By: pablo <pablo@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/10/28 18:24:19 by pablo             #+#    #+#             */
-/*   Updated: 2025/11/09 16:04:22 by jose-ara         ###   ########.fr       */
+/*   Updated: 2025/11/10 20:51:55 by pablo            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -22,19 +22,4 @@ inline int	ft_max_len_str(const char *str_1, const char *str_2)
 	if (len_1 >= len_2)
 		return (len_1);
 	return (len_2);
-}
-
-void	free_splitted_string(char **splitted)
-{
-	int	i;
-
-	i = 0;
-	if (!splitted)
-		return ;
-	while (splitted[i])
-	{
-		free(splitted[i]);
-		i++;
-	}
-	free(splitted);
 }

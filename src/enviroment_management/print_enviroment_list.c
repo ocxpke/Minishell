@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   print_enviroment_list.c                            :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: jose-ara < jose-ara@student.42malaga.co    +#+  +:+       +#+        */
+/*   By: pablo <pablo@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/09/27 19:03:18 by jose-ara          #+#    #+#             */
-/*   Updated: 2025/11/09 16:02:58 by jose-ara         ###   ########.fr       */
+/*   Updated: 2025/11/10 18:53:10 by pablo            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -44,9 +44,6 @@ static int	print_literal(const char *s)
 	printf("\"");
 	return (cont);
 }
-
-// TODO: Esta función está dentro de enviroment_management pero se declara en
-// built_in.h
 
 void	print_envi_list(t_linked_env *envp_list, int mode)
 {

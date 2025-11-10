@@ -6,12 +6,15 @@
 /*   By: pablo <pablo@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/10/28 17:46:49 by pablo             #+#    #+#             */
-/*   Updated: 2025/10/30 10:29:56 by pablo            ###   ########.fr       */
+/*   Updated: 2025/11/10 20:51:56 by pablo            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #ifndef STRUCTS_H
 # define STRUCTS_H
+
+# include <stddef.h>
+# include <sys/types.h>
 
 /**
  * @enum e_token_type
@@ -237,7 +240,7 @@ typedef struct s_shell_data
 	t_token				**tokens;
 	pid_t				pid_fork;
 	t_einfo				*einfo;
-	char 				*prompt;
+	char				*prompt;
 }						t_shell_data;
 
 #endif

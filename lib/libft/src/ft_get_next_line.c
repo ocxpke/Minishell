@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   ft_get_next_line.c                                 :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: jose-ara < jose-ara@student.42malaga.co    +#+  +:+       +#+        */
+/*   By: pablo <pablo@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/10/03 16:12:35 by pablo             #+#    #+#             */
-/*   Updated: 2025/10/09 20:02:12 by jose-ara         ###   ########.fr       */
+/*   Updated: 2025/11/10 17:55:19 by pablo            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -155,6 +155,7 @@ static char	*keep_reading(int fd, char *buffers[], char *b, char **ret)
 			buffers[fd] = NULL;
 			if (*ret && **ret)
 				return (*ret);
+			free(*ret);
 			return (NULL);
 		}
 		b[read_ret] = 0;

@@ -1,7 +1,20 @@
-#include "minishell.h"
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   enviroment_management.h                            :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: pablo <pablo@student.42.fr>                +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2025/11/10 18:34:17 by pablo             #+#    #+#             */
+/*   Updated: 2025/11/10 20:51:55 by pablo            ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
 
 #ifndef ENVIROMENT_MANAGEMENT_H
-#define ENVIROMENT_MANAGEMENT_H
+# define ENVIROMENT_MANAGEMENT_H
+
+# include "structs.h"
+# include "libft.h"
 
 /**
  * @brief Adds a new environment variable node to the ordered linked list
@@ -21,7 +34,7 @@
  * @return             1 on success (node added), 0 on failure (e.g.,
  *                     memory allocation error).
  */
-int add_normal_node(t_linked_env **envp, char **key_value);
+int				add_normal_node(t_linked_env **envp, char **key_value);
 
 /**
  * @brief Adds a new environment variable node to the ordered linked
@@ -41,7 +54,22 @@ int add_normal_node(t_linked_env **envp, char **key_value);
  * @return 1 on success (node added), 0 on failure (e.g., memory
  *         allocation error).
  */
-int add_ordered_node(t_linked_env **ordered_envp, char **key_value);
+int				add_ordered_node(t_linked_env **ordered_envp, char **key_value);
+
+/**
+ * @brief Checks if the environment variable key is "SHLVL" and increments
+ * its value.
+ *
+ * This function examines the provided key-value pair. If the key matches
+ * "SHLVL", it converts the value to an integer, increments it by one, and
+ * updates the value string accordingly. This is typically used to track
+ * the shell nesting level.
+ *
+ * @param key_value A pointer to an array of strings where key_value[0] is
+ * the key and key_value[1] is the value. The value is modified in place if
+ * the key is "SHLVL".
+ */
+void			check_if_shelllvl(char **key_value);
 
 /**
  * @brief Clones the environment variables from the global 'environ'
@@ -60,7 +88,7 @@ int add_ordered_node(t_linked_env **ordered_envp, char **key_value);
  * @param enviroment A pointer to the t_envp structure where the cloned
  *                   environment will be stored and managed.
  */
-void clone_environs(t_envp *enviroment);
+void			clone_environs(t_envp *enviroment);
 
 /**
  * @brief Edits or adds environment variables in the shell's environment lists.
@@ -77,7 +105,7 @@ void clone_environs(t_envp *enviroment);
  * @return 0 if the variable was found and updated, 1 if a new variable
  *         was added.
  */
-int edit_env_lists(t_envp *shell_env, char **key_value);
+int				edit_env_lists(t_envp *shell_env, char **key_value);
 
 /**
  * @brief Frees the entire linked list of environment variables.
@@ -91,19 +119,7 @@ int edit_env_lists(t_envp *shell_env, char **key_value);
  *                   freed. The list is modified in place, and the pointer is
  *                   set to NULL upon completion.
  */
-void free_env_linked_list(t_linked_env **linked_env);
-
-/**
- * @brief Gets the value of an environment variable by its key.
- *
- * This function searches through the linked list of environment variables
- * to find a matching key and returns its associated value.
- *
- * @param key The name of the environment variable to search for.
- * @param linked_env A pointer to the head of the environment linked list.
- * @return The value associated with the key if found, NULL otherwise.
- */
-char			*get_enviroment_value(const char *key, t_linked_env *linked_env);
+void			free_env_linked_list(t_linked_env **linked_env);
 
 /**
  * @brief Gets the environment node by its key.
@@ -116,6 +132,34 @@ char			*get_enviroment_value(const char *key, t_linked_env *linked_env);
  * @return A pointer to the node if found, NULL otherwise.
  */
 t_linked_env	*get_enviroment_node(const char *key, t_linked_env *linked_env);
+
+/**
+ * @brief Gets the value of an environment variable by its key.
+ *
+ * This function searches through the linked list of environment variables
+ * to find a matching key and returns its associated value.
+ *
+ * @param key The name of the environment variable to search for.
+ * @param linked_env A pointer to the head of the environment linked list.
+ * @return The value associated with the key if found, NULL otherwise.
+ */
+char			*get_enviroment_value(const char *key,
+					t_linked_env *linked_env);
+
+/**
+ * @brief Gets the PID environment variable string.
+ *
+ * This function reads the PID from the provided string and formats it
+ * as an environment variable in the format "PID=value". It extracts
+ * digits from the input string, potentially with leading non-digit
+ * characters (e.g., "pid123" -> "PID=123").
+ *
+ * @param pid A string containing the PID information.
+ * @return A dynamically allocated string in the format "PID=<digits>",
+ *         or NULL if memory allocation fails or if the substring
+ *         extraction fails.
+ */
+char			*get_pid_env(char *pid);
 
 /**
  * @brief Retrieves the process ID (PID) from the /proc/self/status file.
@@ -132,19 +176,14 @@ t_linked_env	*get_enviroment_node(const char *key, t_linked_env *linked_env);
 char			*get_pid_from_file(void);
 
 /**
- * @brief Gets the PID environment variable string.
+ * @brief Modifies the exit status value in the environment.
  *
- * This function reads the PID from the provided string and formats it
- * as an environment variable in the format "PID=value". It extracts
- * digits from the input string, potentially with leading non-digit
- * characters (e.g., "pid123" -> "PID=123").
- *
- * @param pid A string containing the PID information.
- * @return A dynamically allocated string in the format "PID=<digits>",
- *         or NULL if memory allocation fails or if the substring
- *         extraction fails.
+ * @param shell_envp A pointer to the shell environment structure.
+ * @param new_exit_status The new exit status value to set.
+ * @return 1 on success, 0 on failure.
  */
-char			*get_pid_env(char *pid);
+int				modify_exit_status_value(t_envp *shell_envp,
+					int new_exit_status);
 
 /**
  * @brief Modifies the value of an environment variable in both the normal
@@ -170,21 +209,5 @@ char			*get_pid_env(char *pid);
  */
 int				modify_value_env_node(t_envp *shell_env, const char *key,
 					char *new_key);
-
-/**
- * @brief Modifies the exit status value in the environment.
- *
- * @param shell_envp A pointer to the shell environment structure.
- * @param new_exit_status The new exit status value to set.
- * @return 1 on success, 0 on failure.
- */
-int				modify_exit_status_value(t_envp *shell_envp,
-					int new_exit_status);
-
-char	*get_enviroment_value(const char *key, t_linked_env *linked_env);
-t_linked_env	*get_enviroment_node(const char *key, t_linked_env *linked_env);
-char	*get_pid_from_file(void);
-char	*get_pid_env(char *pid);
-void	check_if_shelllvl(char **key_value);
 
 #endif

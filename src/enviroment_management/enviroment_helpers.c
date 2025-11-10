@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   enviroment_helpers.c                               :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: jose-ara < jose-ara@student.42malaga.co    +#+  +:+       +#+        */
+/*   By: pablo <pablo@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/10/29 10:51:04 by pablo             #+#    #+#             */
-/*   Updated: 2025/11/09 16:02:46 by jose-ara         ###   ########.fr       */
+/*   Updated: 2025/11/10 20:51:54 by pablo            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -31,7 +31,7 @@ static int	add_exit_env(t_envp *enviroment)
 	exit_env = "FT_EXIT_ENV=0";
 	key_value = get_key_value(exit_env);
 	ret = edit_env_lists(enviroment, key_value);
-	return (free_splitted_string(key_value), ret);
+	return (ft_matrix_free((void ***)&key_value, 0), ret);
 }
 
 /**
@@ -66,7 +66,7 @@ static int	add_pid_env(t_envp *enviroment)
 	if (!key_value)
 		return (free(pid_from_file), free(env_prepared), 0);
 	ret = edit_env_lists(enviroment, key_value);
-	free_splitted_string(key_value);
+	ft_matrix_free((void ***)&key_value, 0);
 	return (free(pid_from_file), free(env_prepared), ret);
 }
 
@@ -100,7 +100,7 @@ void	clone_environs(t_envp *enviroment)
 		{
 			check_if_shelllvl(key_value);
 			edit_env_lists(enviroment, key_value);
-			free_splitted_string(key_value);
+			ft_matrix_free((void ***)&key_value, 0);
 		}
 		i++;
 	}

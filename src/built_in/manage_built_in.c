@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   manage_built_in.c                                  :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: jose-ara < jose-ara@student.42malaga.co    +#+  +:+       +#+        */
+/*   By: pablo <pablo@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/09/27 19:01:07 by jose-ara          #+#    #+#             */
-/*   Updated: 2025/11/09 16:02:23 by jose-ara         ###   ########.fr       */
+/*   Updated: 2025/11/10 18:51:45 by pablo            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -91,7 +91,6 @@ inline int	exec_built_in(t_shell_data *shell_data, t_cinfo *cinfo)
 	return (ret);
 }
 
-// TODO funcion que guarde el exit code en la env correspondiente
 int	check_if_is_built_in(t_shell_data *shell_data, t_cinfo *cinfo)
 {
 	int	save_stdin;

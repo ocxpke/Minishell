@@ -6,26 +6,15 @@
 /*   By: pablo <pablo@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/09/27 20:39:24 by pabmart2          #+#    #+#             */
-/*   Updated: 2025/10/30 10:51:01 by pablo            ###   ########.fr       */
+/*   Updated: 2025/11/10 20:51:55 by pablo            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
-
-/**
- * @file tools.h
- * @brief Utility functions and structures for minishell environment and
- *        process management.
- *
- * This header provides declarations for functions and structures used to
- * manipulate environment variables, manage linked lists, handle shell
- * level, and manage piped process information within the minishell
- * project.
- */
-
-#include "minishell.h"
 
 #ifndef TOOLS_H
 # define TOOLS_H
 
+# include "structs.h"
+# include "libft.h"
 /**
  * @brief Adds a new node with the given key and value to the end of the
  *        environment linked list.
@@ -109,23 +98,6 @@ void			check_if_shelllvl(char **key_value);
  *        will be cloned.
  */
 void			clone_environs(t_envp *enviroment);
-
-/**
- * @brief Frees a null-terminated array of strings.
- *
- * This function iterates through the provided array of strings, freeing
- * each individual string, and then frees the array itself. If the input
- * array is NULL, the function returns immediately without performing any
- * operations.
- *
- * @param splitted A pointer to a null-terminated array of strings (char
- *                 **). Each element in the array should be a dynamically
- *                 allocated string, and the array itself should be
- *                 dynamically allocated. The array must be null-terminated
- *                 (i.e., the last element should be NULL).
- * @todo Esta funcion puede ser sustituida por ft_matrix_free
- */
-void			free_splitted_string(char **splitted);
 
 /**
  * @brief Frees the entire linked list of piped information structures.

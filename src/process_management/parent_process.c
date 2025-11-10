@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   parent_process.c                                   :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: jose-ara < jose-ara@student.42malaga.co    +#+  +:+       +#+        */
+/*   By: pablo <pablo@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/08/01 12:47:33 by jose-ara          #+#    #+#             */
-/*   Updated: 2025/11/09 16:03:47 by jose-ara         ###   ########.fr       */
+/*   Updated: 2025/11/10 18:33:25 by pablo            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -29,8 +29,6 @@ static void	close_fds(t_shell_data *shell_data, int pipes[2], int *pipe_aux,
 		close(*pipe_aux);
 }
 
-// TODO partir en cachitos, si el comando no existe exit_code=127,
-// preguntar a pablo que hace con el manejo de los comandos q no existen
 void	parent_process(t_shell_data *shell_data, int pipes[2], int *pipe_aux,
 		int index)
 {

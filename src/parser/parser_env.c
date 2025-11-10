@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   parser_env.c                                       :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: pabmart2 <pabmart2@student.42malaga.com    +#+  +:+       +#+        */
+/*   By: pablo <pablo@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/07/28 19:39:27 by pablo             #+#    #+#             */
-/*   Updated: 2025/10/26 14:59:07 by pabmart2         ###   ########.fr       */
+/*   Updated: 2025/11/10 17:33:47 by pablo            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -61,7 +61,7 @@ static char	*get_expanded_value(char *env_start, char *env_end,
 	if (env_end - 1 != env_start)
 	{
 		if (!ft_strncmp(env, "?", ft_strlen(env)))
-			env_value = get_enviroment_value("FT_STATUS", linked_env);
+			env_value = get_enviroment_value("FT_EXIT_ENV", linked_env);
 		else
 			env_value = get_enviroment_value(env, linked_env);
 		if (!env_value)
