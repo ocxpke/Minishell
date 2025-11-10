@@ -6,7 +6,7 @@
 /*   By: jose-ara < jose-ara@student.42malaga.co    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/09/27 19:01:28 by jose-ara          #+#    #+#             */
-/*   Updated: 2025/09/27 19:01:28 by jose-ara         ###   ########.fr       */
+/*   Updated: 2025/11/09 15:59:03 by jose-ara         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -19,7 +19,7 @@ void	pwd_cmd(int *ret)
 	*ret = 1;
 	cwd = getcwd(NULL, 0);
 	if (!cwd)
-		return (perror("Cannot access parent directories\n"));
+		return (*ret = -1, perror("Cannot access parent directories"));
 	printf("%s\n", cwd);
 	free(cwd);
 }

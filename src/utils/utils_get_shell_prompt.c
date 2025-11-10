@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   utils_get_shell_prompt.c                           :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: pablo <pablo@student.42.fr>                +#+  +:+       +#+        */
+/*   By: jose-ara < jose-ara@student.42malaga.co    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/10/28 16:55:13 by pablo             #+#    #+#             */
-/*   Updated: 2025/10/28 18:11:45 by pablo            ###   ########.fr       */
+/*   Updated: 2025/11/09 16:08:29 by jose-ara         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -42,13 +42,6 @@ static char	*create_colored_base_prompt(t_linked_env *envs)
 	colored_prompt = ft_strjoin(base_prompt, RESET " " GREEN);
 	ft_free((void **)&base_prompt);
 	return (colored_prompt);
-}
-
-static char	*get_current_directory(void)
-{
-	// TODO: Esto debería leer una variable de entorno, presumiblemente PWD
-	// pero tengo que asegurar que jose la setea en CD
-	return (getcwd(NULL, 0));
 }
 
 /**
@@ -109,7 +102,7 @@ char	*get_shell_prompt(t_linked_env *envs)
 	colored_prompt = create_colored_base_prompt(envs);
 	if (!colored_prompt)
 		return (NULL);
-	current_dir = get_current_directory();
+	current_dir = ft_strdup(get_enviroment_value("PWD", envs));
 	if (!current_dir)
 		return (ft_free((void **)&colored_prompt), NULL);
 	prompt_with_cwd = create_prompt_with_cwd(colored_prompt, current_dir);

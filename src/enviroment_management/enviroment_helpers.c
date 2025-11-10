@@ -3,16 +3,14 @@
 /*                                                        :::      ::::::::   */
 /*   enviroment_helpers.c                               :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: pablo <pablo@student.42.fr>                +#+  +:+       +#+        */
+/*   By: jose-ara < jose-ara@student.42malaga.co    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/10/29 10:51:04 by pablo             #+#    #+#             */
-/*   Updated: 2025/10/29 11:07:05 by pablo            ###   ########.fr       */
+/*   Updated: 2025/11/09 16:02:46 by jose-ara         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
-
-extern char	**environ;
 
 /**
  * @brief Adds the "FT_EXIT_ENV=0" environment variable to the environment list.

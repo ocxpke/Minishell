@@ -6,17 +6,17 @@
 /*   By: jose-ara < jose-ara@student.42malaga.co    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/08/01 12:47:33 by jose-ara          #+#    #+#             */
-/*   Updated: 2025/09/27 19:02:46 by jose-ara         ###   ########.fr       */
+/*   Updated: 2025/11/09 16:03:47 by jose-ara         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
 
-static void close_fds(t_shell_data *shell_data, int pipes[2], int *pipe_aux,
+static void	close_fds(t_shell_data *shell_data, int pipes[2], int *pipe_aux,
 		int index)
 {
-	if(!shell_data->einfo->n_pipes)
-		return;
+	if (!shell_data->einfo->n_pipes)
+		return ;
 	if (index != shell_data->einfo->n_pipes)
 	{
 		close(pipes[1]);
@@ -24,11 +24,12 @@ static void close_fds(t_shell_data *shell_data, int pipes[2], int *pipe_aux,
 			close(*pipe_aux);
 		*pipe_aux = dup(pipes[0]);
 		close(pipes[0]);
-	}else if (index == shell_data->einfo->n_pipes)
+	}
+	else if (index == shell_data->einfo->n_pipes)
 		close(*pipe_aux);
 }
 
-//TODO partir en cachitos, si el comando no existe exit_code=127,
+// TODO partir en cachitos, si el comando no existe exit_code=127,
 // preguntar a pablo que hace con el manejo de los comandos q no existen
 void	parent_process(t_shell_data *shell_data, int pipes[2], int *pipe_aux,
 		int index)
@@ -40,9 +41,9 @@ void	parent_process(t_shell_data *shell_data, int pipes[2], int *pipe_aux,
 	if (shell_data->einfo->n_pipes)
 	{
 		if (shell_data->einfo->n_pipes != index)
-			return;
+			return ;
 		wait_node = shell_data->einfo->piped_info;
-		while(wait_node)
+		while (wait_node)
 		{
 			waitpid(wait_node->pid, &ret_status, 0);
 			wait_node = wait_node->next;
@@ -50,7 +51,7 @@ void	parent_process(t_shell_data *shell_data, int pipes[2], int *pipe_aux,
 	}
 	else
 		waitpid(shell_data->pid_fork, &ret_status, 0);
-	//Actualizamos el valor de la variable de entorno de exit
 	if (index == shell_data->einfo->n_pipes)
-		modify_exit_status_value(&shell_data->shell_envi, WEXITSTATUS(ret_status));
+		modify_exit_status_value(&shell_data->shell_envi,
+			WEXITSTATUS(ret_status));
 }
