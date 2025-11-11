@@ -28,11 +28,11 @@ void	echo_cmd(t_cinfo *cinfo, int *ret)
 	}
 	while (cinfo->cmd_and_args[i])
 	{
-		write(1, cinfo->cmd_and_args[i], ft_strlen(cinfo->cmd_and_args[i]));
+		write(STDOUT_FILENO, cinfo->cmd_and_args[i], ft_strlen(cinfo->cmd_and_args[i]));
 		if (cinfo->cmd_and_args[i + 1])
-			write(1, " ", 1);
+			write(STDOUT_FILENO, " ", 1);
 		i++;
 	}
 	if (final_nl)
-		write(1, "\n", 1);
+		write(STDOUT_FILENO, "\n", 1);
 }
