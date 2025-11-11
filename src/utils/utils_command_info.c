@@ -3,16 +3,16 @@
 /*                                                        :::      ::::::::   */
 /*   utils_command_info.c                               :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: pabmart2 <pabmart2@student.42malaga.com    +#+  +:+       +#+        */
+/*   By: pablo <pablo@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/08/25 18:24:40 by pablo             #+#    #+#             */
-/*   Updated: 2025/11/11 18:44:33 by pabmart2         ###   ########.fr       */
+/*   Updated: 2025/11/11 22:46:25 by pablo            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
 
-//TODO: Se está metiendo todos los tokens en cmd_and_args, revisar
+// TODO: Se está metiendo todos los tokens en cmd_and_args, revisar
 
 /**
  * @brief Sets the arguments for a command info structure from tokens.
@@ -30,6 +30,7 @@ static int	set_cinfo_args(t_token **tokens, t_cinfo *cinfo, int cmd_pos)
 {
 	int	args_count;
 	int	i;
+	int	j;
 
 	args_count = count_command_args(tokens, cmd_pos);
 	cinfo->array_size = args_count + 1;
@@ -40,12 +41,16 @@ static int	set_cinfo_args(t_token **tokens, t_cinfo *cinfo, int cmd_pos)
 	if (!cinfo->cmd_and_args[0])
 		return (1);
 	i = 1;
-	while (i < args_count + 1)
+	j = cmd_pos;
+	while (tokens[++j] && tokens[j]->token_type != PIPE)
 	{
-		cinfo->cmd_and_args[i] = ft_strdup(tokens[cmd_pos + i]->string);
-		if (!cinfo->cmd_and_args[i])
-			return (1);
-		++i;
+		if (tokens[j]->token_type == ARGUMENT)
+		{
+			cinfo->cmd_and_args[i] = ft_strdup(tokens[j]->string);
+			if (!cinfo->cmd_and_args[i])
+				return (1);
+			++i;
+		}
 	}
 	return (0);
 }
