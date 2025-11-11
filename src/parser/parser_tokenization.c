@@ -3,15 +3,16 @@
 /*                                                        :::      ::::::::   */
 /*   parser_tokenization.c                              :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: pablo <pablo@student.42.fr>                +#+  +:+       +#+        */
+/*   By: pabmart2 <pabmart2@student.42malaga.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/07/30 16:21:57 by pablo             #+#    #+#             */
-/*   Updated: 2025/10/28 18:10:32 by pablo            ###   ########.fr       */
+/*   Updated: 2025/11/11 18:09:52 by pabmart2         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "libft.h"
 #include "minishell.h"
+#include <sys/types.h>
 
 /**
  * @brief Assigns the token type to tokens[i] based on array[i].
@@ -83,43 +84,62 @@ static t_token	**first_token_parse(char **array, size_t size)
 }
 
 /**
- * @brief Classifies the type of a token argument by context.
+ * @brief Resolves argument classification using previous tokens.
  *
- * Analyzes the token at index `i` in `tokens`. If its type is
- * `UNDEFINED`, determines its type by inspecting the previous token:
- *
- * - If preceded by `REDIRECT_IN_CHAR`, sets type to `REDIRECT_IN_ROUTE`.
- *
- * - If preceded by `REDIRECT_OUT_CHAR` or `REDIRECT_OUT_CHAR_APPEND`,
- *   sets type to `REDIRECT_OUT_ROUTE`.
- *
- * - If preceded by `REDIRECT_IN_CHAR_HEREDOC`, sets type to `HEREDOC_EOF`.
- *
- * - If preceded by `COMMAND_BUILT_IN`, `COMMAND_ROUTE`, or `ARGUMENT`,
- *   sets type to `ARGUMENT`.
- *
- * - Otherwise, delegates to `cmd_resolver`.
+ * Backtracks from index `i - 1` and inspects tokens until a pipe or the
+ * beginning is reached. Updates tokens[i]->token_type when a relevant
+ * context (redirection, heredoc, command or argument) is detected.
  *
  * @param tokens Array of token pointers.
- * @param i Index of the token to classify.
+ * @param i Current token index.
+ */
+static void	argument_resolver(t_token **tokens, size_t i)
+{
+	ssize_t	j;
+
+	if (i == 0)
+		return ;
+	j = (ssize_t)i - 1;
+	/* while (j >= 0 && tokens[j]->token_type != PIPE)
+	{ */
+		if (tokens[j]->token_type == REDIRECT_IN_CHAR)
+			return (tokens[i]->token_type = REDIRECT_IN_ROUTE, (void)0);
+		if (tokens[j]->token_type == REDIRECT_OUT_CHAR
+			|| tokens[j]->token_type == REDIRECT_OUT_CHAR_APPEND)
+			return (tokens[i]->token_type = REDIRECT_OUT_ROUTE, (void)0);
+		if (tokens[j]->token_type == REDIRECT_IN_CHAR_HEREDOC)
+			return (tokens[i]->token_type = HEREDOC_EOF, (void)0);
+		if (tokens[j]->token_type == REDIRECT_IN_ROUTE
+			|| tokens[j]->token_type == REDIRECT_OUT_ROUTE
+			|| tokens[j]->token_type == HEREDOC_EOF
+			|| tokens[j]->token_type == COMMAND_BUILT_IN
+			|| tokens[j]->token_type == COMMAND_ROUTE
+			|| tokens[j]->token_type == COMMAND_NOT_FOUND
+			|| tokens[j]->token_type == ARGUMENT)
+			return (tokens[i]->token_type = ARGUMENT, (void)0);
+		//--j;
+	//}
+}
+
+/**
+ * @brief Classifies a token as either an argument or a command if its
+ * type is undefined.
+ *
+ * This function attempts to resolve the type of a token at the specified
+ * index in the tokens array. If the token's type is UNDEFINED, it first
+ * tries to resolve it as an argument using argument_resolver. If the
+ * token remains UNDEFINED after that, it then attempts to resolve it as
+ * a command using cmd_resolver.
+ *
+ * @param tokens A pointer to an array of token pointers.
+ * @param i The index of the token to classify in the tokens array.
  */
 static void	arg_classification(t_token **tokens, size_t i)
 {
 	if (tokens[i]->token_type == UNDEFINED)
 	{
-		if (i > 0 && tokens[i - 1]->token_type == REDIRECT_IN_CHAR)
-			tokens[i]->token_type = REDIRECT_IN_ROUTE;
-		else if (i > 0 && (tokens[i - 1]->token_type == REDIRECT_OUT_CHAR
-				|| tokens[i - 1]->token_type == REDIRECT_OUT_CHAR_APPEND))
-			tokens[i]->token_type = REDIRECT_OUT_ROUTE;
-		else if (i > 0 && tokens[i - 1]->token_type == REDIRECT_IN_CHAR_HEREDOC)
-			tokens[i]->token_type = HEREDOC_EOF;
-		else if (i > 0 && (tokens[i - 1]->token_type == COMMAND_BUILT_IN
-				|| tokens[i - 1]->token_type == COMMAND_ROUTE || tokens[i
-					- 1]->token_type == COMMAND_NOT_FOUND || tokens[i
-					- 1]->token_type == ARGUMENT))
-			tokens[i]->token_type = ARGUMENT;
-		else
+		argument_resolver(tokens, i);
+		if (tokens[i]->token_type == UNDEFINED)
 			cmd_resolver(tokens, i);
 	}
 }
@@ -138,5 +158,6 @@ t_token	**tokenize(char **array)
 		arg_classification(tokens, i);
 		++i;
 	}
+	print_token_matrix(tokens);
 	return (tokens);
 }

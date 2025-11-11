@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   echo_command.c                                     :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: pablo <pablo@student.42.fr>                +#+  +:+       +#+        */
+/*   By: pabmart2 <pabmart2@student.42malaga.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/09/27 19:00:40 by jose-ara          #+#    #+#             */
-/*   Updated: 2025/11/10 18:48:40 by pablo            ###   ########.fr       */
+/*   Updated: 2025/11/11 17:59:59 by pabmart2         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -28,7 +28,8 @@ void	echo_cmd(t_cinfo *cinfo, int *ret)
 	}
 	while (cinfo->cmd_and_args[i])
 	{
-		write(STDOUT_FILENO, cinfo->cmd_and_args[i], ft_strlen(cinfo->cmd_and_args[i]));
+		write(STDOUT_FILENO, cinfo->cmd_and_args[i],
+			ft_strlen(cinfo->cmd_and_args[i]));
 		if (cinfo->cmd_and_args[i + 1])
 			write(STDOUT_FILENO, " ", 1);
 		i++;

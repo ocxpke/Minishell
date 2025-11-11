@@ -3,14 +3,16 @@
 /*                                                        :::      ::::::::   */
 /*   utils_command_info.c                               :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: pablo <pablo@student.42.fr>                +#+  +:+       +#+        */
+/*   By: pabmart2 <pabmart2@student.42malaga.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/08/25 18:24:40 by pablo             #+#    #+#             */
-/*   Updated: 2025/11/10 20:54:32 by pablo            ###   ########.fr       */
+/*   Updated: 2025/11/11 18:44:33 by pabmart2         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
+
+//TODO: Se está metiendo todos los tokens en cmd_and_args, revisar
 
 /**
  * @brief Sets the arguments for a command info structure from tokens.

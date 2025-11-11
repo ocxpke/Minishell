@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   main.c                                             :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: pablo <pablo@student.42.fr>                +#+  +:+       +#+        */
+/*   By: pabmart2 <pabmart2@student.42malaga.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/07/24 20:38:12 by pablo             #+#    #+#             */
-/*   Updated: 2025/11/10 22:16:17 by pablo            ###   ########.fr       */
+/*   Updated: 2025/11/11 17:59:15 by pabmart2         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -62,7 +62,7 @@ static int	ctrl_d_exit(t_shell_data *shell_data)
 	int		ret_num;
 	char	*exit_env_value;
 
-	exit_env_value = get_enviroment_value("FT_EXIT_ENV",
+	exit_env_value = get_env_value("FT_EXIT_ENV",
 			shell_data->shell_envi.envp);
 	if (!exit_env_value)
 		ret_num = 1;

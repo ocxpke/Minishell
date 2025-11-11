@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   cd_command.c                                       :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: pablo <pablo@student.42.fr>                +#+  +:+       +#+        */
+/*   By: pabmart2 <pabmart2@student.42malaga.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/09/27 19:00:32 by jose-ara          #+#    #+#             */
-/*   Updated: 2025/11/10 18:44:24 by pablo            ###   ########.fr       */
+/*   Updated: 2025/11/11 17:59:15 by pabmart2         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -16,7 +16,7 @@ static int	act_pwd_and_oldpwd_env(t_shell_data *shell_data, char *newpwd)
 {
 	char	*old_pwd;
 
-	old_pwd = get_enviroment_value("PWD", shell_data->shell_envi.envp);
+	old_pwd = get_env_value("PWD", shell_data->shell_envi.envp);
 	if (!old_pwd)
 		return (0);
 	old_pwd = ft_strdup(old_pwd);
@@ -35,7 +35,7 @@ void	cd_cmd(t_shell_data *shell_data, t_cinfo *cinfo, int *ret)
 		return (*ret = -1, errno = EINVAL, perror("bash: cd"));
 	else if (cinfo->array_size == 1)
 	{
-		new_wd = get_enviroment_value("HOME", shell_data->shell_envi.envp);
+		new_wd = get_env_value("HOME", shell_data->shell_envi.envp);
 		if (!new_wd)
 			return (*ret = -1, errno = ENOENT, perror("HOME not set"));
 		chdir(new_wd);

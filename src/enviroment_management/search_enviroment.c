@@ -3,16 +3,16 @@
 /*                                                        :::      ::::::::   */
 /*   search_enviroment.c                                :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: pablo <pablo@student.42.fr>                +#+  +:+       +#+        */
+/*   By: pabmart2 <pabmart2@student.42malaga.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/10/28 18:24:55 by pablo             #+#    #+#             */
-/*   Updated: 2025/11/10 18:14:32 by pablo            ###   ########.fr       */
+/*   Updated: 2025/11/11 17:59:15 by pabmart2         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
 
-char	*get_enviroment_value(const char *key, t_linked_env *linked_env)
+char	*get_env_value(const char *key, t_linked_env *linked_env)
 {
 	if (!key || !linked_env)
 		return (NULL);

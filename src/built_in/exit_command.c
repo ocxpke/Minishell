@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   exit_command.c                                     :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: pablo <pablo@student.42.fr>                +#+  +:+       +#+        */
+/*   By: pabmart2 <pabmart2@student.42malaga.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/09/27 19:00:52 by jose-ara          #+#    #+#             */
-/*   Updated: 2025/11/10 18:38:10 by pablo            ###   ########.fr       */
+/*   Updated: 2025/11/11 17:59:15 by pabmart2         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -36,7 +36,7 @@ void	exit_cmd(t_shell_data *shell_data, t_cinfo *cinfo, int *ret)
 		return (*ret = -1, errno = EINVAL, perror("bash: exit"));
 	else if (cinfo->array_size == 1)
 	{
-		exit_env_val = get_enviroment_value("FT_EXIT_ENV",
+		exit_env_val = get_env_value("FT_EXIT_ENV",
 				shell_data->shell_envi.envp);
 		if (!exit_env_val)
 			num_ret = ft_atoi(exit_env_val);

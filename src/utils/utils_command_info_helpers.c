@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   utils_command_info_helpers.c                       :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: pablo <pablo@student.42.fr>                +#+  +:+       +#+        */
+/*   By: pabmart2 <pabmart2@student.42malaga.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/10/20 18:09:55 by pablo             #+#    #+#             */
-/*   Updated: 2025/11/09 22:33:10 by pablo            ###   ########.fr       */
+/*   Updated: 2025/11/11 18:36:45 by pabmart2         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -46,9 +46,10 @@ int	count_command_args(t_token **tokens, int cmd_pos)
 
 	args_count = 0;
 	++cmd_pos;
-	while (tokens[cmd_pos] && tokens[cmd_pos]->token_type == ARGUMENT)
+	while (tokens[cmd_pos] && tokens[cmd_pos]->token_type != PIPE)
 	{
-		args_count++;
+		if (tokens[cmd_pos]->token_type == ARGUMENT)
+			args_count++;
 		cmd_pos++;
 	}
 	return (args_count);

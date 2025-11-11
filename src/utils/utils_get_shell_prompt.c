@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   utils_get_shell_prompt.c                           :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: pablo <pablo@student.42.fr>                +#+  +:+       +#+        */
+/*   By: pabmart2 <pabmart2@student.42malaga.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/10/28 16:55:13 by pablo             #+#    #+#             */
-/*   Updated: 2025/11/10 21:27:36 by pablo            ###   ########.fr       */
+/*   Updated: 2025/11/11 17:59:15 by pabmart2         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -33,7 +33,7 @@ static char	*create_colored_base_prompt(t_linked_env *envs)
 	char	*colored_prompt;
 	char	*user_env;
 
-	user_env = get_enviroment_value("USER", envs);
+	user_env = get_env_value("USER", envs);
 	if (!user_env)
 		return (NULL);
 	base_prompt = ft_strjoin(YELLOW "Minishell" RED "@" BLUE, user_env);
@@ -102,7 +102,7 @@ char	*get_prompt(t_linked_env *envs)
 	colored_prompt = create_colored_base_prompt(envs);
 	if (!colored_prompt)
 		return (NULL);
-	current_dir = ft_strdup(get_enviroment_value("PWD", envs));
+	current_dir = ft_strdup(get_env_value("PWD", envs));
 	if (!current_dir)
 		return (ft_free((void **)&colored_prompt), NULL);
 	prompt_with_cwd = create_prompt_with_cwd(colored_prompt, current_dir);

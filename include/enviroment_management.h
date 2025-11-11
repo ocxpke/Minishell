@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   enviroment_management.h                            :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: pablo <pablo@student.42.fr>                +#+  +:+       +#+        */
+/*   By: pabmart2 <pabmart2@student.42malaga.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/11/10 18:34:17 by pablo             #+#    #+#             */
-/*   Updated: 2025/11/10 20:51:55 by pablo            ###   ########.fr       */
+/*   Updated: 2025/11/11 17:59:16 by pabmart2         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -143,7 +143,7 @@ t_linked_env	*get_enviroment_node(const char *key, t_linked_env *linked_env);
  * @param linked_env A pointer to the head of the environment linked list.
  * @return The value associated with the key if found, NULL otherwise.
  */
-char			*get_enviroment_value(const char *key,
+char			*get_env_value(const char *key,
 					t_linked_env *linked_env);
 
 /**
