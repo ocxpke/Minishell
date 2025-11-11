@@ -61,9 +61,9 @@ static char	*get_expanded_value(char *env_start, char *env_end,
 	if (env_end - 1 != env_start)
 	{
 		if (!ft_strncmp(env, "?", ft_strlen(env)))
-			env_value = get_enviroment_value("FT_EXIT_ENV", linked_env);
+			env_value = ft_strdup(get_enviroment_value("FT_EXIT_ENV", linked_env));
 		else
-			env_value = get_enviroment_value(env, linked_env);
+			env_value = ft_strdup(get_enviroment_value(env, linked_env));
 		if (!env_value)
 			env_value = ft_strdup("");
 		if (!env_value)
