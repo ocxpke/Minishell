@@ -15,10 +15,9 @@
 
 #include "libft.h"
 
-
 void	ft_matrix_free(void ***array, size_t size)
 {
-	size_t i;
+	size_t	i;
 
 	if (!array || !*array)
 		return ;

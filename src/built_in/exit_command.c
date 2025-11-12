@@ -3,15 +3,25 @@
 /*                                                        :::      ::::::::   */
 /*   exit_command.c                                     :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: pabmart2 <pabmart2@student.42malaga.com    +#+  +:+       +#+        */
+/*   By: pablo <pablo@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/09/27 19:00:52 by jose-ara          #+#    #+#             */
-/*   Updated: 2025/11/11 17:59:15 by pabmart2         ###   ########.fr       */
+/*   Updated: 2025/11/12 23:01:39 by pablo            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
 
+/**
+ * @brief Checks if the given string represents a numeric value.
+ *
+ * This function iterates through the characters of the input string to verify
+ * if all characters are digits. If the string is NULL, it is considered valid.
+ * The function uses ft_isdigit to check each character.
+ *
+ * @param first_arg The string to be checked for being numeric.
+ * @return 1 if the string is NULL or consists entirely of digits, 0 otherwise.
+ */
 static int	check_is_num(char *first_arg)
 {
 	if (!first_arg)

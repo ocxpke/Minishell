@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   parser_tokenization.c                              :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: pabmart2 <pabmart2@student.42malaga.com    +#+  +:+       +#+        */
+/*   By: pablo <pablo@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/07/30 16:21:57 by pablo             #+#    #+#             */
-/*   Updated: 2025/11/11 18:09:52 by pabmart2         ###   ########.fr       */
+/*   Updated: 2025/11/12 21:29:08 by pablo            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -100,25 +100,21 @@ static void	argument_resolver(t_token **tokens, size_t i)
 	if (i == 0)
 		return ;
 	j = (ssize_t)i - 1;
-	/* while (j >= 0 && tokens[j]->token_type != PIPE)
-	{ */
-		if (tokens[j]->token_type == REDIRECT_IN_CHAR)
-			return (tokens[i]->token_type = REDIRECT_IN_ROUTE, (void)0);
-		if (tokens[j]->token_type == REDIRECT_OUT_CHAR
-			|| tokens[j]->token_type == REDIRECT_OUT_CHAR_APPEND)
-			return (tokens[i]->token_type = REDIRECT_OUT_ROUTE, (void)0);
-		if (tokens[j]->token_type == REDIRECT_IN_CHAR_HEREDOC)
-			return (tokens[i]->token_type = HEREDOC_EOF, (void)0);
-		if (tokens[j]->token_type == REDIRECT_IN_ROUTE
-			|| tokens[j]->token_type == REDIRECT_OUT_ROUTE
-			|| tokens[j]->token_type == HEREDOC_EOF
-			|| tokens[j]->token_type == COMMAND_BUILT_IN
-			|| tokens[j]->token_type == COMMAND_ROUTE
-			|| tokens[j]->token_type == COMMAND_NOT_FOUND
-			|| tokens[j]->token_type == ARGUMENT)
-			return (tokens[i]->token_type = ARGUMENT, (void)0);
-		//--j;
-	//}
+	if (tokens[j]->token_type == REDIRECT_IN_CHAR)
+		return (tokens[i]->token_type = REDIRECT_IN_ROUTE, (void)0);
+	if (tokens[j]->token_type == REDIRECT_OUT_CHAR
+		|| tokens[j]->token_type == REDIRECT_OUT_CHAR_APPEND)
+		return (tokens[i]->token_type = REDIRECT_OUT_ROUTE, (void)0);
+	if (tokens[j]->token_type == REDIRECT_IN_CHAR_HEREDOC)
+		return (tokens[i]->token_type = HEREDOC_EOF, (void)0);
+	if (tokens[j]->token_type == REDIRECT_IN_ROUTE
+		|| tokens[j]->token_type == REDIRECT_OUT_ROUTE
+		|| tokens[j]->token_type == HEREDOC_EOF
+		|| tokens[j]->token_type == COMMAND_BUILT_IN
+		|| tokens[j]->token_type == COMMAND_ROUTE
+		|| tokens[j]->token_type == COMMAND_NOT_FOUND
+		|| tokens[j]->token_type == ARGUMENT)
+		return (tokens[i]->token_type = ARGUMENT, (void)0);
 }
 
 /**
@@ -158,6 +154,5 @@ t_token	**tokenize(char **array)
 		arg_classification(tokens, i);
 		++i;
 	}
-	print_token_matrix(tokens);
 	return (tokens);
 }

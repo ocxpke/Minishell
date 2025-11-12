@@ -6,12 +6,27 @@
 /*   By: pablo <pablo@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/09/27 19:01:07 by jose-ara          #+#    #+#             */
-/*   Updated: 2025/11/10 18:51:45 by pablo            ###   ########.fr       */
+/*   Updated: 2025/11/12 23:01:37 by pablo            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
 
+/**
+ * @brief Redirects stdin to the specified input file for built-in commands.
+ *
+ * This function opens the input file specified in the command info structure,
+ * duplicates the current stdin file descriptor to save it, and redirects stdin
+ * to the new file descriptor. The original stdin is saved in the provided
+ * save_stdin pointer for later restoration.
+ *
+ * @param cinfo Pointer to the command info structure containing the input file
+ * path.
+ * @param save_stdin Pointer to an integer where the original stdin file
+ * descriptor will be saved.
+ * @return 0 if no input file is specified, -1 on failure (e.g., file open
+ * error), 1 on success.
+ */
 static int	redirect_input_built_in(t_cinfo *cinfo, int *save_stdin)
 {
 	int	new_fd;
@@ -27,6 +42,23 @@ static int	redirect_input_built_in(t_cinfo *cinfo, int *save_stdin)
 	return (1);
 }
 
+/**
+ * @brief Redirects the standard output for built-in commands to a specified
+ * file.
+ *
+ * This function handles output redirection for built-in shell commands. It
+ * opens the specified output file in write-only mode, either appending or
+ * truncating based on the append flag. It duplicates the current stdout file
+ * descriptor for later restoration, redirects stdout to the new file
+ * descriptor, and closes the new file descriptor.
+ *
+ * @param cinfo A pointer to the command info structure containing output file
+ * details.
+ * @param save_stdout A pointer to an integer where the original stdout file
+ * descriptor will be saved for restoration.
+ * @return 0 if no output file is specified, 1 on successful redirection, -1
+ * on failure (e.g., file open error).
+ */
 static int	redirect_output_built_in(t_cinfo *cinfo, int *save_stdout)
 {
 	int	new_fd;
@@ -117,5 +149,5 @@ int	check_if_is_built_in(t_shell_data *shell_data, t_cinfo *cinfo)
 	}
 	if (exit_val == -1)
 		return (modify_exit_status_value(&(shell_data->shell_envi), 2), 1);
-	return (modify_exit_status_value(&(shell_data->shell_envi), 0), 1);
+	return (modify_exit_status_value(&(shell_data->shell_envi), exit_val), 1);
 }
