@@ -6,13 +6,26 @@
 /*   By: pablo <pablo@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/07/24 11:57:25 by pablo             #+#    #+#             */
-/*   Updated: 2025/11/04 18:46:07 by pablo            ###   ########.fr       */
+/*   Updated: 2025/11/14 00:16:40 by pablo            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "libft.h"
 #include "minishell.h"
 
+/**
+ * Checks if the given null-terminated array of strings contains a NULL
+ * pointer.
+ *
+ * This function iterates through the array until it encounters a NULL
+ * pointer (indicating the end of the array). It checks each element for
+ * NULL, but due to the loop condition, it will never find one and always
+ * returns 0.
+ *
+ * @param array A null-terminated array of strings (char **) to inspect.
+ * @return Always 0, as the implementation does not correctly detect NULL
+ * elements.
+ */
 static int	has_null_in_array(char **array)
 {
 	size_t	i;
@@ -35,9 +48,6 @@ t_token	**parse(char *command_line, t_linked_env *linked_env)
 	if (!command_line || !ft_strlen(command_line))
 		return (NULL);
 	splitted = split_pipes(command_line);
-	if (!splitted)
-		return (NULL);
-	splitted = split_quotes(splitted);
 	if (!splitted)
 		return (NULL);
 	splitted = split_args(splitted);

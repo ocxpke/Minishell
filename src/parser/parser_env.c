@@ -6,7 +6,7 @@
 /*   By: pablo <pablo@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/07/28 19:39:27 by pablo             #+#    #+#             */
-/*   Updated: 2025/11/12 19:46:11 by pablo            ###   ########.fr       */
+/*   Updated: 2025/11/13 23:53:23 by pablo            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -134,31 +134,6 @@ static char	*expand_env(char *env_start, char **current_string,
 	return (*current_string);
 }
 
-/**
- * @brief Removes leading/trailing quotes from a string.
- *
- * Removes the first and last character if they are matching quotes.
- * Checks the first character and only trims that specific quote type.
- *
- * @param current_string Pointer to the string pointer to clean quotes from.
- */
-static void	clean_quote(char **current_string)
-{
-	char	*tmp;
-	char	*str;
-
-	str = *current_string;
-	if (!str || !*str)
-		return ;
-	if (str[0] == '"')
-		tmp = ft_strtrim(str, "\"");
-	else if (str[0] == '\'')
-		tmp = ft_strtrim(str, "\'");
-	else
-		return ;
-	free(*current_string);
-	*current_string = tmp;
-}
 
 char	**parse_expand_env(char **splitted, t_linked_env *linked_env)
 {
