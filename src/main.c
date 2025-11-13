@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   main.c                                             :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: pabmart2 <pabmart2@student.42malaga.com    +#+  +:+       +#+        */
+/*   By: pablo <pablo@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/07/24 20:38:12 by pablo             #+#    #+#             */
-/*   Updated: 2025/11/11 17:59:15 by pabmart2         ###   ########.fr       */
+/*   Updated: 2025/11/12 17:25:38 by pablo            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -147,8 +147,6 @@ static void	execute_shell_cycle(t_shell_data *shell_data, char *input)
 		add_history(input);
 		execution_cycle(shell_data);
 	}
-	else
-		perror("Parse error");
 }
 
 int	main(void)

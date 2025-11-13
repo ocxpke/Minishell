@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   parser_env.c                                       :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: pabmart2 <pabmart2@student.42malaga.com    +#+  +:+       +#+        */
+/*   By: pablo <pablo@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/07/28 19:39:27 by pablo             #+#    #+#             */
-/*   Updated: 2025/11/11 17:59:27 by pabmart2         ###   ########.fr       */
+/*   Updated: 2025/11/12 19:46:11 by pablo            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -17,7 +17,7 @@
  * @brief Advances pointer past env var name.
  *
  * Increments pointer to skip initial char (e.g., '$'), then
- * continues while current char is alphanumeric or '?'
+ * continues while current char is alphanumeric, underscore, or '?'
  * (for special vars like $?).
  *
  * @param env_start: Pointer to start of env var (usually at '$').
@@ -27,7 +27,9 @@
 static char	*get_env_end(char *env_start)
 {
 	++env_start;
-	while (ft_isprint(*env_start) && !ft_isspace(*env_start))
+	if (*env_start == '?')
+		return (env_start + 1);
+	while (ft_isalnum(*env_start) || *env_start == '_')
 		++env_start;
 	return (env_start);
 }
@@ -55,7 +57,7 @@ static char	*get_expanded_value(char *env_start, char *env_end,
 	char	*env;
 	char	*env_value;
 
-	env = ft_strndup(env_start + 1, env_end - env_start - 1);
+	env = ft_strndup(env_start + 1, env_end - env_start);
 	if (!env)
 		return (NULL);
 	if (env_end - 1 != env_start)
@@ -135,17 +137,25 @@ static char	*expand_env(char *env_start, char **current_string,
 /**
  * @brief Removes leading/trailing quotes from a string.
  *
- * Trims leading/trailing single (') or double (") quotes from the string
- * pointed to by `current_string`. Frees the original string and
- * replaces it with the trimmed version.
+ * Removes the first and last character if they are matching quotes.
+ * Checks the first character and only trims that specific quote type.
  *
  * @param current_string Pointer to the string pointer to clean quotes from.
  */
 static void	clean_quote(char **current_string)
 {
 	char	*tmp;
+	char	*str;
 
-	tmp = ft_strtrim(*current_string, "\"\'");
+	str = *current_string;
+	if (!str || !*str)
+		return ;
+	if (str[0] == '"')
+		tmp = ft_strtrim(str, "\"");
+	else if (str[0] == '\'')
+		tmp = ft_strtrim(str, "\'");
+	else
+		return ;
 	free(*current_string);
 	*current_string = tmp;
 }

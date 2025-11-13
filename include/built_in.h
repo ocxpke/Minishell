@@ -6,7 +6,7 @@
 /*   By: pablo <pablo@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/11/10 18:34:00 by pablo             #+#    #+#             */
-/*   Updated: 2025/11/10 20:51:55 by pablo            ###   ########.fr       */
+/*   Updated: 2025/11/12 20:48:06 by pablo            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -130,19 +130,19 @@ void	env_cmd(t_cinfo *cinfo, t_envp *enviroment, int *ret);
 int		exec_built_in(t_shell_data *shell_data, t_cinfo *cinfo);
 
 /**
- * @brief Handles the export command in the shell.
+ * @brief Executes the export command in the minishell.
  *
- * This function processes the export command arguments. If no arguments
- * are provided, it prints the ordered environment list. For each argument,
- * it parses the key-value pair and updates the shell's environment lists
- * accordingly.
+ * This function handles the export builtin command. If no arguments are
+ * provided, it prints the ordered environment variables. For each argument,
+ * it attempts to parse it as a key-value pair (e.g., "KEY=VALUE"). If parsing
+ * succeeds, it updates the shell's environment lists. If parsing fails, it
+ * prints an error message to stderr and sets the return value to 1.
  *
  * @param shell_data Pointer to the shell data structure containing
- * environment information.
- * @param cinfo Pointer to the command information structure with command
- * arguments.
- * @param ret Pointer to an integer where the return status is stored (set
- * to 1 initially).
+ * environment info.
+ * @param cinfo Pointer to the command info structure with command arguments.
+ * @param ret Pointer to an integer where the return status is stored (0 for
+ * success, 1 for error).
  */
 void	export_cmd(t_shell_data *shell_data, t_cinfo *cinfo, int *ret);
 

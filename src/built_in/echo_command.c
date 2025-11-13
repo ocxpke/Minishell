@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   echo_command.c                                     :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: pabmart2 <pabmart2@student.42malaga.com    +#+  +:+       +#+        */
+/*   By: pablo <pablo@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/09/27 19:00:40 by jose-ara          #+#    #+#             */
-/*   Updated: 2025/11/11 17:59:59 by pabmart2         ###   ########.fr       */
+/*   Updated: 2025/11/12 20:33:49 by pablo            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -17,7 +17,6 @@ void	echo_cmd(t_cinfo *cinfo, int *ret)
 	int	i;
 	int	final_nl;
 
-	*ret = 1;
 	i = 1;
 	final_nl = 1;
 	if (cinfo->cmd_and_args[i] && !ft_strncmp(cinfo->cmd_and_args[i], "-n",
@@ -36,4 +35,5 @@ void	echo_cmd(t_cinfo *cinfo, int *ret)
 	}
 	if (final_nl)
 		write(STDOUT_FILENO, "\n", 1);
+	*ret = 0;
 }
