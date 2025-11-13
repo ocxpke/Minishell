@@ -6,7 +6,7 @@
 /*   By: pablo <pablo@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/07/28 19:39:27 by pablo             #+#    #+#             */
-/*   Updated: 2025/11/13 23:53:23 by pablo            ###   ########.fr       */
+/*   Updated: 2025/11/14 00:18:43 by pablo            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -133,7 +133,6 @@ static char	*expand_env(char *env_start, char **current_string,
 	free(env_value);
 	return (*current_string);
 }
-
 
 char	**parse_expand_env(char **splitted, t_linked_env *linked_env)
 {
