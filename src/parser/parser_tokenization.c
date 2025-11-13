@@ -129,18 +129,20 @@ static void	argument_resolver(t_token **tokens, size_t i)
  *
  * @param tokens A pointer to an array of token pointers.
  * @param i The index of the token to classify in the tokens array.
+ * @param linked_env Pointer to the linked environment list.
  */
-static void	arg_classification(t_token **tokens, size_t i)
+static void	arg_classification(t_token **tokens, size_t i,
+		t_linked_env *linked_env)
 {
 	if (tokens[i]->token_type == UNDEFINED)
 	{
 		argument_resolver(tokens, i);
 		if (tokens[i]->token_type == UNDEFINED)
-			cmd_resolver(tokens, i);
+			cmd_resolver(tokens, i, linked_env);
 	}
 }
 
-t_token	**tokenize(char **array)
+t_token	**tokenize(char **array, t_linked_env *linked_env)
 {
 	size_t	size;
 	size_t	i;
@@ -151,7 +153,7 @@ t_token	**tokenize(char **array)
 	i = 0;
 	while (i < size)
 	{
-		arg_classification(tokens, i);
+		arg_classification(tokens, i, linked_env);
 		++i;
 	}
 	return (tokens);

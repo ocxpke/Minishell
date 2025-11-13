@@ -6,7 +6,7 @@
 /*   By: pablo <pablo@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/10/28 18:08:35 by pablo             #+#    #+#             */
-/*   Updated: 2025/11/10 20:51:55 by pablo            ###   ########.fr       */
+/*   Updated: 2025/11/13 21:50:30 by pablo            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -43,8 +43,9 @@ char	**clean_splitted(char **splitted);
  * Otherwise, tries to resolve the command path.
  * @param tokens Array of token pointers.
  * @param i Index of the token to resolve.
+ * @param linked_env Pointer to the linked environment list.
  */
-void	cmd_resolver(t_token **tokens, size_t i);
+void	cmd_resolver(t_token **tokens, size_t i, t_linked_env *linked_env);
 
 /**
  * @brief Collapses a 3D array of strings into a single 2D array.
@@ -178,8 +179,9 @@ char	**split_quotes(char **array);
  * arguments using arg_classification.
  *
  * @param array The input array of strings to be tokenized.
+ * @param linked_env Pointer to the linked environment list.
  * @return t_token** Pointer to an array of token structures.
  */
-t_token	**tokenize(char **array);
+t_token	**tokenize(char **array, t_linked_env *linked_env);
 
 #endif

@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   parser_cmd_resolver.c                              :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: pabmart2 <pabmart2@student.42malaga.com    +#+  +:+       +#+        */
+/*   By: pablo <pablo@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/07/30 18:08:16 by pablo             #+#    #+#             */
-/*   Updated: 2025/10/26 15:15:28 by pabmart2         ###   ########.fr       */
+/*   Updated: 2025/11/13 21:45:58 by pablo            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -131,20 +131,21 @@ static int	cmd_literal_resolver(t_token *token)
  * @brief Resolves the full path of a command token using PATH env variable.
  *
  * Attempts to find the executable path for the command in the given token.
- * Retrieves PATH, splits it into directories, and searches for the command.
- * If found, updates token->string and sets type to COMMAND_ROUTE.
- * If not found, sets type to COMMAND_NOT_FOUND.
+ * Retrieves PATH from linked_env, splits it into directories, and searches
+ * for the command. If found, updates token->string and sets type to
+ * COMMAND_ROUTE. If not found, sets type to COMMAND_NOT_FOUND.
  * If PATH is missing or allocation fails, sets type to UNDEFINED.
  *
  * @param token Pointer to the t_token structure to resolve.
+ * @param linked_env Pointer to the linked environment list.
  */
-static void	cmd_path_resolver(t_token *token)
+static void	cmd_path_resolver(t_token *token, t_linked_env *linked_env)
 {
 	char	*env_path;
 	char	**paths;
 	char	*cmd_path;
 
-	env_path = getenv("PATH");
+	env_path = get_env_value("PATH", linked_env);
 	if (!env_path)
 		return (token->token_type = UNDEFINED, (void)0);
 	paths = ft_split(env_path, ':');
@@ -163,11 +164,11 @@ static void	cmd_path_resolver(t_token *token)
 		return (token->token_type = COMMAND_NOT_FOUND, (void)0);
 }
 
-void	cmd_resolver(t_token **tokens, size_t i)
+void	cmd_resolver(t_token **tokens, size_t i, t_linked_env *linked_env)
 {
 	if (is_built_in(tokens[i]->string))
 		return (tokens[i]->token_type = COMMAND_BUILT_IN, (void)0);
 	if (cmd_literal_resolver(tokens[i]) != 2)
 		return ;
-	cmd_path_resolver(tokens[i]);
+	cmd_path_resolver(tokens[i], linked_env);
 }

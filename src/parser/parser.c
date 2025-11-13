@@ -48,7 +48,7 @@ t_token	**parse(char *command_line, t_linked_env *linked_env)
 		return (NULL);
 	if (has_null_in_array(splitted))
 		return (ft_free((void **)&splitted), NULL);
-	tokens = tokenize(splitted);
+	tokens = tokenize(splitted, linked_env);
 	ft_matrix_free((void ***)&splitted, 0);
 	return (tokens);
 }
