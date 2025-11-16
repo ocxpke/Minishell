@@ -6,7 +6,7 @@
 #    By: pablo <pablo@student.42.fr>                +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2024/09/20 14:34:30 by pabmart2          #+#    #+#              #
-#    Updated: 2025/11/10 22:14:56 by pablo            ###   ########.fr        #
+#    Updated: 2025/11/14 00:07:34 by pablo            ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -39,13 +39,12 @@ BUILT_IN_SRC = src/built_in/manage_built_in.c \
 				src/built_in/exit_command.c
 
 PARSER_SRC = src/parser/parser_cmd_resolver.c \
+			src/parser/parser_clean_quotes.c \
 			src/parser/parser_env.c \
 			src/parser/parser_split_args.c \
 			src/parser/parser_split_pipes.c \
-			src/parser/parser_split_quotes.c \
 			src/parser/parser_tokenization.c \
 			src/parser/parser.c \
-			src/parser/utils/parser_clean_splitted.c \
 			src/parser/utils/parser_collapse.c \
 			src/parser/utils/parser_free_tokens.c
 

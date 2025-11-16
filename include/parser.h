@@ -6,7 +6,7 @@
 /*   By: pablo <pablo@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/10/28 18:08:35 by pablo             #+#    #+#             */
-/*   Updated: 2025/11/10 20:51:55 by pablo            ###   ########.fr       */
+/*   Updated: 2025/11/14 00:14:10 by pablo            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -17,21 +17,22 @@
 # include "libft.h"
 
 /**
- * @brief Cleans a splitted string array by trimming spaces and removing empty
- * strings.
+ * @brief Cleans quotes from the input string by removing unnecessary quote
+ * characters.
  *
- * Iterates over the input array of strings (`splitted`), trims leading and
- * trailing spaces from each string, and adds non-empty trimmed strings to a
- * new array. Empty strings (after trimming) are freed and not included in the
- * result. The resulting array is dynamically resized as needed and is
- * NULL-terminated. The original `splitted` array is freed before returning.
+ * This function processes the string pointed to by *str, removing
+ * quotes that are not part of the actual content (e.g., handling
+ * escaped or paired quotes). It calculates the size of the cleaned
+ * string, processes it if quotes are present, and updates the
+ * original string pointer to the cleaned version. If no cleaning is
+ * needed or if processing fails, the function returns without
+ * modification.
  *
- * @param splitted The input array of strings to be cleaned. Must be
- * NULL-terminated.
- * @return A newly allocated NULL-terminated array of cleaned strings. Returns
- * NULL if no strings remain or if splitted is NULL
+ * @param str A pointer to a pointer to the string to be cleaned. The
+ *            string must be null-terminated. If str or *str is NULL,
+ *            the function does nothing.
  */
-char	**clean_splitted(char **splitted);
+void	clean_quote(char **str);
 
 /**
  * @brief Resolves the command type for the token at index `i`.
@@ -43,8 +44,9 @@ char	**clean_splitted(char **splitted);
  * Otherwise, tries to resolve the command path.
  * @param tokens Array of token pointers.
  * @param i Index of the token to resolve.
+ * @param linked_env Pointer to the linked environment list.
  */
-void	cmd_resolver(t_token **tokens, size_t i);
+void	cmd_resolver(t_token **tokens, size_t i, t_linked_env *linked_env);
 
 /**
  * @brief Collapses a 3D array of strings into a single 2D array.
@@ -178,8 +180,9 @@ char	**split_quotes(char **array);
  * arguments using arg_classification.
  *
  * @param array The input array of strings to be tokenized.
+ * @param linked_env Pointer to the linked environment list.
  * @return t_token** Pointer to an array of token structures.
  */
-t_token	**tokenize(char **array);
+t_token	**tokenize(char **array, t_linked_env *linked_env);
 
 #endif
