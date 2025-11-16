@@ -6,12 +6,30 @@
 /*   By: pablo <pablo@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/07/24 11:57:25 by pablo             #+#    #+#             */
-/*   Updated: 2025/11/14 00:16:40 by pablo            ###   ########.fr       */
+/*   Updated: 2025/11/16 13:13:23 by pablo            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "libft.h"
 #include "minishell.h"
+
+int	has_command_in_pipeline(t_token **tokens, size_t i)
+{
+	ssize_t	j;
+
+	j = (ssize_t)i - 1;
+	while (j >= 0)
+	{
+		if (tokens[j]->token_type == PIPE)
+			return (0);
+		if (tokens[j]->token_type == COMMAND_BUILT_IN
+			|| tokens[j]->token_type == COMMAND_ROUTE
+			|| tokens[j]->token_type == COMMAND_NOT_FOUND)
+			return (1);
+		j--;
+	}
+	return (0);
+}
 
 /**
  * Checks if the given null-terminated array of strings contains a NULL
@@ -59,6 +77,7 @@ t_token	**parse(char *command_line, t_linked_env *linked_env)
 	if (has_null_in_array(splitted))
 		return (ft_free((void **)&splitted), NULL);
 	tokens = tokenize(splitted, linked_env);
+	print_token_matrix(tokens);
 	ft_matrix_free((void ***)&splitted, 0);
 	return (tokens);
 }

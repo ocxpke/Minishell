@@ -6,7 +6,7 @@
 /*   By: pablo <pablo@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/10/28 18:08:35 by pablo             #+#    #+#             */
-/*   Updated: 2025/11/14 00:14:10 by pablo            ###   ########.fr       */
+/*   Updated: 2025/11/16 13:13:15 by pablo            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -74,6 +74,19 @@ char	**collapse_extracted(char ***extracted);
  *               freed. After freeing, the pointer is set to NULL.
  */
 void	free_tokens(t_token ***tokens);
+
+/**
+ * @brief Checks if there is at least one command in the current pipeline.
+ *
+ * Backtracks from the given index until a pipe or the beginning is reached,
+ * checking if any token is classified as a command (COMMAND_BUILT_IN,
+ * COMMAND_ROUTE, or COMMAND_NOT_FOUND).
+ *
+ * @param tokens Array of token pointers.
+ * @param i Current token index.
+ * @return 1 if a command exists in the pipeline, 0 otherwise.
+ */
+int	has_command_in_pipeline(t_token **tokens, size_t i);
 
 /**
  * @brief Parses the given command line string into an array of tokens.

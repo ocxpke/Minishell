@@ -6,23 +6,43 @@
 /*   By: pablo <pablo@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/11/09 15:45:12 by pablo             #+#    #+#             */
-/*   Updated: 2025/11/10 17:18:57 by pablo            ###   ########.fr       */
+/*   Updated: 2025/11/16 13:10:38 by pablo            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
 
-static int	set_heredoc_input_file(t_token **tokens, t_cinfo *cinfo)
+/**
+ * @brief Sets up the input file for a heredoc redirection in the
+ * command info structure.
+ *
+ * This function extracts the heredoc redirection token and its
+ * delimiter from the token list, generates a temporary file path
+ * for the heredoc content, and assigns it to the command info.
+ * It ensures that the heredoc is within the bounds of the pipe
+ * if specified.
+ *
+ * @param tokens Pointer to the array of tokens to process.
+ * @param cinfo Pointer to the command info structure where the
+ * input file will be set.
+ * @param pipe Pointer to the pipe token to limit the search
+ * scope (can be NULL).
+ * @return 0 on success, 1 on failure (e.g., memory allocation
+ * error or invalid setup).
+ */
+static int	set_heredoc_input_file(t_token **tokens, t_cinfo *cinfo,
+		t_token **pipe)
 {
 	char	*route;
 	t_token	**heredoc;
 	t_token	**delimiter;
 
-	heredoc = extract_first_type_token(tokens, REDIRECT_IN_CHAR_HEREDOC);
-	if (!heredoc)
+	heredoc = extract_first_type_token(tokens,
+			REDIRECT_IN_CHAR_HEREDOC);
+	if (!heredoc || (pipe && heredoc >= pipe))
 		return (0);
 	delimiter = extract_first_type_token(heredoc + 1, HEREDOC_EOF);
-	if (!delimiter)
+	if (!delimiter || (pipe && delimiter >= pipe))
 		return (0);
 	ft_get_next_line(-1);
 	route = heredoc_behaviour((*delimiter)->string);
@@ -48,7 +68,7 @@ int	set_command_input_file(t_token **tokens, t_cinfo *cinfo, t_token **pipe)
 		cinfo->is_heredoc = 0;
 		return (0);
 	}
-	return (set_heredoc_input_file(tokens, cinfo));
+	return (set_heredoc_input_file(tokens, cinfo, pipe));
 }
 
 int	set_command_output_file(t_token **tokens, t_cinfo *cinfo, t_token **pipe)
