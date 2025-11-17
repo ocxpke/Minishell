@@ -6,7 +6,7 @@
 /*   By: pablo <pablo@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/10/28 17:46:49 by pablo             #+#    #+#             */
-/*   Updated: 2025/11/10 20:51:56 by pablo            ###   ########.fr       */
+/*   Updated: 2025/11/17 18:33:49 by pablo            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -62,6 +62,17 @@ typedef enum e_token_type
 	REDIRECT_OUT_ROUTE,
 	UNDEFINED
 }						t_ttype;
+
+/**
+ * @brief Return codes for heredoc operations.
+ *
+ * - HEREDOC_SUCCESS: Heredoc completed successfully (0).
+ * - HEREDOC_INTERRUPTED: Heredoc was interrupted by signal (1).
+ * - HEREDOC_ERROR: An error occurred during heredoc operation (2).
+ */
+# define HEREDOC_SUCCESS		0
+# define HEREDOC_INTERRUPTED	1
+# define HEREDOC_ERROR			2
 
 /**
  * @struct s_token

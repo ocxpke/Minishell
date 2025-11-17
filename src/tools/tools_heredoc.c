@@ -3,17 +3,17 @@
 /*                                                        :::      ::::::::   */
 /*   tools_heredoc.c                                    :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: pabmart2 <pabmart2@student.42malaga.com    +#+  +:+       +#+        */
+/*   By: pablo <pablo@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/05 18:31:11 by pablo             #+#    #+#             */
-/*   Updated: 2025/11/06 20:18:38 by pabmart2         ###   ########.fr       */
+/*   Updated: 2025/11/17 18:50:26 by pablo            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "colors.h"
 #include "minishell.h"
 
-extern volatile sig_atomic_t g_signal_recv;
+extern volatile sig_atomic_t	g_signal_recv;
 
 /**
  * @brief Checks if the EOF char is zero and line char is a newline.
@@ -66,70 +66,49 @@ static char	*process_heredoc_line(char *buffer, char *line)
 	return (buffer);
 }
 
-/**
- * @brief Reads lines from stdin until a specified EOF marker is found,
- *        accumulating the input into a buffer.
- *
- * Prompts the user with "heredoc > " and reads lines using readline().
- * Each line is appended to a buffer unless it matches the EOF marker
- * (eof) with the given size (eof_size) and passes check_zero_eof().
- * If the EOF marker is detected, the buffer is returned.
- * Handles memory allocation and input errors, freeing resources and
- * printing error messages.
- *
- * @param eof      The string that marks the end of heredoc input.
- * @param eof_size The length of the EOF marker to compare.
- * @return         Pointer to the buffer with heredoc input, or NULL on
- *                 error or interruption.
- */
 static char	*heredoc(char *eof, size_t eof_size)
 {
 	char	*buffer;
 	char	*line;
+	char	*trimmed_line;
 
 	buffer = NULL;
 	while (1)
 	{
-		line = readline(BOLD "heredoc > " RESET);
+		write(STDOUT_FILENO, BOLD "heredoc >" RESET " ", 18);
+		line = ft_get_next_line(STDIN_FILENO);
 		if (line)
 		{
-			if (!ft_strncmp(line, eof, eof_size) && check_zero_eof(*eof, *line))
-				return (free(line), buffer);
-			buffer = process_heredoc_line(buffer, line);
+			trimmed_line = ft_strtrim(line, "\n");
 			free(line);
+			if (!trimmed_line)
+				return (ft_get_next_line(-1), ft_free((void **)&buffer),
+					perror("Error trimming line"), NULL);
+			if (!ft_strncmp(trimmed_line, eof, eof_size) && check_zero_eof(*eof, *trimmed_line))
+				return (ft_get_next_line(-1), free(trimmed_line), buffer);
+			buffer = process_heredoc_line(buffer, trimmed_line);
+			free(trimmed_line);
 			if (!buffer)
-				return (ft_free((void **)&buffer),
+				return (ft_get_next_line(-1), ft_free((void **)&buffer),
 					perror("Error joining heredoc"), NULL);
 		}
 		else
 		{
 			if (g_signal_recv == SIGINT)
-				return (ft_free((void **)&buffer), NULL);
-				//Escalar este problema hasta process_management
+				return (ft_get_next_line(-1), ft_free((void **)&buffer), NULL);
+			// Escalar este problema hasta process_management
 			else
-				return (write(STDERR_FILENO, "Here-document delimited by end-of-file\n", 39), buffer);
+				return (ft_get_next_line(-1), write(STDERR_FILENO,
+						"Here-document delimited by end-of-file\n", 39),
+					buffer);
 		}
-			// return (ft_free((void **)&buffer), ft_perror("Heredoc error", EINTR,
-			// 		0), NULL);
-		//Necesidad de si el usuario decide terminar antes con ctrl+d esto ha de seguir, no es error
+		// return (ft_free((void **)&buffer), ft_perror("Heredoc error", EINTR,
+		// 		0), NULL);
+		// Necesidad de si el usuario decide terminar antes con ctrl+d
+		// esto ha de seguir, no es error
 	}
 }
 
-/**
- * @brief Generates a unique temporary filename for heredoc usage.
- *
- * This function creates a filename in the format ".heredoc_tmpN", where N is an
- * integer starting from 0 and incremented until a writable file with that name
- * does not already exist. It ensures that the generated filename does not
- * collide with any existing writable file in the current directory.
- *
- * @return
- *   A pointer to the newly allocated string containing the unique filename,
- *   or NULL if memory allocation fails at any point.
- *
- * @note
- *   The returned string must be freed by the caller.
- */
 static char	*gerate_tmp_heredoc_name(void)
 {
 	int		n;
@@ -155,34 +134,35 @@ static char	*gerate_tmp_heredoc_name(void)
 	return (tmp_name);
 }
 
-char	*heredoc_behaviour(char *eof)
+int	heredoc_behaviour(char *eof, char **result)
 {
 	char	*buffer;
 	char	*tmp_name;
 	int		tmp_file;
 
+	*result = NULL;
 	signal(SIGINT, sigint_heredoc_handler);
 	buffer = heredoc(eof, ft_strlen(eof));
 	signal(SIGINT, sigint_handler);
 	if (!buffer)
 	{
 		if (g_signal_recv == SIGINT)
-			return (ft_strdup(""));//TODO: Pablo ver los posibles leaks de esto <3
-		return (NULL);
+			return (HEREDOC_INTERRUPTED);
+		return (HEREDOC_ERROR);
 	}
-
 	tmp_name = gerate_tmp_heredoc_name();
 	if (!tmp_name)
 		return (ft_free((void **)&buffer),
-			perror("Error generating heredoc tmp filename"), NULL);
+			perror("Error generating heredoc tmp filename"), HEREDOC_ERROR);
 	tmp_file = open(tmp_name, O_WRONLY | O_CREAT | O_TRUNC, 0644);
 	if (tmp_file == -1)
 		return (ft_free((void **)&buffer), ft_free((void **)tmp_name),
-			perror("Error opening here_doc tmp file"), NULL);
+			perror("Error opening here_doc tmp file"), HEREDOC_ERROR);
 	write(tmp_file, buffer, ft_strlen(buffer));
 	if (close(tmp_file))
 		return (ft_free((void **)&buffer), ft_free((void **)&tmp_name),
-			perror("Error closing here_doc tmp file"), NULL);
+			perror("Error closing here_doc tmp file"), HEREDOC_ERROR);
 	ft_free((void **)&buffer);
-	return (tmp_name);
+	*result = tmp_name;
+	return (HEREDOC_SUCCESS);
 }

@@ -6,7 +6,7 @@
 /*   By: pablo <pablo@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/11/09 15:45:12 by pablo             #+#    #+#             */
-/*   Updated: 2025/11/16 13:10:38 by pablo            ###   ########.fr       */
+/*   Updated: 2025/11/17 18:53:28 by pablo            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -37,17 +37,20 @@ static int	set_heredoc_input_file(t_token **tokens, t_cinfo *cinfo,
 	t_token	**heredoc;
 	t_token	**delimiter;
 
-	heredoc = extract_first_type_token(tokens,
-			REDIRECT_IN_CHAR_HEREDOC);
+	heredoc = extract_first_type_token(tokens, REDIRECT_IN_CHAR_HEREDOC);
 	if (!heredoc || (pipe && heredoc >= pipe))
 		return (0);
 	delimiter = extract_first_type_token(heredoc + 1, HEREDOC_EOF);
 	if (!delimiter || (pipe && delimiter >= pipe))
 		return (0);
 	ft_get_next_line(-1);
-	route = heredoc_behaviour((*delimiter)->string);
+	if (heredoc_behaviour((*delimiter)->string, &route) != HEREDOC_SUCCESS)
+	{
+		ft_free((void **)&route);
+		return (1);
+	}
 	if (!route)
-		return (0);
+		return (1);
 	cinfo->input_file = route;
 	if (!cinfo->input_file)
 		return (1);
