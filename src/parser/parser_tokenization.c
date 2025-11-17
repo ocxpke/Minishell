@@ -6,7 +6,7 @@
 /*   By: pablo <pablo@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/07/30 16:21:57 by pablo             #+#    #+#             */
-/*   Updated: 2025/11/12 21:29:08 by pablo            ###   ########.fr       */
+/*   Updated: 2025/11/16 13:13:36 by pablo            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -89,6 +89,7 @@ static t_token	**first_token_parse(char **array, size_t size)
  * Backtracks from index `i - 1` and inspects tokens until a pipe or the
  * beginning is reached. Updates tokens[i]->token_type when a relevant
  * context (redirection, heredoc, command or argument) is detected.
+ * Only classifies as ARGUMENT if there's already a command in the pipeline.
  *
  * @param tokens Array of token pointers.
  * @param i Current token index.
@@ -107,13 +108,14 @@ static void	argument_resolver(t_token **tokens, size_t i)
 		return (tokens[i]->token_type = REDIRECT_OUT_ROUTE, (void)0);
 	if (tokens[j]->token_type == REDIRECT_IN_CHAR_HEREDOC)
 		return (tokens[i]->token_type = HEREDOC_EOF, (void)0);
-	if (tokens[j]->token_type == REDIRECT_IN_ROUTE
-		|| tokens[j]->token_type == REDIRECT_OUT_ROUTE
-		|| tokens[j]->token_type == HEREDOC_EOF
-		|| tokens[j]->token_type == COMMAND_BUILT_IN
-		|| tokens[j]->token_type == COMMAND_ROUTE
-		|| tokens[j]->token_type == COMMAND_NOT_FOUND
-		|| tokens[j]->token_type == ARGUMENT)
+	if ((tokens[j]->token_type == REDIRECT_IN_ROUTE
+			|| tokens[j]->token_type == REDIRECT_OUT_ROUTE
+			|| tokens[j]->token_type == HEREDOC_EOF
+			|| tokens[j]->token_type == COMMAND_BUILT_IN
+			|| tokens[j]->token_type == COMMAND_ROUTE
+			|| tokens[j]->token_type == COMMAND_NOT_FOUND
+			|| tokens[j]->token_type == ARGUMENT)
+		&& has_command_in_pipeline(tokens, i))
 		return (tokens[i]->token_type = ARGUMENT, (void)0);
 }
 

@@ -12,6 +12,31 @@
 
 #include "minishell.h"
 
+/**
+ * @brief Finds the start position of the pipeline containing the given command.
+ *
+ * Searches backwards from token_pos to find the previous PIPE token or the
+ * beginning of the token array. Returns the position right after the pipe
+ * (start of current pipeline) or 0 if no pipe is found.
+ *
+ * @param tokens Array of token pointers.
+ * @param token_pos Position of the command token.
+ * @return Position of the start of the current pipeline.
+ */
+int	find_pipeline_start(t_token **tokens, int token_pos)
+{
+	int	i;
+
+	i = token_pos - 1;
+	while (i >= 0)
+	{
+		if (tokens[i]->token_type == PIPE)
+			return (i + 1);
+		i--;
+	}
+	return (0);
+}
+
 t_token	*get_next_command(t_token **tokens, int n, int *token_pos)
 {
 	int	cmd_count;

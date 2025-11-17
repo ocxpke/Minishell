@@ -12,6 +12,8 @@
 
 #include "minishell.h"
 
+extern volatile sig_atomic_t g_signal_recv;
+
 static void	close_fds(t_shell_data *shell_data, int pipes[2], int *pipe_aux,
 		int index)
 {
@@ -29,6 +31,27 @@ static void	close_fds(t_shell_data *shell_data, int pipes[2], int *pipe_aux,
 		close(*pipe_aux);
 }
 
+static void manage_exit_code(t_shell_data *shell_data,int ret_status, int index)
+{
+	int	exit_num;
+
+	exit_num = 0;
+	if (g_signal_recv == SIGINT)
+		exit_num = ((128 + SIGINT) % 256);
+	else if (WIFEXITED(ret_status))
+		exit_num = WEXITSTATUS(ret_status);
+	else if(WIFSIGNALED(ret_status))
+	{
+		exit_num = ((128 + WTERMSIG(ret_status)) % 256);
+		if (WTERMSIG(ret_status) == SIGINT)
+			write(STDOUT_FILENO, "\n", 1);
+		if (WTERMSIG(ret_status) == SIGQUIT)
+			write(STDOUT_FILENO, "Quit (core dumped)\n", 19);
+	}
+	if (index == shell_data->einfo->n_pipes)
+		modify_exit_status_value(&shell_data->shell_envi, exit_num);
+}
+
 void	parent_process(t_shell_data *shell_data, int pipes[2], int *pipe_aux,
 		int index)
 {
@@ -36,6 +59,7 @@ void	parent_process(t_shell_data *shell_data, int pipes[2], int *pipe_aux,
 	int				ret_status;
 
 	close_fds(shell_data, pipes, pipe_aux, index);
+	signal(SIGINT, SIG_IGN);
 	if (shell_data->einfo->n_pipes)
 	{
 		if (shell_data->einfo->n_pipes != index)
@@ -49,7 +73,6 @@ void	parent_process(t_shell_data *shell_data, int pipes[2], int *pipe_aux,
 	}
 	else
 		waitpid(shell_data->pid_fork, &ret_status, 0);
-	if (index == shell_data->einfo->n_pipes)
-		modify_exit_status_value(&shell_data->shell_envi,
-			WEXITSTATUS(ret_status));
+	signal(SIGINT, sigint_handler);
+	manage_exit_code(shell_data, ret_status, index);
 }

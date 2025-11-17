@@ -6,7 +6,7 @@
 /*   By: pablo <pablo@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/07/24 12:02:38 by pablo             #+#    #+#             */
-/*   Updated: 2025/11/10 21:27:34 by pablo            ###   ########.fr       */
+/*   Updated: 2025/11/16 13:08:41 by pablo            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -30,6 +30,7 @@
 # include <readline/readline.h>
 # include <signal.h>
 # include <stdio.h>
+# include <sys/ioctl.h>
 # include <stdlib.h>
 # include <string.h>
 # include <sys/wait.h>
@@ -200,6 +201,7 @@ int		count_command_args(t_token **tokens, int cmd_pos);
  */
 t_token	*get_next_command(t_token **tokens, int n, int *token_pos);
 
+
 /**
  * @brief Cleans up an array of command info structures by freeing
  * allocated memory.
@@ -213,6 +215,19 @@ t_token	*get_next_command(t_token **tokens, int n, int *token_pos);
  * a NULL pointer. The array and its contents will be deallocated.
  */
 void	clean_cinfos(t_cinfo **cinfos);
+
+/**
+ * @brief Finds the start position of the pipeline containing the given command.
+ *
+ * Searches backwards from token_pos to find the previous PIPE token or the
+ * beginning of the token array. Returns the position right after the pipe
+ * (start of current pipeline) or 0 if no pipe is found.
+ *
+ * @param tokens Array of token pointers.
+ * @param token_pos Position of the command token.
+ * @return Position of the start of the current pipeline.
+ */
+int		find_pipeline_start(t_token **tokens, int token_pos);
 
 /**
  * @brief Sets up command information structures in the execution info.

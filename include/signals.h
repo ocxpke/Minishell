@@ -52,4 +52,17 @@ void	restore_terminal_signals(void);
  */
 void	sigint_handler(int sig);
 
+/**
+ * @brief Signal handler for SIGINT (interrupt signal). Same as original one
+ * but for heredoc file management.
+ *
+ * This function is called when a SIGINT signal is received, typically
+ * triggered by pressing Ctrl+C. It clears the current input line in
+ * readline, moves the cursor to a new line, writes a newline character
+ * to stdout, and redisplays the prompt.
+ *
+ * @param sig The signal number (unused in this implementation).
+ */
+void	sigint_heredoc_handler(int sig);
+
 #endif

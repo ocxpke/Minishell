@@ -13,6 +13,8 @@
 #include "colors.h"
 #include "minishell.h"
 
+extern volatile sig_atomic_t g_signal_recv;
+
 /**
  * @brief Checks if the EOF char is zero and line char is a newline.
  *
@@ -100,8 +102,16 @@ static char	*heredoc(char *eof, size_t eof_size)
 					perror("Error joining heredoc"), NULL);
 		}
 		else
-			return (ft_free((void **)&buffer), ft_perror("Heredoc error", EINTR,
-					0), NULL);
+		{
+			if (g_signal_recv == SIGINT)
+				return (ft_free((void **)&buffer), NULL);
+				//Escalar este problema hasta process_management
+			else
+				return (write(STDERR_FILENO, "Here-document delimited by end-of-file\n", 39), buffer);
+		}
+			// return (ft_free((void **)&buffer), ft_perror("Heredoc error", EINTR,
+			// 		0), NULL);
+		//Necesidad de si el usuario decide terminar antes con ctrl+d esto ha de seguir, no es error
 	}
 }
 
@@ -151,9 +161,16 @@ char	*heredoc_behaviour(char *eof)
 	char	*tmp_name;
 	int		tmp_file;
 
+	signal(SIGINT, sigint_heredoc_handler);
 	buffer = heredoc(eof, ft_strlen(eof));
+	signal(SIGINT, sigint_handler);
 	if (!buffer)
+	{
+		if (g_signal_recv == SIGINT)
+			return (ft_strdup(""));//TODO: Pablo ver los posibles leaks de esto <3
 		return (NULL);
+	}
+
 	tmp_name = gerate_tmp_heredoc_name();
 	if (!tmp_name)
 		return (ft_free((void **)&buffer),
