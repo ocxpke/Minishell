@@ -158,6 +158,7 @@ int	main(void)
 	block_terminal_signals();
 	while (1)
 	{
+		g_signal_recv = 0;
 		if (!read_shell_input(&shell_data, &input))
 			return (ctrl_d_exit(&shell_data));
 		execute_shell_cycle(&shell_data, input);
