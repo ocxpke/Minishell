@@ -28,10 +28,7 @@ static int	redirect_input(t_cinfo *cinfo, int *pipe_aux)
 	{
 		fd = open(cinfo->input_file, O_RDONLY, 0644);
 		if (fd == -1)
-		{
-			perror(cinfo->input_file);
-			return (1);
-		}
+			return(perror(cinfo->input_file), 1);
 		dup2(fd, STDIN_FILENO);
 		close(fd);
 	}
@@ -56,10 +53,7 @@ static int	redirect_output(t_shell_data *shell_data, t_cinfo *cinfo,
 		else
 			fd = open(cinfo->output_file, O_WRONLY | O_CREAT | O_TRUNC, 0644);
 		if (fd == -1)
-		{
-			perror(cinfo->output_file);
-			return (1);
-		}
+			return (perror(cinfo->output_file), 1);
 		dup2(fd, STDOUT_FILENO);
 		close(fd);
 	}
@@ -78,8 +72,7 @@ void	child_process(t_shell_data *shell_data, int pipes[2], int *pipe_aux,
 	rl_clear_history();
 	if (redirect_input(cinfo, pipe_aux) || redirect_output(shell_data, cinfo,
 			pipes, index))
-		return (perror("File not found"), free_shell_data(shell_data),
-			exit(EXIT_FAILURE));
+		return (free_shell_data(shell_data), exit(EXIT_FAILURE));
 	ft_matrix_free((void ***)&shell_data->shell_envi.envp_exec, 0);
 	generate_exec_envp(&(shell_data->shell_envi));
 	restore_terminal_signals();
@@ -103,8 +96,7 @@ void	exec_subshell(t_shell_data *shell_data, int pipes[2], int *pipe_aux,
 	rl_clear_history();
 	if (redirect_input(cinfo, pipe_aux) || redirect_output(shell_data, cinfo,
 			pipes, index))
-		return (perror("File not found"), free_shell_data(shell_data),
-			exit(EXIT_FAILURE));
+		return (free_shell_data(shell_data), exit(EXIT_FAILURE));
 	restore_terminal_signals();
 	exit_status = exec_built_in(shell_data, cinfo);
 	free_shell_data(shell_data);

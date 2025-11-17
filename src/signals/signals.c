@@ -12,8 +12,6 @@
 
 #include "minishell.h"
 
-extern sig_atomic_t	g_signal_recv;
-
 void	block_terminal_signals(void)
 {
 	signal(SIGINT, sigint_handler);
