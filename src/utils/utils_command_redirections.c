@@ -12,6 +12,8 @@
 
 #include "minishell.h"
 
+extern volatile sig_atomic_t	g_signal_recv;
+
 /**
  * @brief Sets up the input file for a heredoc redirection in the
  * command info structure.
@@ -44,16 +46,20 @@ static int	set_heredoc_input_file(t_token **tokens, t_cinfo *cinfo,
 	if (!delimiter || (pipe && delimiter >= pipe))
 		return (0);
 	ft_get_next_line(-1);
-	if (heredoc_behaviour((*delimiter)->string, &route) != HEREDOC_SUCCESS)
+	if (heredoc_behaviour((*delimiter)->string, &route) == HEREDOC_ERROR)
 	{
 		ft_free((void **)&route);
 		return (1);
 	}
+	if (g_signal_recv == SIGINT)
+	{
+		ft_free((void **)&route);
+		write(STDOUT_FILENO, "\n", 1);
+		route = ft_strdup("");
+	}
 	if (!route)
 		return (1);
 	cinfo->input_file = route;
-	if (!cinfo->input_file)
-		return (1);
 	cinfo->is_heredoc = 1;
 	return (0);
 }

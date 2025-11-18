@@ -66,7 +66,7 @@ static char	*process_heredoc_line(char *buffer, char *line)
 	return (buffer);
 }
 
-static char	*heredoc(char *eof, size_t eof_size)
+static char	*heredoc(char *eof)
 {
 	char	*buffer;
 	char	*line;
@@ -84,7 +84,7 @@ static char	*heredoc(char *eof, size_t eof_size)
 			if (!trimmed_line)
 				return (ft_get_next_line(-1), ft_free((void **)&buffer),
 					perror("Error trimming line"), NULL);
-			if (!ft_strncmp(trimmed_line, eof, eof_size) && check_zero_eof(*eof, *trimmed_line))
+			if (!ft_strncmp(trimmed_line, eof, ft_max_len_str(trimmed_line, eof)) && check_zero_eof(*eof, *trimmed_line))
 				return (ft_get_next_line(-1), free(trimmed_line), buffer);
 			buffer = process_heredoc_line(buffer, trimmed_line);
 			free(trimmed_line);
@@ -107,6 +107,7 @@ static char	*heredoc(char *eof, size_t eof_size)
 		// Necesidad de si el usuario decide terminar antes con ctrl+d
 		// esto ha de seguir, no es error
 	}
+
 }
 
 static char	*gerate_tmp_heredoc_name(void)
@@ -139,10 +140,15 @@ int	heredoc_behaviour(char *eof, char **result)
 	char	*buffer;
 	char	*tmp_name;
 	int		tmp_file;
+	int		save_stdin;
 
 	*result = NULL;
+	save_stdin = dup(STDIN_FILENO);
 	signal(SIGINT, sigint_heredoc_handler);
-	buffer = heredoc(eof, ft_strlen(eof));
+	buffer = heredoc(eof);
+	if (g_signal_recv == SIGINT)
+		dup2(save_stdin, STDIN_FILENO);
+	close(save_stdin);
 	signal(SIGINT, sigint_handler);
 	if (!buffer)
 	{
