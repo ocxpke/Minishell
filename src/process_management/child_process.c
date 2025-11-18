@@ -27,6 +27,8 @@ static int	redirect_input(t_cinfo *cinfo, int *pipe_aux)
 	if (cinfo->input_file)
 	{
 		fd = open(cinfo->input_file, O_RDONLY, 0644);
+		if (!ft_strncmp(cinfo->input_file, "", 1) && cinfo->is_heredoc)
+			return (1);
 		if (fd == -1)
 			return(perror(cinfo->input_file), 1);
 		dup2(fd, STDIN_FILENO);
