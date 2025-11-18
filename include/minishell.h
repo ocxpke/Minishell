@@ -6,7 +6,7 @@
 /*   By: pablo <pablo@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/07/24 12:02:38 by pablo             #+#    #+#             */
-/*   Updated: 2025/11/16 13:08:41 by pablo            ###   ########.fr       */
+/*   Updated: 2025/11/17 18:33:45 by pablo            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -43,16 +43,19 @@
  * @brief Creates a temporary file containing heredoc input.
  *
  * Reads input from the user until the specified EOF delimiter is encountered,
- * writes the input to a newly generated temporary file,
- * and returns the name
- * of the file. Handles memory allocation, file creation,
+ * writes the input to a newly generated temporary file, and returns the status
+ * of the operation. The name of the temporary file is returned via the result
+ * parameter. Handles memory allocation, file creation, signal interruption,
  * and error reporting.
  *
  * @param eof The end-of-file delimiter string for the heredoc.
- * @return On success, returns the name of the temporary file (char *).
- *         On failure, returns NULL.
+ * @param result Pointer to store the temporary filename on success (caller must free).
+ *               Set to NULL on error or interruption.
+ * @return HEREDOC_SUCCESS (0) if heredoc completed successfully.
+ *         HEREDOC_INTERRUPTED (1) if interrupted by signal (e.g., Ctrl+C).
+ *         HEREDOC_ERROR (2) if an error occurred (memory, I/O, etc.).
  */
-char	*heredoc_behaviour(char *eof);
+int		heredoc_behaviour(char *eof, char **result);
 
 /**
  * @brief Counts the number of tokens of a specific type in a token array.
