@@ -6,7 +6,7 @@
 /*   By: pablo <pablo@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/10/03 16:12:35 by pablo             #+#    #+#             */
-/*   Updated: 2025/11/10 17:55:19 by pablo            ###   ########.fr       */
+/*   Updated: 2025/11/19 23:30:10 by pablo            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -145,17 +145,17 @@ static char	*keep_reading(int fd, char *buffers[], char *b, char **ret)
 	while (!tmp)
 	{
 		if (!str_append_mem(ret, b, ft_strlen(b)))
-			return (NULL);
+			return (ft_free((void **)ret), NULL);
 		read_ret = read(fd, b, BUFFER_SIZE);
 		if (read_ret == -1)
-			return (NULL);
+			return (ft_free((void **)ret), NULL);
 		if (read_ret == 0)
 		{
 			free(buffers[fd]);
 			buffers[fd] = NULL;
 			if (*ret && **ret)
 				return (*ret);
-			free(*ret);
+			ft_free((void **)ret);
 			return (NULL);
 		}
 		b[read_ret] = 0;
@@ -180,7 +180,10 @@ char	*ft_get_next_line(int fd)
 	{
 		tmp = keep_reading(fd, buffers, b, &ret);
 		if (!tmp)
+		{
+			ft_free((void **)&ret);
 			return (NULL);
+		}
 	}
 	return (clean_buffer(&ret, b, tmp));
 }

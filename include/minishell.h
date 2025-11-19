@@ -6,7 +6,7 @@
 /*   By: pablo <pablo@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/07/24 12:02:38 by pablo             #+#    #+#             */
-/*   Updated: 2025/11/19 17:38:40 by pablo            ###   ########.fr       */
+/*   Updated: 2025/11/19 23:17:19 by pablo            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -40,20 +40,24 @@
 //////////////////////////////////// TOOLS /////////////////////////////////////
 
 /**
- * @brief Creates a temporary file containing heredoc input.
+ * @brief Handles the behavior for heredoc input in the shell.
  *
- * Reads input from the user until the specified EOF delimiter is encountered,
- * writes the input to a newly generated temporary file, and returns the status
- * of the operation. The name of the temporary file is returned via the result
- * parameter. Handles memory allocation, file creation, signal interruption,
- * and error reporting.
+ * This function sets up signal handling for heredoc, reads input until the
+ * specified end-of-file (EOF) delimiter is encountered, generates a temporary
+ * file name, writes the collected input to that file, and returns the file
+ * name via the result parameter. It manages interruptions and errors during
+ * the process.
  *
- * @param eof The end-of-file delimiter string for the heredoc.
- * @param result Pointer to store the temporary filename on success
- *               (caller must free). Set to NULL on error or interruption.
- * @return HEREDOC_SUCCESS (0) if heredoc completed successfully.
- *         HEREDOC_INTERRUPTED (1) if interrupted by signal (e.g., Ctrl+C).
- *         HEREDOC_ERROR (2) if an error occurred (memory, I/O, etc.).
+ * @param eof A null-terminated string representing the EOF delimiter for the
+ *            heredoc input.
+ * @param result A pointer to a char pointer where the generated temporary file
+ *               name will be stored upon success. The caller is responsible
+ *               for freeing this memory.
+ *
+ * @return HEREDOC_SUCCESS on successful completion,
+ *         HEREDOC_INTERRUPTED if interrupted by SIGINT,
+ *         HEREDOC_ERROR on other failures (e.g., memory allocation or file
+ *         operations).
  */
 int		heredoc_behaviour(char *eof, char **result);
 

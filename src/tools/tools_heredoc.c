@@ -6,7 +6,7 @@
 /*   By: pablo <pablo@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/05 18:31:11 by pablo             #+#    #+#             */
-/*   Updated: 2025/11/19 17:57:14 by pablo            ###   ########.fr       */
+/*   Updated: 2025/11/19 23:17:21 by pablo            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -15,29 +15,64 @@
 
 extern volatile sig_atomic_t	g_signal_recv;
 
-static char	*process_line(char *buffer, char *line, char *eof)
+/**
+ * Processes a single line read from input during heredoc expansion.
+ *
+ * This function trims the newline character from the input line,
+ * checks if it matches the end-of-file (EOF) delimiter, and if not,
+ * appends the processed line to the buffer. It handles memory
+ * management for the line and buffer, returning appropriate status
+ * codes.
+ *
+ * @param buffer A pointer to a string buffer where the heredoc
+ *               content is accumulated. The buffer is modified in
+ *               place and may be freed on error.
+ * @param line   The raw line read from input, which will be freed
+ *               by this function.
+ * @param eof    The EOF delimiter string to check against the
+ *               trimmed line.
+ * @return       0 on success (line appended to buffer),
+ *               1 if the line matches the EOF delimiter (indicating
+ *               end of heredoc),
+ *               -1 on error (e.g., memory allocation failure).
+ */
+static int	process_line(char **buffer, char *line, char *eof)
 {
 	char	*trimmed_line;
 
 	trimmed_line = ft_strtrim(line, "\n");
 	free(line);
 	if (!trimmed_line)
-		return (ft_get_next_line(-1), ft_free((void **)&buffer),
-			perror("Error trimming line"), NULL);
+		return (ft_free((void **)buffer), perror("Error trimming line"), -1);
 	if (check_eof_match(trimmed_line, eof))
-		return (ft_get_next_line(-1), free(trimmed_line), buffer);
-	buffer = process_heredoc_line(buffer, trimmed_line);
+		return (free(trimmed_line), 1);
+	*buffer = process_heredoc_line(*buffer, trimmed_line);
 	free(trimmed_line);
-	if (!buffer)
-		return (ft_get_next_line(-1), ft_free((void **)&buffer),
-			perror("Error joining heredoc"), NULL);
-	return (buffer);
+	if (!*buffer)
+		return (ft_free((void **)buffer), perror("Error joining heredoc"), -1);
+	return (0);
 }
 
+/**
+ * @brief Reads input from stdin until a specified end-of-file marker
+ * is encountered.
+ *
+ * This function implements a heredoc mechanism, prompting the user
+ * with "heredoc >" and reading lines from standard input. It
+ * accumulates the input into a buffer until the end-of-file marker
+ * (eof) is matched. If the eof is found, the buffer is returned. If
+ * an error occurs during processing, NULL is returned. If EOF is
+ * reached without finding eof, it handles the case accordingly.
+ *
+ * @param eof The end-of-file marker string to stop reading input.
+ * @return A pointer to the accumulated buffer string, or NULL on
+ * error or if eof is not found.
+ */
 static char	*heredoc(char *eof)
 {
 	char	*buffer;
 	char	*line;
+	int		result;
 
 	buffer = NULL;
 	while (1)
@@ -46,15 +81,37 @@ static char	*heredoc(char *eof)
 		line = ft_get_next_line(STDIN_FILENO);
 		if (line)
 		{
-			buffer = process_line(buffer, line, eof);
-			if (!buffer || check_eof_match(buffer, eof))
+			result = process_line(&buffer, line, eof);
+			if (result == 1)
 				return (buffer);
+			else if (result == -1)
+				return (NULL);
 		}
 		else
 			return (handle_heredoc_eof(buffer));
 	}
 }
 
+/**
+ * @brief Sets up signal handling for heredoc input and reads input until
+ * the end-of-file delimiter.
+ *
+ * This function duplicates the standard input file descriptor,
+ * installs a custom SIGINT handler for heredoc operations, reads
+ * input from the user until the specified EOF delimiter is
+ * encountered, and restores the original stdin and signal handler.
+ * If a SIGINT signal is received during input, it restores stdin
+ * from the saved duplicate.
+ *
+ * @param eof A null-terminated string representing the end-of-file
+ * delimiter for heredoc input.
+ * @param save_stdin A pointer to an integer where the duplicated
+ * stdin file descriptor will be stored. This is used to restore
+ * stdin if interrupted.
+ * @return A pointer to a dynamically allocated string containing
+ * the heredoc input, or NULL on failure. The caller is responsible
+ * for freeing the returned buffer.
+ */
 static char	*setup_heredoc_signals(char *eof, int *save_stdin)
 {
 	char	*buffer;
@@ -69,6 +126,21 @@ static char	*setup_heredoc_signals(char *eof, int *save_stdin)
 	return (buffer);
 }
 
+/**
+ * @brief Writes the heredoc buffer content to a temporary file.
+ *
+ * This function creates or truncates a temporary file with the
+ * specified name, writes the provided buffer content to it, and
+ * closes the file. If any operation fails, it frees the buffer
+ * and tmp_name, prints an error message, and returns an error
+ * code.
+ *
+ * @param buffer The null-terminated string buffer containing the
+ * heredoc content to write.
+ * @param tmp_name The name of the temporary file to create or
+ * overwrite.
+ * @return HEREDOC_SUCCESS on success, HEREDOC_ERROR on failure.
+ */
 static int	write_heredoc_to_file(char *buffer, char *tmp_name)
 {
 	int	tmp_file;

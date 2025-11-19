@@ -50,7 +50,8 @@
 		"tools.h": "c",
 		"shell_data.h": "c",
 		"readline.h": "c",
-		"enviroment_management.h": "c"
+		"enviroment_management.h": "c",
+		"built_in.h": "c"
 	},
 	"makefile.configureOnOpen": false
 }
