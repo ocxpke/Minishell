@@ -6,7 +6,7 @@
 /*   By: pablo <pablo@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/08/01 12:04:16 by jose-ara          #+#    #+#             */
-/*   Updated: 2025/11/10 20:51:54 by pablo            ###   ########.fr       */
+/*   Updated: 2025/11/19 17:39:57 by pablo            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -30,7 +30,7 @@ static int	redirect_input(t_cinfo *cinfo, int *pipe_aux)
 		if (!ft_strncmp(cinfo->input_file, "", 1) && cinfo->is_heredoc)
 			return (1);
 		if (fd == -1)
-			return(perror(cinfo->input_file), 1);
+			return (perror(cinfo->input_file), 1);
 		dup2(fd, STDIN_FILENO);
 		close(fd);
 	}

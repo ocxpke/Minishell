@@ -6,15 +6,15 @@
 /*   By: pablo <pablo@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/09/27 20:39:24 by pabmart2          #+#    #+#             */
-/*   Updated: 2025/11/10 20:51:55 by pablo            ###   ########.fr       */
+/*   Updated: 2025/11/19 18:14:25 by pablo            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #ifndef TOOLS_H
 # define TOOLS_H
 
-# include "structs.h"
 # include "libft.h"
+# include "structs.h"
 /**
  * @brief Adds a new node with the given key and value to the end of the
  *        environment linked list.
@@ -84,6 +84,32 @@ int				add_ordered_node(t_linked_env **ordered_envp, char **key_value);
 void			check_if_shelllvl(char **key_value);
 
 /**
+ * @brief Checks if the trimmed line matches the end-of-file (EOF) delimiter.
+ *
+ * This function compares the trimmed input line with the EOF delimiter string.
+ * It returns 1 if they match based on the comparison logic, otherwise 0.
+ *
+ * @param trimmed_line The input line after trimming whitespace.
+ * @param eof The EOF delimiter string to compare against.
+ * @return 1 if the trimmed line matches the EOF, 0 otherwise.
+ */
+int				check_eof_match(char *trimmed_line, char *eof);
+
+/**
+ * @brief Checks if the EOF char is zero and line char is a newline.
+ *
+ * Used to determine if heredoc input reached a special EOF condition.
+ * If 'eof' is '\0' and 'line' is '\n', returns 1 (true). If 'eof' is
+ * '\0' but 'line' is not '\n', returns 0 (false). In all other cases,
+ * returns 1.
+ *
+ * @param eof  The EOF character to check.
+ * @param line The current line character to check.
+ * @return int 1 if the EOF condition is met, otherwise 0.
+ */
+int				check_zero_eof(char eof, char line);
+
+/**
  * @brief Clones the current environment variables into the given t_envp
  *        structure.
  *
@@ -145,6 +171,19 @@ int				ft_max_len_str(const char *str_1, const char *str_2);
 int				generate_exec_envp(t_envp *shell_envi);
 
 /**
+ * @brief Generates a unique temporary file name for heredoc operations.
+ *
+ * This function creates a temporary file name starting from ".heredoc_tmp0"
+ * and increments the number until it finds a name that does not exist or is
+ * not writable. It uses ft_itoa to convert the number to a string and
+ * ft_strjoin to concatenate it with the base name ".heredoc_tmp".
+ *
+ * @return A pointer to a dynamically allocated string containing the unique
+ *         temporary file name, or NULL if memory allocation fails.
+ */
+char			*gerate_tmp_heredoc_name(void);
+
+/**
  * @brief Splits an environment variable string into key and value.
  *
  * Given a string in the form "KEY=VALUE", this function splits it into a
@@ -174,5 +213,33 @@ char			**get_key_value(char *env);
  *         empty or invalid.
  */
 t_piped_info	*get_last_pipe_info_entry(t_shell_data *shell_data);
+
+/**
+ * @brief Handles the end-of-file condition for a here-document in the
+ * minishell.
+ *
+ * This function checks if a SIGINT signal was received. If so, it cleans up
+ * by reading from an invalid file descriptor and freeing the buffer, then
+ * returns NULL to indicate termination. Otherwise, it reads from an invalid
+ * file descriptor, writes an error message to stderr indicating that the
+ * here-document was delimited by end-of-file, and returns the buffer.
+ *
+ * @param buffer The buffer containing the here-document content.
+ * @return NULL if SIGINT was received, otherwise the original buffer.
+ */
+char			*handle_heredoc_eof(char *buffer);
+
+/**
+ * @brief Appends a line and newline to the heredoc buffer.
+ *
+ * Concatenates the given line to the buffer, then appends a newline.
+ * Handles memory freeing for temporary buffers.
+ *
+ * @param buffer Current heredoc buffer (may be NULL or allocated).
+ * @param line   Line to append (should not be NULL).
+ * @return Newly allocated buffer with the line and newline appended,
+ *         or NULL on allocation failure. Caller must free the result.
+ */
+char			*process_heredoc_line(char *buffer, char *line);
 
 #endif

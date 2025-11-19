@@ -6,15 +6,15 @@
 /*   By: pablo <pablo@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/10/28 18:08:35 by pablo             #+#    #+#             */
-/*   Updated: 2025/11/16 13:13:15 by pablo            ###   ########.fr       */
+/*   Updated: 2025/11/19 17:38:43 by pablo            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #ifndef PARSER_H
 # define PARSER_H
 
-# include "structs.h"
 # include "libft.h"
+# include "structs.h"
 
 /**
  * @brief Cleans quotes from the input string by removing unnecessary quote
@@ -86,7 +86,7 @@ void	free_tokens(t_token ***tokens);
  * @param i Current token index.
  * @return 1 if a command exists in the pipeline, 0 otherwise.
  */
-int	has_command_in_pipeline(t_token **tokens, size_t i);
+int		has_command_in_pipeline(t_token **tokens, size_t i);
 
 /**
  * @brief Parses the given command line string into an array of tokens.

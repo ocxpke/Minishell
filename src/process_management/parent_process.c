@@ -6,13 +6,13 @@
 /*   By: pablo <pablo@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/08/01 12:47:33 by jose-ara          #+#    #+#             */
-/*   Updated: 2025/11/10 18:33:25 by pablo            ###   ########.fr       */
+/*   Updated: 2025/11/19 17:39:48 by pablo            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
 
-extern volatile sig_atomic_t g_signal_recv;
+extern volatile sig_atomic_t	g_signal_recv;
 
 static void	close_fds(t_shell_data *shell_data, int pipes[2], int *pipe_aux,
 		int index)
@@ -31,7 +31,8 @@ static void	close_fds(t_shell_data *shell_data, int pipes[2], int *pipe_aux,
 		close(*pipe_aux);
 }
 
-static void manage_exit_code(t_shell_data *shell_data,int ret_status, int index)
+static void	manage_exit_code(t_shell_data *shell_data, int ret_status,
+		int index)
 {
 	int	exit_num;
 
@@ -40,7 +41,7 @@ static void manage_exit_code(t_shell_data *shell_data,int ret_status, int index)
 		exit_num = ((128 + SIGINT) % 256);
 	else if (WIFEXITED(ret_status))
 		exit_num = WEXITSTATUS(ret_status);
-	else if(WIFSIGNALED(ret_status))
+	else if (WIFSIGNALED(ret_status))
 	{
 		exit_num = ((128 + WTERMSIG(ret_status)) % 256);
 		if (WTERMSIG(ret_status) == SIGINT)

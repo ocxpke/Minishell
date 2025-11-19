@@ -6,7 +6,7 @@
 /*   By: pablo <pablo@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/07/24 12:02:38 by pablo             #+#    #+#             */
-/*   Updated: 2025/11/17 18:33:45 by pablo            ###   ########.fr       */
+/*   Updated: 2025/11/19 17:38:40 by pablo            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -15,14 +15,14 @@
 
 # define _GNU_SOURCE
 
-# include "structs.h"
-# include "libft.h"
 # include "built_in.h"
 # include "enviroment_management.h"
+# include "libft.h"
 # include "parser.h"
 # include "process_management.h"
 # include "shell_data.h"
 # include "signals.h"
+# include "structs.h"
 # include "tools.h"
 # include <aio.h>
 # include <fcntl.h>
@@ -30,9 +30,9 @@
 # include <readline/readline.h>
 # include <signal.h>
 # include <stdio.h>
-# include <sys/ioctl.h>
 # include <stdlib.h>
 # include <string.h>
+# include <sys/ioctl.h>
 # include <sys/wait.h>
 # include <termios.h>
 # include <unistd.h>
@@ -49,8 +49,8 @@
  * and error reporting.
  *
  * @param eof The end-of-file delimiter string for the heredoc.
- * @param result Pointer to store the temporary filename on success (caller must free).
- *               Set to NULL on error or interruption.
+ * @param result Pointer to store the temporary filename on success
+ *               (caller must free). Set to NULL on error or interruption.
  * @return HEREDOC_SUCCESS (0) if heredoc completed successfully.
  *         HEREDOC_INTERRUPTED (1) if interrupted by signal (e.g., Ctrl+C).
  *         HEREDOC_ERROR (2) if an error occurred (memory, I/O, etc.).
@@ -203,7 +203,6 @@ int		count_command_args(t_token **tokens, int cmd_pos);
  *         token_pos is non-NULL, *token_pos is set to -1.
  */
 t_token	*get_next_command(t_token **tokens, int n, int *token_pos);
-
 
 /**
  * @brief Cleans up an array of command info structures by freeing
