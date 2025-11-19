@@ -6,7 +6,7 @@
 /*   By: pablo <pablo@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/09/10 18:17:00 by pabmart2          #+#    #+#             */
-/*   Updated: 2025/11/10 20:43:25 by pablo            ###   ########.fr       */
+/*   Updated: 2025/11/19 22:40:44 by pablo            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -672,6 +672,23 @@ char				**ft_splitkeep(char const *s, char c);
  *         allocation fails.
  */
 char				**ft_splitm(char const *s, char *cs);
+
+/**
+ * @brief Splits a string into substrings based on a delimiter,
+ * ignoring quotes.
+ *
+ * This function counts the number of tokens in the input string `s`
+ * by splitting on the delimiter `c`, while ignoring double and single
+ * quotes. It then creates an array of substrings accordingly.
+ *
+ * @param s The string to be split.
+ * @param c The delimiter character.
+ * @param ignored A string of characters to ignore (currently unused
+ * in implementation).
+ * @return A NULL-terminated array of strings (substrings), or NULL
+ * if allocation fails.
+ */
+char	**ft_split_ignore(char const *s, char c, char const *ignored);
 
 /**
  * @brief Searches for the first occurrence of a character in a string.
