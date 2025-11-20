@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   tools_heredoc_helpers.c                            :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: pablo <pablo@student.42.fr>                +#+  +:+       +#+        */
+/*   By: pabmart2 <pabmart2@student.42malaga.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/11/19 17:44:06 by pablo             #+#    #+#             */
-/*   Updated: 2025/11/19 18:03:01 by pablo            ###   ########.fr       */
+/*   Updated: 2025/11/20 17:25:08 by pabmart2         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -70,7 +70,7 @@ char	*gerate_tmp_heredoc_name(void)
 int	check_eof_match(char *trimmed_line, char *eof)
 {
 	if (!ft_strncmp(trimmed_line, eof, ft_max_len_str(trimmed_line, eof))
-		&& check_zero_eof(*eof, *trimmed_line))
+		|| check_zero_eof(*eof, *trimmed_line))
 		return (1);
 	return (0);
 }

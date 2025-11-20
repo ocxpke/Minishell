@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   utils_entry_info.c                                 :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: jose-ara < jose-ara@student.42malaga.co    +#+  +:+       +#+        */
+/*   By: pabmart2 <pabmart2@student.42malaga.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/08/18 12:52:02 by pablo             #+#    #+#             */
-/*   Updated: 2025/11/09 16:08:32 by jose-ara         ###   ########.fr       */
+/*   Updated: 2025/11/20 18:03:02 by pabmart2         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -44,8 +44,7 @@ t_einfo	*get_entry_info(t_token **tokens)
 	einfo = initialize_einfo();
 	if (!einfo)
 		return (NULL);
-	set_cinfos(tokens, einfo);
-	if (!einfo->cinfos)
+	if (set_cinfos(tokens, einfo))
 		return (clean_entry_info(&einfo), NULL);
 	einfo->n_pipes = count_tokens(tokens, PIPE);
 	einfo->piped_info = NULL;

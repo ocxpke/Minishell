@@ -25,6 +25,10 @@ void	sigint_handler(int sig)
 
 void	sigint_heredoc_handler(int sig)
 {
+	int	fd_null;
+
 	g_signal_recv = sig;
-	close(STDIN_FILENO);
+	fd_null = open("/dev/null", O_RDONLY, 0644);
+	dup2(fd_null, STDIN_FILENO);
+	close(fd_null);
 }
