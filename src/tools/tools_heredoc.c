@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   tools_heredoc.c                                    :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: pabmart2 <pabmart2@student.42malaga.com    +#+  +:+       +#+        */
+/*   By: jose-ara < jose-ara@student.42malaga.co    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/05 18:31:11 by pablo             #+#    #+#             */
-/*   Updated: 2025/11/20 17:51:09 by pabmart2         ###   ########.fr       */
+/*   Updated: 2025/11/20 19:13:42 by jose-ara         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -117,7 +117,7 @@ static char	*heredoc(char *eof)
 static char	*setup_heredoc_signals(char *eof)
 {
 	char	*buffer;
-	int save_stdin;
+	int		save_stdin;
 
 	save_stdin = dup(STDIN_FILENO);
 	signal(SIGINT, sigint_heredoc_handler);
@@ -166,6 +166,8 @@ int	heredoc_behaviour(char *eof, char **result)
 	int		status;
 
 	*result = NULL;
+	if (g_signal_recv == SIGINT)
+		return (HEREDOC_INTERRUPTED);
 	buffer = setup_heredoc_signals(eof);
 	if (!buffer)
 	{
