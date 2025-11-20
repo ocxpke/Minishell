@@ -6,7 +6,7 @@
 /*   By: pablo <pablo@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/07/30 15:51:04 by pablo             #+#    #+#             */
-/*   Updated: 2025/11/04 17:19:15 by pablo            ###   ########.fr       */
+/*   Updated: 2025/11/19 22:47:08 by pablo            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -59,14 +59,7 @@ static char	***allocate_tmp(size_t size)
 }
 
 /**
- * @brief Processes a single argument, splitting it by spaces if not quoted,
- * or treating it as a single string if quoted.
- *
- * This function handles the parsing of an argument in the context of
- * command-line argument processing. If the argument does not start with a
- * single or double quote, it is split into multiple substrings using space
- * as the delimiter. If it starts with a quote, it is stored as a single
- * string.
+ * @brief Processes a single argument by splitting it considering quotes.
  *
  * @param arg The argument string to process.
  * @param tmp A pointer to an array of string arrays where the processed
@@ -77,25 +70,9 @@ static char	***allocate_tmp(size_t size)
  */
 static int	process_arg(char *arg, char ***tmp, size_t i)
 {
-	if (arg[0] != '\'' && arg[0] != '\"')
-	{
-		tmp[i] = ft_split(arg, ' ');
-		if (!tmp[i])
-			return (0);
-	}
-	else
-	{
-		tmp[i] = malloc(sizeof(char *) * 2);
-		if (!tmp[i])
-			return (0);
-		tmp[i][0] = ft_strdup(arg);
-		if (!tmp[i][0])
-		{
-			free(tmp[i]);
-			return (0);
-		}
-		tmp[i][1] = NULL;
-	}
+	tmp[i] = ft_split_ignore(arg, ' ', "\"'");
+	if (!tmp[i])
+		return (0);
 	return (1);
 }
 

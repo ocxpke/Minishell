@@ -3,16 +3,16 @@
 /*                                                        :::      ::::::::   */
 /*   sig_handlers.c                                     :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: jose-ara < jose-ara@student.42malaga.co    +#+  +:+       +#+        */
+/*   By: pablo <pablo@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/09/27 19:02:56 by jose-ara          #+#    #+#             */
-/*   Updated: 2025/11/09 16:03:57 by jose-ara         ###   ########.fr       */
+/*   Updated: 2025/11/19 18:03:08 by pablo            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
 
-extern volatile sig_atomic_t g_signal_recv;
+extern volatile sig_atomic_t	g_signal_recv;
 
 void	sigint_handler(int sig)
 {

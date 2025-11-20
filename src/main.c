@@ -6,7 +6,7 @@
 /*   By: pablo <pablo@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/07/24 20:38:12 by pablo             #+#    #+#             */
-/*   Updated: 2025/11/12 17:25:38 by pablo            ###   ########.fr       */
+/*   Updated: 2025/11/19 23:30:41 by pablo            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -70,6 +70,7 @@ static int	ctrl_d_exit(t_shell_data *shell_data)
 		ret_num = ft_atoi(exit_env_value);
 	rl_clear_history();
 	free_shell_data(shell_data);
+	ft_get_next_line(-1);
 	return (ret_num);
 }
 

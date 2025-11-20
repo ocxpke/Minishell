@@ -6,7 +6,7 @@
 /*   By: pablo <pablo@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/09/27 19:00:52 by jose-ara          #+#    #+#             */
-/*   Updated: 2025/11/12 23:01:39 by pablo            ###   ########.fr       */
+/*   Updated: 2025/11/19 23:27:45 by pablo            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -57,5 +57,6 @@ void	exit_cmd(t_shell_data *shell_data, t_cinfo *cinfo, int *ret)
 		num_ret = ft_atoi(cinfo->cmd_and_args[1]);
 	rl_clear_history();
 	free_shell_data(shell_data);
+	ft_get_next_line(-1);
 	exit(num_ret % 256);
 }

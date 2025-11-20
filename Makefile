@@ -6,7 +6,7 @@
 #    By: pablo <pablo@student.42.fr>                +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2024/09/20 14:34:30 by pabmart2          #+#    #+#              #
-#    Updated: 2025/11/14 00:07:34 by pablo            ###   ########.fr        #
+#    Updated: 2025/11/19 18:14:50 by pablo            ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -59,6 +59,7 @@ SIGNALS_SRC = src/signals/signals.c \
 
 TOOLS_SRC = src/tools/tools_count_tokens.c \
 			src/tools/tools_heredoc.c \
+			src/tools/tools_heredoc_helpers.c \
 			src/tools/tools_piped_info.c \
 			src/tools/tools_key_value.c \
 			src/tools/tools_strings.c
