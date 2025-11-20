@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   child_process.c                                    :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: jose-ara < jose-ara@student.42malaga.co    +#+  +:+       +#+        */
+/*   By: pabmart2 <pabmart2@student.42malaga.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/08/01 12:04:16 by jose-ara          #+#    #+#             */
-/*   Updated: 2025/11/20 19:06:45 by jose-ara         ###   ########.fr       */
+/*   Updated: 2025/11/20 19:53:09 by pabmart2         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -28,7 +28,7 @@ static int	redirect_input(t_cinfo *cinfo, int *pipe_aux)
 	{
 		fd = open(cinfo->input_file, O_RDONLY, 0644);
 		if (!ft_strncmp(cinfo->input_file, "", 1) && cinfo->is_heredoc)
-			return (write(STDERR_FILENO, "heredoc err\n", 12), 1);
+			return (write(STDERR_FILENO, "heredoc sigint\n", 12), 1);
 		if (fd == -1)
 			return (perror(cinfo->input_file), 1);
 		dup2(fd, STDIN_FILENO);

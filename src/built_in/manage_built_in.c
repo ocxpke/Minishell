@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   manage_built_in.c                                  :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: pablo <pablo@student.42.fr>                +#+  +:+       +#+        */
+/*   By: pabmart2 <pabmart2@student.42malaga.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/09/27 19:01:07 by jose-ara          #+#    #+#             */
-/*   Updated: 2025/11/12 23:01:37 by pablo            ###   ########.fr       */
+/*   Updated: 2025/11/20 19:32:05 by pabmart2         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -79,6 +79,8 @@ static int	redirect_output_built_in(t_cinfo *cinfo, int *save_stdout)
 
 inline int	check_built_in_name(t_cinfo *cinfo)
 {
+	if (!cinfo || !cinfo->cmd_and_args)
+		return (0);
 	if (!ft_strncmp(cinfo->cmd_and_args[0], "exit",
 			ft_max_len_str(cinfo->cmd_and_args[0], "exit"))
 		|| !ft_strncmp(cinfo->cmd_and_args[0], "pwd",
