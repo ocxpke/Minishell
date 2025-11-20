@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   ft_split_ignore.c                                  :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: pablo <pablo@student.42.fr>                +#+  +:+       +#+        */
+/*   By: pabmart2 <pabmart2@student.42malaga.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/09/13 18:26:29 by pabmart2          #+#    #+#             */
-/*   Updated: 2025/11/19 22:48:51 by pablo            ###   ########.fr       */
+/*   Updated: 2025/11/20 17:24:14 by pabmart2         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -131,17 +131,15 @@ static size_t	count_tokens(char const *s, char c, char const *ignore)
 	while (*s)
 	{
 		if (ignore && ft_strchr(ignore, *s))
-			inside_ignore = !inside_ignore;
-		else if (!inside_ignore)
 		{
-			if (*s != c && !inside_token)
-			{
+			if (!inside_ignore && !inside_token && ++counter)
 				inside_token = 1;
-				++counter;
-			}
-			else if (*s == c)
-				inside_token = 0;
+			inside_ignore = !inside_ignore;
 		}
+		else if (!inside_ignore && *s != c && !inside_token && ++counter)
+			inside_token = 1;
+		else if (!inside_ignore && *s == c)
+			inside_token = 0;
 		++s;
 	}
 	return (counter);

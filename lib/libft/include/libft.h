@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   libft.h                                            :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: pablo <pablo@student.42.fr>                +#+  +:+       +#+        */
+/*   By: pabmart2 <pabmart2@student.42malaga.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/09/10 18:17:00 by pabmart2          #+#    #+#             */
-/*   Updated: 2025/11/19 22:40:44 by pablo            ###   ########.fr       */
+/*   Updated: 2025/11/20 17:27:30 by pabmart2         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -20,6 +20,7 @@
  * https://github.com/42School/norminette/issues/470
  */
 
+# include "ft_get_next_line/ft_get_next_line.h"
 # include <errno.h>
 # include <float.h>
 # include <limits.h>
@@ -29,8 +30,6 @@
 # include <stdio.h>
 # include <stdlib.h>
 # include <unistd.h>
-# include "ft_get_next_line/ft_get_next_line.h"
-
 
 /**
  * @brief A structure representing a node in a linked list.
@@ -688,7 +687,8 @@ char				**ft_splitm(char const *s, char *cs);
  * @return A NULL-terminated array of strings (substrings), or NULL
  * if allocation fails.
  */
-char	**ft_split_ignore(char const *s, char c, char const *ignored);
+char				**ft_split_ignore(char const *s, char c,
+						char const *ignored);
 
 /**
  * @brief Searches for the first occurrence of a character in a string.
