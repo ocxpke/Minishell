@@ -6,7 +6,7 @@
 /*   By: pabmart2 <pabmart2@student.42malaga.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/11/19 17:44:06 by pablo             #+#    #+#             */
-/*   Updated: 2025/11/20 17:25:08 by pabmart2         ###   ########.fr       */
+/*   Updated: 2025/11/20 19:16:22 by pabmart2         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -23,7 +23,7 @@ int	check_zero_eof(char eof, char line)
 		else
 			return (0);
 	}
-	return (1);
+	return (0);
 }
 
 char	*process_heredoc_line(char *buffer, char *line)
