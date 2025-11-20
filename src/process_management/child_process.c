@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   child_process.c                                    :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: pablo <pablo@student.42.fr>                +#+  +:+       +#+        */
+/*   By: jose-ara < jose-ara@student.42malaga.co    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/08/01 12:04:16 by jose-ara          #+#    #+#             */
-/*   Updated: 2025/11/19 17:39:57 by pablo            ###   ########.fr       */
+/*   Updated: 2025/11/20 19:06:45 by jose-ara         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -28,7 +28,7 @@ static int	redirect_input(t_cinfo *cinfo, int *pipe_aux)
 	{
 		fd = open(cinfo->input_file, O_RDONLY, 0644);
 		if (!ft_strncmp(cinfo->input_file, "", 1) && cinfo->is_heredoc)
-			return (1);
+			return (write(STDERR_FILENO, "heredoc err\n", 12), 1);
 		if (fd == -1)
 			return (perror(cinfo->input_file), 1);
 		dup2(fd, STDIN_FILENO);
@@ -79,7 +79,8 @@ void	child_process(t_shell_data *shell_data, int pipes[2], int *pipe_aux,
 	generate_exec_envp(&(shell_data->shell_envi));
 	restore_terminal_signals();
 	if (cinfo->cmd_and_args[0])
-		execve(cinfo->cmd_and_args[0], cinfo->cmd_and_args, shell_data->shell_envi.envp_exec);
+		execve(cinfo->cmd_and_args[0], cinfo->cmd_and_args,
+			shell_data->shell_envi.envp_exec);
 	perror("Command not found");
 	free_shell_data(shell_data);
 	exit(127);
