@@ -6,7 +6,7 @@
 /*   By: pabmart2 <pabmart2@student.42malaga.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/07/24 11:57:25 by pablo             #+#    #+#             */
-/*   Updated: 2025/11/20 17:07:48 by pabmart2         ###   ########.fr       */
+/*   Updated: 2025/11/20 19:04:06 by pabmart2         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -77,7 +77,6 @@ t_token	**parse(char *command_line, t_linked_env *linked_env)
 	if (has_null_in_array(splitted))
 		return (ft_free((void **)&splitted), NULL);
 	tokens = tokenize(splitted, linked_env);
-	print_token_matrix(tokens);
 	ft_matrix_free((void ***)&splitted, 0);
 	return (tokens);
 }
