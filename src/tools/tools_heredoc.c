@@ -112,16 +112,17 @@ static char	*heredoc(char *eof)
  * the heredoc input, or NULL on failure. The caller is responsible
  * for freeing the returned buffer.
  */
-static char	*setup_heredoc_signals(char *eof, int *save_stdin)
+static char	*setup_heredoc_signals(char *eof)
 {
 	char	*buffer;
+	int save_stdin;
 
-	*save_stdin = dup(STDIN_FILENO);
+	save_stdin = dup(STDIN_FILENO);
 	signal(SIGINT, sigint_heredoc_handler);
 	buffer = heredoc(eof);
 	if (g_signal_recv == SIGINT)
-		dup2(*save_stdin, STDIN_FILENO);
-	close(*save_stdin);
+		dup2(save_stdin, STDIN_FILENO);
+	close(save_stdin);
 	signal(SIGINT, sigint_handler);
 	return (buffer);
 }
@@ -160,11 +161,10 @@ int	heredoc_behaviour(char *eof, char **result)
 {
 	char	*buffer;
 	char	*tmp_name;
-	int		save_stdin;
 	int		status;
 
 	*result = NULL;
-	buffer = setup_heredoc_signals(eof, &save_stdin);
+	buffer = setup_heredoc_signals(eof);
 	if (!buffer)
 	{
 		if (g_signal_recv == SIGINT)

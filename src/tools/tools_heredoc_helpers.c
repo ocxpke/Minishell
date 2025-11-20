@@ -70,7 +70,7 @@ char	*gerate_tmp_heredoc_name(void)
 int	check_eof_match(char *trimmed_line, char *eof)
 {
 	if (!ft_strncmp(trimmed_line, eof, ft_max_len_str(trimmed_line, eof))
-		&& check_zero_eof(*eof, *trimmed_line))
+		|| check_zero_eof(*eof, *trimmed_line))
 		return (1);
 	return (0);
 }

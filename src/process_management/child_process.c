@@ -66,23 +66,20 @@ void	child_process(t_shell_data *shell_data, int pipes[2], int *pipe_aux,
 		int index)
 {
 	t_cinfo	*cinfo;
-	char	*cmd_path;
-	char	**cmd_and_args;
-	char	**envp_exec;
+	int		err_in;
+	int		err_out;
 
 	cinfo = shell_data->einfo->cinfos[index];
 	rl_clear_history();
-	if (redirect_input(cinfo, pipe_aux) || redirect_output(shell_data, cinfo,
-			pipes, index))
+	err_in = redirect_input(cinfo, pipe_aux);
+	err_out = redirect_output(shell_data, cinfo, pipes, index);
+	if (err_in || err_out)
 		return (free_shell_data(shell_data), exit(EXIT_FAILURE));
 	ft_matrix_free((void ***)&shell_data->shell_envi.envp_exec, 0);
 	generate_exec_envp(&(shell_data->shell_envi));
 	restore_terminal_signals();
-	cmd_path = cinfo->cmd_and_args[0];
-	cmd_and_args = cinfo->cmd_and_args;
-	envp_exec = shell_data->shell_envi.envp_exec;
-	if (cmd_path && cmd_path[0])
-		execve(cmd_path, cmd_and_args, envp_exec);
+	if (cinfo->cmd_and_args[0])
+		execve(cinfo->cmd_and_args[0], cinfo->cmd_and_args, shell_data->shell_envi.envp_exec);
 	perror("Command not found");
 	free_shell_data(shell_data);
 	exit(127);
@@ -93,11 +90,14 @@ void	exec_subshell(t_shell_data *shell_data, int pipes[2], int *pipe_aux,
 {
 	t_cinfo	*cinfo;
 	int		exit_status;
+	int		err_in;
+	int		err_out;
 
 	cinfo = shell_data->einfo->cinfos[index];
 	rl_clear_history();
-	if (redirect_input(cinfo, pipe_aux) || redirect_output(shell_data, cinfo,
-			pipes, index))
+	err_in = redirect_input(cinfo, pipe_aux);
+	err_out = redirect_output(shell_data, cinfo, pipes, index);
+	if (err_in || err_out)
 		return (free_shell_data(shell_data), exit(EXIT_FAILURE));
 	restore_terminal_signals();
 	exit_status = exec_built_in(shell_data, cinfo);
