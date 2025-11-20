@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   libft.h                                            :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: pablo <pablo@student.42.fr>                +#+  +:+       +#+        */
+/*   By: pabmart2 <pabmart2@student.42malaga.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/09/10 18:17:00 by pabmart2          #+#    #+#             */
-/*   Updated: 2025/11/19 22:40:44 by pablo            ###   ########.fr       */
+/*   Updated: 2025/11/20 18:08:18 by pabmart2         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -20,6 +20,7 @@
  * https://github.com/42School/norminette/issues/470
  */
 
+# include "ft_get_next_line/ft_get_next_line.h"
 # include <errno.h>
 # include <float.h>
 # include <limits.h>
@@ -29,8 +30,6 @@
 # include <stdio.h>
 # include <stdlib.h>
 # include <unistd.h>
-# include "ft_get_next_line/ft_get_next_line.h"
-
 
 /**
  * @brief A structure representing a node in a linked list.
@@ -658,6 +657,25 @@ char				**ft_split(char const *s, char c);
 char				**ft_splitkeep(char const *s, char c);
 
 /**
+ * @brief Splits a string into substrings separated by a delimiter, keeping the
+ *        delimiter as separate tokens, while ignoring delimiters within quotes.
+ *
+ * This function splits the input string `s` into substrings using the delimiter
+ * character `c`. Unlike ft_split, this function keeps each occurrence of the
+ * delimiter as a separate token in the result array. Additionally, it respects
+ * quote characters specified in `ignore` - delimiters within quoted sections
+ * are not treated as separators.
+ *
+ * @param s The input string to be split.
+ * @param c The delimiter character.
+ * @param ignore String of characters that toggle ignore state (e.g., "\"'").
+ * @return A pointer to the array of substrings, or NULL if memory
+ *         allocation fails.
+ */
+char				**ft_splitkeep_ignore(char const *s, char c,
+						char const *ignore);
+
+/**
  * @brief Splits a string into an array of substrings based on multiple
  *        delimiters.
  *
@@ -688,7 +706,8 @@ char				**ft_splitm(char const *s, char *cs);
  * @return A NULL-terminated array of strings (substrings), or NULL
  * if allocation fails.
  */
-char	**ft_split_ignore(char const *s, char c, char const *ignored);
+char				**ft_split_ignore(char const *s, char c,
+						char const *ignored);
 
 /**
  * @brief Searches for the first occurrence of a character in a string.
