@@ -3,10 +3,10 @@
 #                                                         :::      ::::::::    #
 #    Makefile                                           :+:      :+:    :+:    #
 #                                                     +:+ +:+         +:+      #
-#    By: pablo <pablo@student.42.fr>                +#+  +:+       +#+         #
+#    By: pabmart2 <pabmart2@student.42malaga.com    +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2024/09/20 14:34:30 by pabmart2          #+#    #+#              #
-#    Updated: 2025/11/19 22:41:07 by pablo            ###   ########.fr        #
+#    Updated: 2025/11/20 18:20:36 by pabmart2         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -62,6 +62,7 @@ SRC = \
 	src/ft_putstr_fd.c \
 	src/ft_split.c \
 	src/ft_splitkeep.c \
+	src/ft_splitkeep_ignore.c \
 	src/ft_splitm.c \
 	src/ft_split_ignore.c \
 	src/ft_realloc.c \

@@ -6,7 +6,7 @@
 /*   By: pabmart2 <pabmart2@student.42malaga.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/09/10 18:17:00 by pabmart2          #+#    #+#             */
-/*   Updated: 2025/11/20 17:27:30 by pabmart2         ###   ########.fr       */
+/*   Updated: 2025/11/20 18:08:18 by pabmart2         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -655,6 +655,25 @@ char				**ft_split(char const *s, char c);
  *         allocation fails.
  */
 char				**ft_splitkeep(char const *s, char c);
+
+/**
+ * @brief Splits a string into substrings separated by a delimiter, keeping the
+ *        delimiter as separate tokens, while ignoring delimiters within quotes.
+ *
+ * This function splits the input string `s` into substrings using the delimiter
+ * character `c`. Unlike ft_split, this function keeps each occurrence of the
+ * delimiter as a separate token in the result array. Additionally, it respects
+ * quote characters specified in `ignore` - delimiters within quoted sections
+ * are not treated as separators.
+ *
+ * @param s The input string to be split.
+ * @param c The delimiter character.
+ * @param ignore String of characters that toggle ignore state (e.g., "\"'").
+ * @return A pointer to the array of substrings, or NULL if memory
+ *         allocation fails.
+ */
+char				**ft_splitkeep_ignore(char const *s, char c,
+						char const *ignore);
 
 /**
  * @brief Splits a string into an array of substrings based on multiple
