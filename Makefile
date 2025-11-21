@@ -3,10 +3,10 @@
 #                                                         :::      ::::::::    #
 #    Makefile                                           :+:      :+:    :+:    #
 #                                                     +:+ +:+         +:+      #
-#    By: pablo <pablo@student.42.fr>                +#+  +:+       +#+         #
+#    By: pabmart2 <pabmart2@student.42malaga.com    +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2024/09/20 14:34:30 by pabmart2          #+#    #+#              #
-#    Updated: 2025/11/19 18:14:50 by pablo            ###   ########.fr        #
+#    Updated: 2025/11/21 15:56:07 by pabmart2         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -103,30 +103,29 @@ debug-asan: clean $(NAME)
 clean:
 	@rm -rf $(OBJ_DIR)
 	@make clean -C lib/libft
-	@echo -e "\033[31mObject files removed\033[0m"
+	@printf "\033[31mObject files removed\033[0m\n"
 
 fclean: clean
 	@rm -f $(BUILD_DIR)/$(NAME)
 	@make fclean -C lib/libft
-	@echo -e "\033[31m$(NAME) removed\033[0m"
+	@printf "\033[31m$(NAME) removed\033[0m\n"
 
 re: fclean
 	$(MAKE) all
 
 libft:
-	@echo -e "\033[33mCompiling libft...\033[0m"
+	@printf "\033[33mCompiling libft...\033[0m\n"
 	@$(MAKE) -C lib/libft
 
 $(NAME): libft $(OBJ)
 	@mkdir -p $(BUILD_DIR)
 	@$(CC) $(CFLAGS) $(OBJ) -o $(BUILD_DIR)/$(NAME) $(LIBS) $(INCLUDES) $(LDFLAGS)
-	@echo -e "\033[32m\n¡$(NAME) compiled! \
-	ᕦ(\033[36m⌐■\033[32m_\033[36m■\033[32m)ᕤ\033[0m\n"
+	@printf "\033[32m\n¡$(NAME) compiled! ᕦ(\033[36m⌐■\033[32m_\033[36m■\033[32m)ᕤ\033[0m\n"
 
 $(OBJ) : $(OBJ_DIR)/%.o : %.c $(HEADERS)
 	@mkdir -p $(dir $@)
 	@$(CC) $(CFLAGS) $(INCLUDES) -c $< -o $@
-	@echo -e "\033[34mCompiling: \033[0m$<"
+	@printf "\033[34mCompiling: \033[0m$<\n"
 
 ################################################
 .PHONY: all debug debug-asan clean fclean re

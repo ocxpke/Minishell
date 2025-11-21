@@ -6,7 +6,7 @@
 #    By: pabmart2 <pabmart2@student.42malaga.com    +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2024/09/20 14:34:30 by pabmart2          #+#    #+#              #
-#    Updated: 2025/11/20 18:20:36 by pabmart2         ###   ########.fr        #
+#    Updated: 2025/11/21 15:56:59 by pabmart2         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -109,12 +109,11 @@ re: fclean
 $(NAME) : $(OBJ)
 	@mkdir -p $(LIB_DIR)
 	@ar rcs $(LIB_DIR)/$(NAME) $(OBJ)
-	@echo -e "\033[32m\n¡$(NAME) compiled! \
-    ᕦ(\033[36m⌐■\033[32m_\033[36m■\033[32m)ᕤ\n\033[0m"
+	@printf "\033[32m\n¡$(NAME) compiled!     ᕦ(\033[36m⌐■\033[32m_\033[36m■\033[32m)ᕤ\n\033[0m"
 
 
 $(OBJ): %.o : %.c
-	@echo -e "\033[34mCompiling $<\033[0m"
+	@printf "\033[34mCompiling: \033[0m$<\n"
 	@$(CC) $(CFLAGS) $(INCLUDES) -c $< -o $@
 
 .PHONY: all clean fclean re bonus
