@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   parser_tokenization.c                              :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: pablo <pablo@student.42.fr>                +#+  +:+       +#+        */
+/*   By: pabmart2 <pabmart2@student.42malaga.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/07/30 16:21:57 by pablo             #+#    #+#             */
-/*   Updated: 2025/11/16 13:13:36 by pablo            ###   ########.fr       */
+/*   Updated: 2025/11/21 16:32:33 by pabmart2         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -65,18 +65,16 @@ static t_token	**first_token_parse(char **array, size_t size)
 
 	tokens = ft_calloc(size + 1, sizeof(t_token *));
 	if (!tokens)
-		return (ft_matrix_free((void ***)&array, 0), NULL);
+		return (NULL);
 	i = 0;
 	while (i < size)
 	{
 		tokens[i] = ft_calloc(1, sizeof(t_token));
 		if (!tokens[i])
-			return (free_tokens(&tokens), ft_matrix_free((void ***)&array, 0),
-				NULL);
+			return (free_tokens(&tokens), NULL);
 		tokens[i]->string = ft_strdup(array[i]);
 		if (!tokens[i]->string)
-			return (free_tokens(&tokens), ft_matrix_free((void ***)&array, 0),
-				NULL);
+			return (free_tokens(&tokens), NULL);
 		first_token_assign(array, tokens, i);
 		i++;
 	}
@@ -152,6 +150,8 @@ t_token	**tokenize(char **array, t_linked_env *linked_env)
 
 	size = ft_matrix_len((void **)array);
 	tokens = first_token_parse(array, size);
+	if (!tokens)
+		return (NULL);
 	i = 0;
 	while (i < size)
 	{

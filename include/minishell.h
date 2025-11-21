@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   minishell.h                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: pablo <pablo@student.42.fr>                +#+  +:+       +#+        */
+/*   By: pabmart2 <pabmart2@student.42malaga.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/07/24 12:02:38 by pablo             #+#    #+#             */
-/*   Updated: 2025/11/19 23:17:19 by pablo            ###   ########.fr       */
+/*   Updated: 2025/11/21 16:23:28 by pabmart2         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -147,17 +147,18 @@ t_token	**extract_first_type_token(t_token **tokens, t_ttype type);
 t_token	**find_next_pipe_pos_after_command(t_token **tokens);
 
 /**
- * @brief Retrieves and initializes entry information from a list of tokens.
+ * @brief Initializes entry information for the shell command parsing.
  *
- * This function allocates and initializes a t_einfo structure, then sets its
- * input and output file fields based on the provided tokens. It also counts
- * the number of pipes present in the token list and stores this value in the
- * structure. Returns NULL if memory allocation fails.
+ * This function processes the tokens to set command information, counts
+ * the number of pipes in the token list, initializes piped_info to NULL,
+ * and frees the tokens.
  *
- * @param tokens Double pointer to the list of tokens to be analyzed.
- * @return Pointer to the initialized t_einfo structure, or NULL on failure.
+ * @param tokens A pointer to the pointer of the token list to process and
+ * free.
+ * @param einfo A pointer to the entry info structure to populate.
+ * @return 0 on success, or the return value of set_cinfos on failure.
  */
-t_einfo	*get_entry_info(t_token **tokens);
+int		get_entry_info(t_token **tokens, t_einfo *einfo);
 
 /**
  * Retrieves the value for a key from a linked environment list.
@@ -170,6 +171,21 @@ t_einfo	*get_entry_info(t_token **tokens);
  * If both length and content match, returns the value. Else, returns NULL.
  */
 char	*get_linked_env(const char *key, t_linked_env *linked_env);
+
+/**
+ * @brief Allocates and initializes a new t_einfo structure.
+ *
+ * This function allocates memory for a t_einfo structure and initializes
+ * its members to default values:
+ *
+ *   - input_file, output_file and commands are set to NULL.
+ *
+ *   - is_append, is_heredoc, and n_pipes are set to -1.
+ *
+ * @return Pointer to the newly allocated and initialized t_einfo structure,
+ *         or NULL if memory allocation fails.
+ */
+t_einfo	*initialize_einfo(void);
 
 //////////////////////////////// UTILS - CINFO /////////////////////////////////
 /**

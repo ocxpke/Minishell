@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   main.c                                             :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: pablo <pablo@student.42.fr>                +#+  +:+       +#+        */
+/*   By: pabmart2 <pabmart2@student.42malaga.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/07/24 20:38:12 by pablo             #+#    #+#             */
-/*   Updated: 2025/11/19 23:30:41 by pablo            ###   ########.fr       */
+/*   Updated: 2025/11/21 16:25:34 by pabmart2         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -116,38 +116,28 @@ static int	read_shell_input(t_shell_data *shell_data, char **input)
  *        entry information, and proceeding to the execution phase if
  *        successful.
  *
- * This function takes the user input, parses it into tokens, obtains entry
- * information for execution, handles any errors during parsing or entry
- * info creation, adds the input to the command history, and initiates the
- * execution cycle.
- *
  * @param shell_data Pointer to the shell data structure containing
  *                   environment and state.
  * @param input The user input string to be processed.
- *
- * @note If parsing fails, an error is printed and the function returns
- *       early. If entry info creation fails, an error is printed, tokens
- *       are freed, and the function returns. The tokens are set to NULL
- *       after successful entry info retrieval.
  */
 static void	execute_shell_cycle(t_shell_data *shell_data, char *input)
 {
+	int	ret;
+
 	shell_data->tokens = parse(input, shell_data->shell_envi.ordered_envp);
-	if (shell_data->tokens)
-	{
-		shell_data->einfo = get_entry_info(shell_data->tokens);
-		if (!shell_data->einfo)
-		{
-			perror("Error creating Entry Info");
-			free_tokens(&shell_data->tokens);
-			shell_data->tokens = NULL;
-			add_history(input);
-			return ;
-		}
-		shell_data->tokens = NULL;
-		add_history(input);
+	if (!shell_data->tokens)
+		return ;
+	shell_data->einfo = initialize_einfo();
+	if (!shell_data->einfo)
+		return (perror("Error creating Entry Info"),
+			free_tokens(&shell_data->tokens), add_history(input));
+	ret = get_entry_info(shell_data->tokens, shell_data->einfo);
+	if (ret == 1)
+		perror("Error creating Entry Info");
+	shell_data->tokens = NULL;
+	add_history(input);
+	if (ret == 0)
 		execution_cycle(shell_data);
-	}
 }
 
 int	main(void)

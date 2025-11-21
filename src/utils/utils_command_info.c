@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   utils_command_info.c                               :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: pablo <pablo@student.42.fr>                +#+  +:+       +#+        */
+/*   By: pabmart2 <pabmart2@student.42malaga.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/08/25 18:24:40 by pablo             #+#    #+#             */
-/*   Updated: 2025/11/16 13:14:01 by pablo            ###   ########.fr       */
+/*   Updated: 2025/11/21 16:22:13 by pabmart2         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -150,6 +150,8 @@ int	set_cinfos(t_token **tokens, t_einfo *einfo)
 
 	n_commands = count_tokens(tokens, COMMAND_BUILT_IN) + count_tokens(tokens,
 			COMMAND_NOT_FOUND) + count_tokens(tokens, COMMAND_ROUTE);
+	if (!n_commands)
+		return (2);
 	einfo->cinfos = malloc(sizeof(t_cinfo *) * (n_commands + 1));
 	if (!einfo->cinfos)
 		return (1);

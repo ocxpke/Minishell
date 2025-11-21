@@ -6,26 +6,13 @@
 /*   By: pabmart2 <pabmart2@student.42malaga.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/08/18 12:52:02 by pablo             #+#    #+#             */
-/*   Updated: 2025/11/20 19:50:37 by pabmart2         ###   ########.fr       */
+/*   Updated: 2025/11/21 16:34:20 by pabmart2         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
 
-/**
- * @brief Allocates and initializes a new t_einfo structure.
- *
- * This function allocates memory for a t_einfo structure and initializes
- * its members to default values:
- *
- *   - input_file, output_file and commands are set to NULL.
- *
- *   - is_append, is_heredoc, and n_pipes are set to -1.
- *
- * @return Pointer to the newly allocated and initialized t_einfo structure,
- *         or NULL if memory allocation fails.
- */
-static t_einfo	*initialize_einfo(void)
+t_einfo	*initialize_einfo(void)
 {
 	t_einfo	*einfo;
 
@@ -34,6 +21,7 @@ static t_einfo	*initialize_einfo(void)
 		return (NULL);
 	einfo->n_pipes = -1;
 	einfo->cinfos = NULL;
+	einfo->piped_info = NULL;
 	return (einfo);
 }
 
@@ -64,19 +52,17 @@ static int	get_n_pipes(t_token **tokens)
 	return (n_pipes);
 }
 
-t_einfo	*get_entry_info(t_token **tokens)
+int	get_entry_info(t_token **tokens, t_einfo *einfo)
 {
-	t_einfo	*einfo;
+	int	ret;
 
-	einfo = initialize_einfo();
-	if (!einfo)
-		return (NULL);
-	if (set_cinfos(tokens, einfo))
-		return (clean_entry_info(&einfo), NULL);
+	ret = set_cinfos(tokens, einfo);
+	if (ret != 0)
+		return (free_tokens(&tokens), ret);
 	einfo->n_pipes = get_n_pipes(tokens);
 	einfo->piped_info = NULL;
 	free_tokens(&tokens);
-	return (einfo);
+	return (0);
 }
 
 void	clean_entry_info(t_einfo **einfo)
