@@ -6,7 +6,7 @@
 #    By: pabmart2 <pabmart2@student.42malaga.com    +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2024/09/20 14:34:30 by pabmart2          #+#    #+#              #
-#    Updated: 2025/11/21 15:56:59 by pabmart2         ###   ########.fr        #
+#    Updated: 2025/11/21 18:32:26 by pabmart2         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -64,6 +64,7 @@ SRC = \
 	src/ft_splitkeep.c \
 	src/ft_splitkeep_ignore.c \
 	src/ft_splitm.c \
+	src/ft_splitm_ignore.c \
 	src/ft_split_ignore.c \
 	src/ft_realloc.c \
 	src/ft_strchr.c \

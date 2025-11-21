@@ -6,7 +6,7 @@
 /*   By: pabmart2 <pabmart2@student.42malaga.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/09/10 18:17:00 by pabmart2          #+#    #+#             */
-/*   Updated: 2025/11/20 18:08:18 by pabmart2         ###   ########.fr       */
+/*   Updated: 2025/11/21 18:31:37 by pabmart2         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -690,6 +690,36 @@ char				**ft_splitkeep_ignore(char const *s, char c,
  *         allocation fails.
  */
 char				**ft_splitm(char const *s, char *cs);
+
+/**
+ * @brief Splits a string into an array of substrings based on
+ * delimiters, ignoring specified characters.
+ *
+ * This function takes a string `s` and splits it into substrings
+ * using the characters in `c` as delimiters. However, any
+ * characters present in the `ignored` string are skipped during
+ * the splitting process. The resulting substrings are stored in
+ * a dynamically allocated array of strings, with the last
+ * element being NULL.
+ *
+ * @param s The input string to be split. Must be a
+ * null-terminated string.
+ * @param c A string containing the delimiter characters. Each
+ * character in this string acts as a separator.
+ * @param ignored A string containing characters to be ignored
+ * during splitting. These characters are skipped.
+ *
+ * @return A pointer to an array of strings (char **) containing
+ * the split substrings. Returns NULL if memory allocation fails
+ * or if `s` is NULL. The caller is responsible for freeing the
+ * returned array and its contents using appropriate functions.
+ *
+ * @note This function allocates memory for the array and
+ * substrings. Ensure to free them to avoid memory leaks.
+ * @note If `c` or `ignored` is NULL, the behavior may be
+ * undefined or equivalent to standard splitting.
+ */
+char	**ft_splitm_ignore(char const *s, char const *c, char const *ignored);
 
 /**
  * @brief Splits a string into substrings based on a delimiter,
