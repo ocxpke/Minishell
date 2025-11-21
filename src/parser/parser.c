@@ -6,7 +6,7 @@
 /*   By: pabmart2 <pabmart2@student.42malaga.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/07/24 11:57:25 by pablo             #+#    #+#             */
-/*   Updated: 2025/11/20 19:04:06 by pabmart2         ###   ########.fr       */
+/*   Updated: 2025/11/21 18:05:48 by pabmart2         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -67,7 +67,7 @@ t_token	**parse(char *command_line, t_linked_env *linked_env)
 		return (NULL);
 	splitted = split_pipes(command_line);
 	if (!splitted)
-		return (NULL);
+	return (NULL);
 	splitted = split_args(splitted);
 	if (!splitted)
 		return (NULL);
