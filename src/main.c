@@ -6,7 +6,7 @@
 /*   By: pabmart2 <pabmart2@student.42malaga.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/07/24 20:38:12 by pablo             #+#    #+#             */
-/*   Updated: 2025/11/21 16:25:34 by pabmart2         ###   ########.fr       */
+/*   Updated: 2025/11/21 18:48:22 by pabmart2         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -124,18 +124,18 @@ static void	execute_shell_cycle(t_shell_data *shell_data, char *input)
 {
 	int	ret;
 
+	add_history(input);
 	shell_data->tokens = parse(input, shell_data->shell_envi.ordered_envp);
 	if (!shell_data->tokens)
 		return ;
 	shell_data->einfo = initialize_einfo();
 	if (!shell_data->einfo)
 		return (perror("Error creating Entry Info"),
-			free_tokens(&shell_data->tokens), add_history(input));
+			free_tokens(&shell_data->tokens));
 	ret = get_entry_info(shell_data->tokens, shell_data->einfo);
 	if (ret == 1)
 		perror("Error creating Entry Info");
 	shell_data->tokens = NULL;
-	add_history(input);
 	if (ret == 0)
 		execution_cycle(shell_data);
 }

@@ -6,7 +6,7 @@
 /*   By: pabmart2 <pabmart2@student.42malaga.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/09/13 18:26:29 by pabmart2          #+#    #+#             */
-/*   Updated: 2025/11/21 18:14:40 by pabmart2         ###   ########.fr       */
+/*   Updated: 2025/11/21 19:00:56 by pabmart2         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -49,7 +49,7 @@ static char	*extract_token(const char **s, char c, char const *ignore)
 	if (!token)
 		return (NULL);
 	ft_strlcpy(token, start, len + 1);
-	while (**s == c)
+	while (**s && **s == c)
 		(*s)++;
 	return (token);
 }

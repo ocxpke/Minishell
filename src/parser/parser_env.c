@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   parser_env.c                                       :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: pablo <pablo@student.42.fr>                +#+  +:+       +#+        */
+/*   By: pabmart2 <pabmart2@student.42malaga.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/07/28 19:39:27 by pablo             #+#    #+#             */
-/*   Updated: 2025/11/14 00:18:43 by pablo            ###   ########.fr       */
+/*   Updated: 2025/11/21 20:00:30 by pabmart2         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -112,9 +112,9 @@ static char	*expand_env(char *env_start, char **current_string,
 	char	*env_end;
 	char	*env_value;
 	char	*result;
-	char	*trimmed;
 	size_t	offset;
 
+	// char	*trimmed;
 	env_end = get_env_end(env_start);
 	env_value = get_expanded_value(env_start, env_end, linked_env);
 	if (!env_value)
@@ -123,15 +123,35 @@ static char	*expand_env(char *env_start, char **current_string,
 	result = ft_strinsert(*current_string, env_start, env_end, env_value);
 	if (!result)
 		return (free(env_value), NULL);
-	trimmed = ft_strtrim(result, "\"");
-	free(result);
-	if (!trimmed)
-		return (free(env_value), NULL);
 	free(*current_string);
-	*current_string = trimmed;
+	*current_string = result;
 	*next_search_pos = *current_string + offset + ft_strlen(env_value);
 	free(env_value);
 	return (*current_string);
+}
+
+static char	is_env_between_quotes(char *str, char *env_start)
+{
+	char	inside_quote;
+	char	env_start_reached;
+
+	inside_quote = 0;
+	env_start_reached = 0;
+	while (*str)
+	{
+		if (!inside_quote && *str == '\'')
+			inside_quote = 1;
+		else if (inside_quote && *str == '\'')
+		{
+			inside_quote = 0;
+			if (env_start_reached)
+				return (1);
+		}
+		if (str == env_start && inside_quote)
+			env_start_reached = 1;
+		++str;
+	}
+	return (0);
 }
 
 char	**parse_expand_env(char **splitted, t_linked_env *linked_env)
@@ -139,26 +159,25 @@ char	**parse_expand_env(char **splitted, t_linked_env *linked_env)
 	size_t	i;
 	char	*env_start;
 	char	*next_search_pos;
+	char	*search_pos;
 
 	i = 0;
 	while (splitted[i])
 	{
-		if (splitted[i][0] != '\'')
+		search_pos = splitted[i];
+		while ((env_start = ft_strchr(search_pos, '$')))
 		{
-			env_start = ft_strchr(splitted[i], '$');
-			if (!env_start)
-				clean_quote(&splitted[i]);
-			while (env_start)
+			if (is_env_between_quotes(splitted[i], env_start))
+				search_pos = env_start + 1;
+			else
 			{
 				if (!expand_env(env_start, &splitted[i], &next_search_pos,
 						linked_env))
 					return (ft_matrix_free((void ***)&splitted, 0), NULL);
-				env_start = ft_strchr(next_search_pos, '$');
+				search_pos = next_search_pos;
 			}
 		}
-		else
-			clean_quote(&splitted[i]);
-		++i;
+		clean_quote(&splitted[i++]);
 	}
 	return (splitted);
 }

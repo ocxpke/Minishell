@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   ft_splitm.c                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: pablo <pablo@student.42.fr>                +#+  +:+       +#+        */
+/*   By: pabmart2 <pabmart2@student.42malaga.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/09/13 18:26:29 by pabmart2          #+#    #+#             */
-/*   Updated: 2025/03/29 16:36:20 by pablo            ###   ########.fr       */
+/*   Updated: 2025/11/21 19:00:56 by pabmart2         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -36,7 +36,7 @@ static char	**set_substrs(char const *s, char **str_cont, char *cs,
 	char	*next_t;
 
 	substr_count = 0;
-	while (ft_strchr(cs, *s))
+	while (*s && ft_strchr(cs, *s))
 		++s;
 	while (substr_count < token_count)
 	{
@@ -53,7 +53,8 @@ static char	**set_substrs(char const *s, char **str_cont, char *cs,
 			s = next_t;
 			++substr_count;
 		}
-		++s;
+		if (*s)
+			++s;
 	}
 	return (str_cont);
 }
