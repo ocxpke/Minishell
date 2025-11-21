@@ -6,7 +6,7 @@
 /*   By: pabmart2 <pabmart2@student.42malaga.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/08/01 12:04:16 by jose-ara          #+#    #+#             */
-/*   Updated: 2025/11/20 19:53:09 by pabmart2         ###   ########.fr       */
+/*   Updated: 2025/11/21 16:01:21 by pabmart2         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -28,7 +28,7 @@ static int	redirect_input(t_cinfo *cinfo, int *pipe_aux)
 	{
 		fd = open(cinfo->input_file, O_RDONLY, 0644);
 		if (!ft_strncmp(cinfo->input_file, "", 1) && cinfo->is_heredoc)
-			return (write(STDERR_FILENO, "heredoc sigint\n", 12), 1);
+			return (write(STDERR_FILENO, "heredoc sigint\n", 15), 1);
 		if (fd == -1)
 			return (perror(cinfo->input_file), 1);
 		dup2(fd, STDIN_FILENO);
