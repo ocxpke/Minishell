@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   ft_split_ignore.c                                  :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: pabmart2 <pabmart2@student.42malaga.com    +#+  +:+       +#+        */
+/*   By: pablo <pablo@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/09/13 18:26:29 by pabmart2          #+#    #+#             */
-/*   Updated: 2025/11/21 19:00:56 by pabmart2         ###   ########.fr       */
+/*   Updated: 2025/11/24 20:51:20 by pablo            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -148,6 +148,8 @@ char	**ft_split_ignore(char const *s, char c, char const *ignored)
 {
 	size_t	c_count;
 
+	if (!s)
+		return (NULL);
 	c_count = count_tokens(s, c, ignored);
 	return (set_substrs(s, c, c_count, ignored));
 }

@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   ft_splitkeep_ignore.c                              :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: pabmart2 <pabmart2@student.42malaga.com    +#+  +:+       +#+        */
+/*   By: pablo <pablo@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/11/20 00:00:00 by pabmart2          #+#    #+#             */
-/*   Updated: 2025/11/20 18:37:30 by pabmart2         ###   ########.fr       */
+/*   Updated: 2025/11/24 20:51:20 by pablo            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -173,6 +173,8 @@ char	**ft_splitkeep_ignore(char const *str, char delim, char const *ignore)
 	size_t	token_count;
 	char	**result;
 
+	if (!str)
+		return (NULL);
 	if (!ignore)
 		ignore = "\"'";
 	token_count = count_tokens(str, delim, ignore);

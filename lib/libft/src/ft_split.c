@@ -3,61 +3,63 @@
 /*                                                        :::      ::::::::   */
 /*   ft_split.c                                         :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: pabmart2 <pabmart2@student.42malaga.com    +#+  +:+       +#+        */
+/*   By: pablo <pablo@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/09/13 18:26:29 by pabmart2          #+#    #+#             */
-/*   Updated: 2025/11/21 19:00:56 by pabmart2         ###   ########.fr       */
+/*   Updated: 2025/11/24 21:20:18 by pablo            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "libft.h"
 
 /**
- * @brief Splits a string into substrings based on a delimiter.
+ * @brief Splits the input string into substrings based on a
+ * delimiter and stores them in the provided array.
  *
- * This function takes an input string `s` and splits it into substrings
- * based on the delimiter character `c`. The resulting substrings are stored
- * in the array `str_cont`, which should have enough space to hold `token_count`
- * substrings. The function returns the array `str_cont` on success, or NULL
- * if memory allocation fails.
+ * This function processes the string `s` to extract substrings
+ * separated by the character `c`. It skips leading delimiters,
+ * then for each of the `token_count` tokens, it allocates memory
+ * for the substring, copies it into the `str_cont` array, and
+ * skips trailing delimiters. If memory allocation fails, it
+ * returns NULL.
  *
- * @param s The input string to be split.
- * @param c The delimiter character.
- * @param token_count The number of substrings to be created.
- * @return The array of substrings on success, or NULL on failure.
+ * @param s The input string to split.
+ * @param str_cont The array of strings where substrings will be
+ * stored.
+ * @param c The delimiter character used to split the string.
+ * @param token_count The number of substrings to extract.
+ * @return A pointer to the `str_cont` array on success, or NULL
+ * on memory allocation failure.
  */
 static char	**set_substrs(char const *s, char **str_cont, char c,
 		size_t token_count)
 {
-	size_t	substr_count;
-	size_t	subs_str_len;
-	char	*next_t;
+	size_t	i;
+	char	*start;
 
-	substr_count = 0;
+	i = 0;
 	while (*s && *s == c)
 		++s;
-	while (substr_count < token_count)
+	while (i < token_count)
 	{
-		if (*s && *s != c)
-		{
-			next_t = ft_strchr(s, c);
-			subs_str_len = (next_t - s);
-			if (!next_t)
-				subs_str_len = (ft_strchr(s, '\0') - s);
-			str_cont[substr_count] = ft_calloc(subs_str_len + 1, sizeof(char));
-			if (!str_cont[substr_count])
-				return (NULL);
-			ft_strlcpy(str_cont[substr_count], s, subs_str_len + 1);
-			s = next_t;
-			++substr_count;
-		}
-		if (*s)
+		if (!*s)
+			break ;
+		start = (char *)s;
+		while (*s && *s != c)
+			++s;
+		str_cont[i] = ft_calloc((s - start) + 1, sizeof(char));
+		if (!str_cont[i])
+			return (NULL);
+		ft_strlcpy(str_cont[i], start, (s - start) + 1);
+		++i;
+		while (*s && *s == c)
 			++s;
 	}
 	return (str_cont);
 }
 /**
- * @brief Counts the number of tokens in a string separated by a given delimiter.
+ * @brief Counts the number of tokens in a string separated by a given
+ * delimiter.
  *
  * This function iterates through the input string `s` and counts the number of
  * tokens separated by the character `c`. A token is defined as a contiguous
@@ -91,37 +93,20 @@ static size_t	count_tokens(char const *s, char c)
 	return (counter);
 }
 
-/**
- * Frees a null-terminated array of pointers.
- *
- * This function iterates through each element of the provided array `mtx`,
- * freeing each element individually. After all elements have been freed,
- * the array itself is also freed.
- *
- * @param mtx A null-terminated array of pointers to be freed.
- */
-static void	ft_freemtx(void **mtx)
-{
-	int	i;
-
-	i = 0;
-	while (mtx[i])
-		ft_free((void **)&mtx[i++]);
-	ft_free((void **)&mtx);
-}
-
 char	**ft_split(char const *s, char c)
 {
 	size_t	c_count;
 	char	**str_cont;
 
+	if (!s)
+		return (NULL);
 	c_count = count_tokens(s, c);
 	str_cont = malloc(sizeof(char *) * (c_count + 1));
 	if (!str_cont)
 		return (NULL);
 	if (!set_substrs(s, str_cont, c, c_count))
 	{
-		ft_freemtx((void **)str_cont);
+		ft_matrix_free((void ***)&str_cont, 0);
 		return (NULL);
 	}
 	str_cont[c_count] = NULL;

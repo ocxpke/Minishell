@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   ft_splitm_ignore.c                                 :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: pabmart2 <pabmart2@student.42malaga.com    +#+  +:+       +#+        */
+/*   By: pablo <pablo@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/09/13 18:26:29 by pabmart2          #+#    #+#             */
-/*   Updated: 2025/11/21 19:00:56 by pabmart2         ###   ########.fr       */
+/*   Updated: 2025/11/24 21:15:01 by pablo            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -135,7 +135,8 @@ static size_t	count_tokens(char const *s, char const *c, char const *ignore)
 				inside_token = 1;
 			inside_ignore = !inside_ignore;
 		}
-		else if (!inside_ignore && !ft_strchr(c, *s) && !inside_token && ++counter)
+		else if (!inside_ignore && !ft_strchr(c, *s) && !inside_token
+			&& ++counter)
 			inside_token = 1;
 		else if (!inside_ignore && ft_strchr(c, *s))
 			inside_token = 0;
@@ -148,6 +149,8 @@ char	**ft_splitm_ignore(char const *s, char const *c, char const *ignored)
 {
 	size_t	c_count;
 
+	if (!s)
+		return (NULL);
 	c_count = count_tokens(s, c, ignored);
 	return (set_substrs(s, c, c_count, ignored));
 }

@@ -6,7 +6,7 @@
 /*   By: pablo <pablo@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/10/28 18:08:35 by pablo             #+#    #+#             */
-/*   Updated: 2025/11/19 17:38:43 by pablo            ###   ########.fr       */
+/*   Updated: 2025/11/24 20:53:06 by pablo            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -121,23 +121,22 @@ int		has_command_in_pipeline(t_token **tokens, size_t i);
 t_token	**parse(char *command_line, t_linked_env *linked_env);
 
 /**
- * @brief Expands environment variables in an array of strings.
+ * Parses and expands environment variables in a split command line array.
  *
- * This function iterates through the given array of strings (`splitted`),
- * and for each string that does not start with a single quote, it searches
- * for occurrences of the '$' character, indicating an environment variable.
- * It then expands each environment variable found using the provided
- * linked list of environment variables (`linked_env`). If no environment
- * variable is found, or if the string starts with a single quote, it
- * removes quotes from the string.
+ * This function iterates through each string in the provided array
+ * (`splitted`), searching for environment variable references (indicated by
+ * '$'). It expands valid environment variables using the provided linked
+ * environment list, while skipping those enclosed in quotes. If expansion
+ * fails, the entire array is freed and NULL is returned. After processing,
+ * quotes are cleaned from each string.
  *
- * @param splitted   Array of strings to process and expand environment
- *                   variables.
- * @param linked_env Linked list containing environment variable names and
- *                   values.
- *
- * @return           The modified array of strings with environment variables
- *                   expanded.
+ * @param splitted A null-terminated array of strings representing split
+ *                 command line arguments, which may contain environment
+ *                 variables to expand.
+ * @param linked_env A linked list of environment variables used for
+ *                   expansion.
+ * @return The modified `splitted` array with expanded environment variables
+ *         and cleaned quotes, or NULL if expansion fails.
  */
 char	**parse_expand_env(char **splitted, t_linked_env *linked_env);
 

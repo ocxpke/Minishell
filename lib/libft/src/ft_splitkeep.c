@@ -6,7 +6,7 @@
 /*   By: pablo <pablo@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/09/13 18:26:29 by pabmart2          #+#    #+#             */
-/*   Updated: 2025/07/30 22:18:15 by pablo            ###   ########.fr       */
+/*   Updated: 2025/11/24 21:02:20 by pablo            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -123,37 +123,20 @@ static size_t	count_tokens(char const *s, char c)
 	return (counter);
 }
 
-/**
- * Frees a null-terminated array of pointers.
- *
- * This function iterates through each element of the provided array `mtx`,
- * freeing each element individually. After all elements have been freed,
- * the array itself is also freed.
- *
- * @param mtx A null-terminated array of pointers to be freed.
- */
-static void	ft_freemtx(void **mtx)
-{
-	int	i;
-
-	i = 0;
-	while (mtx[i])
-		ft_free((void **)&mtx[i++]);
-	ft_free((void **)&mtx);
-}
-
 char	**ft_splitkeep(char const *s, char c)
 {
 	size_t	c_count;
 	char	**str_cont;
 
+	if (!s)
+		return (NULL);
 	c_count = count_tokens(s, c);
 	str_cont = malloc(sizeof(char *) * (c_count + 1));
 	if (!str_cont)
 		return (NULL);
 	if (!set_substrs(s, str_cont, c, c_count))
 	{
-		ft_freemtx((void **)str_cont);
+		ft_matrix_free((void ***)&str_cont, 0);
 		return (NULL);
 	}
 	str_cont[c_count] = NULL;
