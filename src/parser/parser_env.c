@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   parser_env.c                                       :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: pablo <pablo@student.42.fr>                +#+  +:+       +#+        */
+/*   By: pabmart2 <pabmart2@student.42malaga.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/07/28 19:39:27 by pablo             #+#    #+#             */
-/*   Updated: 2025/11/24 20:58:12 by pablo            ###   ########.fr       */
+/*   Updated: 2025/11/27 20:19:17 by pabmart2         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -128,34 +128,39 @@ static char	*expand_env(char *env_start, char **current_string,
  * single quotes in a string.
  *
  * This function iterates through the input string, tracking whether
- * the current position is inside single quotes. It determines if the
- * specified environment variable start position is located between
- * single quotes.
+ * the current position is inside single quotes and double quotes.
+ * It determines if the specified environment variable start position
+ * is located between single quotes that are NOT inside double quotes.
+ * Single quotes inside double quotes don't prevent expansion.
  *
  * @param str The input string to analyze.
  * @param env_start A pointer to the start of the environment variable
  * within the string.
- * @return 1 if the environment variable start is between single quotes,
- * 0 otherwise.
+ * @return 1 if the environment variable start is between single quotes
+ * (and not inside double quotes), 0 otherwise.
  */
 static char	is_env_between_quotes(char *str, char *env_start)
 {
-	char	inside_quote;
+	char	inside_single;
+	char	inside_double;
 	char	env_start_reached;
 
-	inside_quote = 0;
+	inside_single = 0;
+	inside_double = 0;
 	env_start_reached = 0;
 	while (*str)
 	{
-		if (!inside_quote && *str == '\'')
-			inside_quote = 1;
-		else if (inside_quote && *str == '\'')
+		if (!inside_single && !inside_double && *str == '\'')
+			inside_single = 1;
+		else if (!inside_double && inside_single && *str == '\'')
 		{
-			inside_quote = 0;
+			inside_single = 0;
 			if (env_start_reached)
 				return (1);
 		}
-		if (str == env_start && inside_quote)
+		else if (!inside_single && *str == '"')
+			inside_double = !inside_double;
+		if (str == env_start && inside_single && !inside_double)
 			env_start_reached = 1;
 		++str;
 	}
