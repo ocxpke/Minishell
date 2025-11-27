@@ -6,7 +6,7 @@
 /*   By: pabmart2 <pabmart2@student.42malaga.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/07/30 15:51:04 by pablo             #+#    #+#             */
-/*   Updated: 2025/11/21 18:34:30 by pabmart2         ###   ########.fr       */
+/*   Updated: 2025/11/27 20:47:13 by pabmart2         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -70,7 +70,7 @@ static char	***allocate_tmp(size_t size)
  */
 static int	process_arg(char *arg, char ***tmp, size_t i)
 {
-	tmp[i] = ft_splitm_ignore(arg, "\t \n", "\"'");
+	tmp[i] = ft_splitm_ignore(arg, "\t \n\f\r\v", "\"'");
 	if (!tmp[i])
 		return (0);
 	return (1);
