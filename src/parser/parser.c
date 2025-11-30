@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   parser.c                                           :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: pablo <pablo@student.42.fr>                +#+  +:+       +#+        */
+/*   By: jose-ara < jose-ara@student.42malaga.co    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/07/24 11:57:25 by pablo             #+#    #+#             */
-/*   Updated: 2025/11/26 18:51:38 by pablo            ###   ########.fr       */
+/*   Updated: 2025/11/30 12:53:40 by jose-ara         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -68,12 +68,10 @@ static int	has_null_in_array(char **array)
  * @param type The token type to check.
  * @return 1 if the type is a redirection operator, 0 otherwise.
  */
-static int is_redirection(t_ttype type)
+static int	is_redirection(t_ttype type)
 {
-	return (type == REDIRECT_IN_CHAR
-		|| type == REDIRECT_IN_CHAR_HEREDOC
-		|| type == REDIRECT_OUT_CHAR
-		|| type == REDIRECT_OUT_CHAR_APPEND);
+	return (type == REDIRECT_IN_CHAR || type == REDIRECT_IN_CHAR_HEREDOC
+		|| type == REDIRECT_OUT_CHAR || type == REDIRECT_OUT_CHAR_APPEND);
 }
 
 /**
@@ -99,16 +97,17 @@ static t_token	**check_tokens(t_token **tokens)
 	i = 0;
 	while (tokens[i])
 	{
-		if (tokens[i]->token_type == PIPE || is_redirection(tokens[i]->token_type))
+		if (tokens[i]->token_type == PIPE
+			|| is_redirection(tokens[i]->token_type))
 		{
-			if (tokens[i + 1] && ((tokens[i]->token_type == PIPE
-						&& tokens[i + 1]->token_type == PIPE)
+			if (tokens[i + 1] && (((tokens[i]->token_type == PIPE)
+						&& (tokens[i + 1]->token_type == PIPE))
 					|| (is_redirection(tokens[i]->token_type)
 						&& is_redirection(tokens[i + 1]->token_type))))
 			{
 				free_tokens(&tmp);
-				write(STDERR_FILENO, "Error parsing: Multiple operators"
-					" together\n", 43);
+				write(STDERR_FILENO,
+					"Error parsing: Multiple operators together\n", 43);
 				return (NULL);
 			}
 		}

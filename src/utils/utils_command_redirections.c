@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   utils_command_redirections.c                       :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: pablo <pablo@student.42.fr>                +#+  +:+       +#+        */
+/*   By: jose-ara < jose-ara@student.42malaga.co    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/11/09 15:45:12 by pablo             #+#    #+#             */
-/*   Updated: 2025/11/19 18:13:40 by pablo            ###   ########.fr       */
+/*   Updated: 2025/11/30 12:51:03 by jose-ara         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -66,21 +66,6 @@ static char	*handle_heredoc_interrupt(char *route)
 	return (route);
 }
 
-/**
- * @brief Sets up the heredoc input file for command redirection.
- *
- * This function validates the heredoc tokens, processes the heredoc
- * behavior to generate a temporary file route, handles potential
- * interruptions (e.g., SIGINT), and assigns the route to the command
- * info structure if successful.
- *
- * @param tokens Pointer to the array of tokens to process.
- * @param cinfo Pointer to the command info structure to update with
- * input file details.
- * @param pipe Pointer to the pipe token for validation context.
- * @return 0 on success, 1 on failure (e.g., validation error, heredoc
- * error, or interruption).
- */
 static int	set_heredoc_input_file(t_token **tokens, t_cinfo *cinfo,
 		t_token **pipe)
 {
@@ -108,9 +93,11 @@ static int	set_heredoc_input_file(t_token **tokens, t_cinfo *cinfo,
 int	set_command_input_file(t_token **tokens, t_cinfo *cinfo, t_token **pipe)
 {
 	t_token	**route;
+	t_token	**heredoc;
 
 	route = extract_first_type_token(tokens, REDIRECT_IN_ROUTE);
-	if (route && (!pipe || route < pipe))
+	heredoc = extract_first_type_token(tokens, REDIRECT_IN_CHAR_HEREDOC);
+	if (route && (!pipe || route < pipe) && route < heredoc)
 	{
 		cinfo->input_file = ft_strdup((*route)->string);
 		if (!cinfo->input_file)
@@ -118,21 +105,24 @@ int	set_command_input_file(t_token **tokens, t_cinfo *cinfo, t_token **pipe)
 		cinfo->is_heredoc = 0;
 		return (0);
 	}
-	return (set_heredoc_input_file(tokens, cinfo, pipe));
+	else
+		return (set_heredoc_input_file(tokens, cinfo, pipe));
 }
 
 int	set_command_output_file(t_token **tokens, t_cinfo *cinfo, t_token **pipe)
 {
 	t_token	**redir;
 	t_token	**route;
+	t_token	**append;
 
 	route = NULL;
 	redir = extract_first_type_token(tokens, REDIRECT_OUT_CHAR);
-	if (redir && (!pipe || redir < pipe))
+	append = extract_first_type_token(tokens, REDIRECT_OUT_CHAR_APPEND);
+	if (redir && (!pipe || redir < pipe) && redir < append)
 		route = extract_first_type_token(redir + 1, REDIRECT_OUT_ROUTE);
 	if (!route || (pipe && route >= pipe))
 	{
-		redir = extract_first_type_token(tokens, REDIRECT_OUT_CHAR_APPEND);
+		redir = append;
 		if (redir && (!pipe || redir < pipe))
 			route = extract_first_type_token(redir + 1, REDIRECT_OUT_ROUTE);
 		if (!route || (pipe && route >= pipe))

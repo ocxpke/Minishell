@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   libft.h                                            :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: pabmart2 <pabmart2@student.42malaga.com    +#+  +:+       +#+        */
+/*   By: jose-ara < jose-ara@student.42malaga.co    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/09/10 18:17:00 by pabmart2          #+#    #+#             */
-/*   Updated: 2025/11/21 18:31:37 by pabmart2         ###   ########.fr       */
+/*   Updated: 2025/11/30 12:54:02 by jose-ara         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -670,7 +670,7 @@ char				**ft_splitkeep(char const *s, char c);
  * @param c The delimiter character.
  * @param ignore String of characters that toggle ignore state (e.g., "\"'").
  * @return A pointer to the array of substrings, or NULL if memory
- *         allocation fails.
+ *         allocation fails or if token_count == 0.
  */
 char				**ft_splitkeep_ignore(char const *s, char c,
 						char const *ignore);
@@ -719,7 +719,8 @@ char				**ft_splitm(char const *s, char *cs);
  * @note If `c` or `ignored` is NULL, the behavior may be
  * undefined or equivalent to standard splitting.
  */
-char	**ft_splitm_ignore(char const *s, char const *c, char const *ignored);
+char				**ft_splitm_ignore(char const *s, char const *c,
+						char const *ignored);
 
 /**
  * @brief Splits a string into substrings based on a delimiter,

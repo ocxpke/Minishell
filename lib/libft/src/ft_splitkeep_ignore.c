@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   ft_splitkeep_ignore.c                              :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: pablo <pablo@student.42.fr>                +#+  +:+       +#+        */
+/*   By: jose-ara < jose-ara@student.42malaga.co    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/11/20 00:00:00 by pabmart2          #+#    #+#             */
-/*   Updated: 2025/11/24 20:51:20 by pablo            ###   ########.fr       */
+/*   Updated: 2025/11/30 12:26:18 by jose-ara         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -152,22 +152,6 @@ static size_t	count_tokens(char const *str, char delim, char const *ignore)
 	return (token_count);
 }
 
-/**
- * @brief Splits a string into substrings separated by a delimiter, keeping the
- *        delimiter as separate tokens, while ignoring delimiters within quotes.
- *
- * This function splits the input string `s` into substrings using the delimiter
- * character `c`. Unlike ft_split, this function keeps each occurrence of the
- * delimiter as a separate token in the result array. Additionally, it respects
- * quote characters specified in `ignore` - delimiters within quoted sections
- * are not treated as separators.
- *
- * @param s The input string to be split.
- * @param c The delimiter character.
- * @param ignore String of characters that toggle ignore state (e.g., "\"'").
- * @return A pointer to the array of substrings, or NULL if memory
- *         allocation fails.
- */
 char	**ft_splitkeep_ignore(char const *str, char delim, char const *ignore)
 {
 	size_t	token_count;
@@ -178,6 +162,8 @@ char	**ft_splitkeep_ignore(char const *str, char delim, char const *ignore)
 	if (!ignore)
 		ignore = "\"'";
 	token_count = count_tokens(str, delim, ignore);
+	if (token_count == 0)
+		return (NULL);
 	result = malloc(sizeof(char *) * (token_count + 1));
 	if (!result)
 		return (NULL);

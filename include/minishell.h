@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   minishell.h                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: pabmart2 <pabmart2@student.42malaga.com    +#+  +:+       +#+        */
+/*   By: jose-ara < jose-ara@student.42malaga.co    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/07/24 12:02:38 by pablo             #+#    #+#             */
-/*   Updated: 2025/11/21 16:23:28 by pabmart2         ###   ########.fr       */
+/*   Updated: 2025/11/30 12:51:09 by jose-ara         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -268,39 +268,37 @@ int		find_pipeline_start(t_token **tokens, int token_pos);
 int		set_cinfos(t_token **tokens, t_einfo *einfo);
 
 /**
- * @brief Set command input file from tokens.
+ * @brief Sets the input file for a command based on redirection tokens.
  *
- * Scans tokens for input redirections: '<' or '<<'.
- * For '<', sets cinfo->input_file to the route token's string and is_heredoc
- * to 0.
- * For '<<', resets GNL state, calls heredoc_behaviour(), sets input_file to
- * the returned path, and is_heredoc to 1.
- * If no redirection, leaves cinfo unchanged.
- * Redirections are only considered if they appear before the specified pipe
- * token.
+ * This function extracts the first REDIRECT_IN_ROUTE token and the first
+ * REDIRECT_IN_CHAR_HEREDOC token from the token list. It prioritizes the route
+ * redirection if it appears before any pipe or heredoc token. If a route is
+ * found and meets the conditions, it sets the input file in cinfo and marks
+ * it as not a heredoc. Otherwise, it delegates to set_heredoc_input_file.
  *
- * @param tokens Pointer to token list head.
- * @param cinfo Command info structure to update.
- * @param pipe A pointer to the pipe token that limits the scope of the
- *             redirection search. Redirections after this pipe are ignored.
- *             Pass NULL to search the entire token list.
- *
- * @note Ownership: input_file points to token's string or heap-allocated path
- *       from heredoc_behaviour(); caller must free if from heredoc.
+ * @param tokens Pointer to the token list to process.
+ * @param cinfo Pointer to the command info structure to update.
+ * @param pipe Pointer to the pipe token for comparison (can be NULL).
+ * @return 0 on success, 1 on memory allocation failure.
  */
 int		set_command_input_file(t_token **tokens, t_cinfo *cinfo,
 			t_token **pipe);
 
 /**
- * Sets the output file for a command by processing redirection tokens.
- * First attempts to process append redirection (>>), and if no output file
- * is set, then attempts to process standard output redirection (>).
+ * @brief Sets the output file for a command based on redirection tokens.
  *
- * @param tokens Pointer to the current token in the token list.
- * @param cinfo Pointer to the command info structure to update with output
- * file details.
- * @param pipe Pointer to the pipe token, used as a boundary for processing.
- * @return 0 on success, 1 on failure (e.g., invalid redirection).
+ * Processes ">" (overwrite) and ">>" (append) operators in the token list
+ * to set the command's output file. Prioritizes the first valid redirection
+ * before any pipe token, updating the command info with the output route
+ * and append flag.
+ *
+ * @param tokens Pointer to the token list to search for redirection
+ *               operators.
+ * @param cinfo Pointer to the command info structure where output file
+ *              route and append flag are set.
+ * @param pipe Pointer to the pipe token limiting redirection scope
+ *             (ignores redirections after the pipe).
+ * @return 0 on success or when no valid redirection is found.
  */
 int		set_command_output_file(t_token **tokens, t_cinfo *cinfo,
 			t_token **pipe);
