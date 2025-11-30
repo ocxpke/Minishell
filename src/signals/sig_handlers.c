@@ -17,6 +17,7 @@ extern volatile sig_atomic_t	g_signal_recv;
 void	sigint_handler(int sig)
 {
 	(void)sig;
+	g_signal_recv = sig;
 	rl_replace_line("", 0);
 	rl_on_new_line();
 	write(STDOUT_FILENO, "\n", 1);

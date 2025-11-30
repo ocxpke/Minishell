@@ -12,6 +12,24 @@
 
 #include "minishell.h"
 
+static int		check_echo_param(t_cinfo *cinfo, int i)
+{
+	int	j;
+
+	j = 1;
+	if(!ft_strncmp(cinfo->cmd_and_args[i], "-n", 2))
+	{
+		while(cinfo->cmd_and_args[i][j])
+		{
+			if (cinfo->cmd_and_args[i][j] != 'n')
+				return (0);
+			j++;
+		}
+		return (1);
+	}
+	return (0);
+}
+
 void	echo_cmd(t_cinfo *cinfo, int *ret)
 {
 	int	i;
@@ -19,8 +37,7 @@ void	echo_cmd(t_cinfo *cinfo, int *ret)
 
 	i = 1;
 	final_nl = 1;
-	if (cinfo->cmd_and_args[i] && !ft_strncmp(cinfo->cmd_and_args[i], "-n",
-			ft_max_len_str(cinfo->cmd_and_args[i], "-n")))
+	while (cinfo->cmd_and_args[i] && check_echo_param(cinfo, i))
 	{
 		final_nl = 0;
 		i++;

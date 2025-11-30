@@ -13,7 +13,6 @@
 #include "colors.h"
 #include "minishell.h"
 
-extern char				**environ;
 volatile sig_atomic_t	g_signal_recv = 0;
 
 /**
@@ -62,6 +61,8 @@ static int	ctrl_d_exit(t_shell_data *shell_data)
 	int		ret_num;
 	char	*exit_env_value;
 
+	if (g_signal_recv == SIGINT)
+		modify_exit_status_value(&shell_data->shell_envi, 130);
 	exit_env_value = get_env_value("FT_EXIT_ENV",
 			shell_data->shell_envi.envp);
 	if (!exit_env_value)
@@ -152,6 +153,8 @@ int	main(void)
 		g_signal_recv = 0;
 		if (!read_shell_input(&shell_data, &input))
 			return (ctrl_d_exit(&shell_data));
+		if (g_signal_recv == SIGINT)
+			modify_exit_status_value(&shell_data.shell_envi, 130);
 		execute_shell_cycle(&shell_data, input);
 		free(input);
 		clean_entry_info(&shell_data.einfo);
