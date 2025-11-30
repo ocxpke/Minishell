@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   utils_command_redirections.c                       :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: jose-ara < jose-ara@student.42malaga.co    +#+  +:+       +#+        */
+/*   By: pabmart2 <pabmart2@student.42malaga.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/11/09 15:45:12 by pablo             #+#    #+#             */
-/*   Updated: 2025/11/30 12:51:03 by jose-ara         ###   ########.fr       */
+/*   Updated: 2025/11/30 14:49:41 by pabmart2         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -97,7 +97,7 @@ int	set_command_input_file(t_token **tokens, t_cinfo *cinfo, t_token **pipe)
 
 	route = extract_first_type_token(tokens, REDIRECT_IN_ROUTE);
 	heredoc = extract_first_type_token(tokens, REDIRECT_IN_CHAR_HEREDOC);
-	if (route && (!pipe || route < pipe) && route < heredoc)
+	if (route && (!pipe || route < pipe) && (!heredoc || route < heredoc))
 	{
 		cinfo->input_file = ft_strdup((*route)->string);
 		if (!cinfo->input_file)
@@ -118,7 +118,7 @@ int	set_command_output_file(t_token **tokens, t_cinfo *cinfo, t_token **pipe)
 	route = NULL;
 	redir = extract_first_type_token(tokens, REDIRECT_OUT_CHAR);
 	append = extract_first_type_token(tokens, REDIRECT_OUT_CHAR_APPEND);
-	if (redir && (!pipe || redir < pipe) && redir < append)
+	if (redir && (!pipe || redir < pipe) && (!append || redir < append))
 		route = extract_first_type_token(redir + 1, REDIRECT_OUT_ROUTE);
 	if (!route || (pipe && route >= pipe))
 	{
