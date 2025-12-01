@@ -6,7 +6,7 @@
 /*   By: pablo <pablo@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/07/30 18:08:16 by pablo             #+#    #+#             */
-/*   Updated: 2025/11/13 21:45:58 by pablo            ###   ########.fr       */
+/*   Updated: 2025/12/01 22:14:12 by pablo            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -134,7 +134,7 @@ static int	cmd_literal_resolver(t_token *token)
  * Retrieves PATH from linked_env, splits it into directories, and searches
  * for the command. If found, updates token->string and sets type to
  * COMMAND_ROUTE. If not found, sets type to COMMAND_NOT_FOUND.
- * If PATH is missing or allocation fails, sets type to UNDEFINED.
+ * If PATH is missing or allocation fails, sets type to COMMAND_NOT_FOUND.
  *
  * @param token Pointer to the t_token structure to resolve.
  * @param linked_env Pointer to the linked environment list.
@@ -147,10 +147,10 @@ static void	cmd_path_resolver(t_token *token, t_linked_env *linked_env)
 
 	env_path = get_env_value("PATH", linked_env);
 	if (!env_path)
-		return (token->token_type = UNDEFINED, (void)0);
+		return (token->token_type = COMMAND_NOT_FOUND, (void)0);
 	paths = ft_split(env_path, ':');
 	if (!paths)
-		return (token->token_type = UNDEFINED, (void)0);
+		return (token->token_type = COMMAND_NOT_FOUND, (void)0);
 	cmd_path = search_path(paths, token->string);
 	ft_matrix_free((void ***)&paths, 0);
 	if (cmd_path)
